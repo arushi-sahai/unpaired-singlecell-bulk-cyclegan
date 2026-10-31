@@ -8,16 +8,24 @@ Final project (solo) for COMP 690-204, Deep Generative Models, UNC Chapel Hill, 
 
 **[Read the results page](https://arushi-sahai.github.io/unpaired-singlecell-bulk-cyclegan/)** for the question, the findings, and what they mean. This README covers how the work was done: the workflow, the code, and how to rerun the analysis.
 
+## Why it matters
+
+Whole-blood bulk RNA-seq is cheap and is the only transcriptome in many large clinical and biobank cohorts, while single-cell RNA-seq of PBMCs resolves immune cell types but is costly. A model that predicts one from the other would let bulk-only cohorts study how immune cell types change with disease, age, and treatment. Most cohorts have only one assay, so such a model would have to be learned without paired samples, which is the setting this project tests.
+
+## The cohort
+
+The Allen Institute for Immunology's Sound Life cohort followed 96 healthy adults over about two years, and every blood draw was profiled by both PBMC single-cell RNA-seq and whole-blood bulk RNA-seq, giving 836 matched pairs. Some draws were taken just before and seven days after a flu vaccination, so the cohort also records a known immune response, the rise in antibody-secreting plasmablasts about a week after the shot.
+
 ## Results
 
-Without paired samples, the CycleGAN's predictions mostly reflected who the donor is, which a simple per-gene correction between the assays already captures, and the CycleGAN was no more realistic than mixtures of simple alignments at equal accuracy. Paired donors are what added accuracy. With 8 paired donors, plain ridge regression (without the spread step) roughly matched the average profile, and with all 68 it scored above the average profile (centered R² 0.16 and 0.24, point estimates), which no unpaired method did.
+Without paired samples, the CycleGAN's predictions mostly reflected who the donor is, which a simple per-gene correction between the assays already captures, and the CycleGAN was no more realistic than blends of simple alignments at equal accuracy. Paired donors are what added accuracy. With 8 paired donors, plain ridge regression (without the spread step) roughly matched the average profile, and with all 68 it scored above the average profile (centered R² 0.16 and 0.24, point estimates), which no unpaired method did.
 
 **Stack:** Python, PyTorch, scanpy and AnnData, scikit-learn, and baselines from ComBat, CORAL, Harmony, and entropic optimal transport.
 
 ## Workflow
 
 - **Data (Phase 0).** Raw Sound Life counts become 836 matched pairs of PBMC single-cell pseudobulk and whole-blood bulk profiles from 96 donors, on a 5,000-gene panel chosen on training donors only.
-- **The bar to beat (Phase 1).** Every model is scored for accuracy against its sample's true partner and for realism. Mixtures of simple alignments, such as mean shift and ComBat, set an accuracy–realism frontier that a model has to beat.
+- **The bar to beat (Phase 1).** Every model is scored for accuracy against its sample's true partner and for realism. Blends of simple alignments, such as mean shift and ComBat, set an accuracy–realism frontier that a model has to beat.
 - **The models (Phases 2–3).** CycleGANs are trained on two halves of the training donors that never share a person, one half giving only single-cell profiles and the other only bulk profiles. Optional composition labels come from networks trained on pairs. Settings and checkpoints are locked on validation data.
 - **Analysis on validation (Phases 4–6).** Ablations, exploratory changes, and analyses of what the CycleGAN changes.
 - **One test run (Phase 7).** The locked models and every baseline are scored on the test split once.
@@ -104,8 +112,8 @@ Register the environment as a Jupyter kernel with `python -m ipykernel install -
 ## Data
 
 The inputs are from the AIFI Sound Life study (Gong et al., 2025), data doi:10.57785/bn17-3h16, licensed CC BY 4.0:
-- the 8 single-cell portal files (age group × sex × CMV status), reduced to "slim" files of a uniform random 3,000 cells per sample;
-- the whole-blood bulk counts file `sound-life_whole-blood_no-stim.h5ad`.
+- **Single-cell:** the 8 portal files (age group × sex × CMV status), reduced to "slim" files of a uniform random 3,000 cells per sample.
+- **Bulk:** the whole-blood counts file `sound-life_whole-blood_no-stim.h5ad`.
 
 The data are not in this repository. To rebuild the slims, download the 8 single-cell portal files and run
 
@@ -165,19 +173,8 @@ The page is static HTML. Its numbers are filled at load time from `assets/data.j
 
 ## Use of AI tools
 
-Arushi Sahai (the author) conceived the project, chose the Sound Life cohort and the question, and wrote the proposal with AI help on drafting, editing, and a design sketch. The author set each phase's goals, set or approved its decision rules, and chose which analyses to run, with Claude's help on the ablations and exploratory directions. Claude drafted the phase specs from those goals, and the author revised and approved them. The author also interpreted the results, directed and revised the text of the results page, README, and notebooks, and reviewed the analysis code and its tests before Claude ran them. Parts of the preprocessing, including building the slim data files and several data checks, were adapted from code the author wrote for an earlier project.
-
-Claude (Anthropic), through Claude Code, wrote all of the new code under the author's direction and ran and monitored the training and evaluation runs. Claude also drafted text for the author to revise, helped interpret the ablation results, and ran code and results audits, one of which changed a decision rule before the main training runs. `notes/llm_usage.md` records what was assisted in each session and how it was checked.
-
-**The author's main contributions:**
-- **The question and the setup.** Asking whether a generative model trained without pairs can recover sample-level biology. The submitted proposal trained a composition-aware CycleGAN on the matched pairs. In discussion with Claude, the author recast the project around training without pairs, since with pairs available a regression model is the natural competitor. The author designed the unpaired setup: the training donors are split into halves that share no person, and the pairs are used only for scoring.
-- **The biological framing.** Treating a blood transcriptome as three kinds of signal, each with its own readout. The person is read from donor baselines against visit deviations, the draw from the vaccine response, and the assay from granulocyte signal that only whole blood carries.
-- **The comparison.** Choosing the comparison methods, starting from ComBat and CORAL in the proposal and adding the paired models that every result is measured against. Claude suggested adding mean shift and the training mean, and blending the alignments, so each model is judged against mixtures of them rather than each one alone.
-- **What pairs buy.** Measuring how much paired data helps, and in what form:
-  - **as composition labels:** networks trained on pairs read each sample's cell-type fractions, and the CycleGAN is trained to keep them;
-  - **as labels from networks that never saw the sample's donor,** to limit leakage from the pairs into the labels;
-  - **as regression targets,** through paired ridge regression trained on the pairs.
-- **Rigor.** Requiring that the questions and decision rules be fixed before training, and that the test split be locked behind a hash of audited code. Claude ran the code audit, and the author reviewed the code.
+Arushi Sahai designed and directed the study, interpreted the results, and directed and revised the text. Claude (Anthropic), through Claude Code, wrote the new code under that direction and ran the training and evaluation runs.
+The full statement, with the author's main contributions, is in [`notes/ai_use.md`](notes/ai_use.md), and the session-by-session log is in [`notes/llm_usage.md`](notes/llm_usage.md).
 
 ## License
 

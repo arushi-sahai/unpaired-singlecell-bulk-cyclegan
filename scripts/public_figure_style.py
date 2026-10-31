@@ -73,8 +73,12 @@ def _layout(fig, stem):
             ax, xy, size, color = t.axes, t.xy, t.get_fontsize(), t.get_color()
             t.remove()
             dx, dy, ha = (12, 24, "left") if k == 0 else (-40, 8, "right")   # single-cell → bulk: up-right; bulk → single-cell: up-left
+            if stem == "8.2_test_plane":                   # test figure: label to the left along the floor, clear of the frontier
+                dx, dy, ha = (-70, 3, "right")
             ax.annotate("training mean", xy, xytext=(dx, dy), textcoords="offset points", fontsize=size, color=color,
                         ha=ha, va="bottom", arrowprops=dict(arrowstyle="-", color=color, lw=0.5, shrinkA=1, shrinkB=3))
+    if stem == "8.2_test_plane":
+        _test_plane_labels(fig)
     if stem in WIDEN:
         w, h = fig.get_size_inches()
         fig.set_size_inches(w * WIDEN[stem], h)
@@ -82,6 +86,26 @@ def _layout(fig, stem):
             if PANEL.match(t.get_text() or ""):            # panel letters left of the titles
                 x, y = t.get_position()
                 t.set_position((x - 0.1, y))
+
+
+def _test_plane_labels(fig):
+    """Figure 5 on the page: baseline labels moved off the frontier, and each panel's verdict for the unpaired CycleGAN."""
+    import pandas as pd
+    models = pd.read_csv(Path(__file__).resolve().parents[1] / "results/phase7/models_test.csv")
+    axes = sorted({t.axes for t in fig.findobj(matplotlib.text.Annotation) if t.axes is not None}, key=fig.axes.index)
+    moves = [{"mean shift": (-10, 6, "right")}, {"ComBat": (-10, 6, "right")}]
+    verdict = [("single-cell → bulk", "unpaired CycleGAN:\nno clear difference\nfrom the frontier", (-95, 62)),
+               ("bulk → single-cell", "unpaired CycleGAN:\nbelow the frontier", (-150, -10))]
+    for k, ax in enumerate(axes[:2]):
+        for t in ax.texts:
+            if isinstance(t, matplotlib.text.Annotation) and t.get_text() in moves[k]:
+                dx, dy, ha = moves[k][t.get_text()]
+                t.xyann = (dx, dy)
+                t.set_ha(ha)
+        d, text, off = verdict[k]
+        m = models[(models.direction == d) & (models.model == "M1")].iloc[0]
+        ax.annotate(text, (m.r2_centered, m.realism), xytext=off, textcoords="offset points", fontsize=7, color="#111111",
+                    ha="left", va="center", arrowprops=dict(arrowstyle="-", color="#111111", lw=0.6, shrinkA=2, shrinkB=4))
 
 
 def _short_ticks(fig):

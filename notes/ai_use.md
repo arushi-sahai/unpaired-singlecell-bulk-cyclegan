@@ -1,0 +1,17 @@
+# Contributions and use of AI
+
+The same statement appears on the results page, under "Contributions and use of AI".
+
+Arushi Sahai (the author) conceived the project, chose the Sound Life cohort and the question, and wrote the proposal with AI help on drafting, editing, and a design sketch. The author set each phase's goals, set or approved its decision rules, and chose which analyses to run, with Claude's help on the ablations and exploratory directions. Claude drafted the phase specs from those goals, and the author revised and approved them. The author also interpreted the results, directed and revised the text of the results page, README, and notebooks, and reviewed the analysis code and its tests before Claude ran them. Parts of the preprocessing, including building the slim data files and several data checks, were adapted from code the author wrote for an earlier project.
+
+Claude (Anthropic), through Claude Code, wrote all of the new code under the author's direction and ran and monitored the training and evaluation runs. Claude also drafted text for the author to revise, helped interpret the ablation results, and ran code and results audits, one of which changed a decision rule before the main training runs. The AI-use log (`notes/llm_usage.md`) records what was assisted in each session and how it was checked.
+
+**The author's main contributions:**
+- **The question and the setup.** Asking whether a generative model trained without pairs can recover sample-level biology. The submitted proposal trained a composition-aware CycleGAN on the matched pairs. In discussion with Claude, the author recast the project around training without pairs, since with pairs available a regression model is the natural competitor. The author designed the unpaired setup: the training donors are split into halves that share no person, and the pairs are used only for scoring.
+- **The biological framing.** Treating a blood transcriptome as three kinds of signal, each with its own readout. The person is read from donor baselines against visit deviations, the draw from the vaccine response, and the assay from granulocyte signal that only whole blood carries.
+- **The comparison.** Choosing the comparison methods, starting from ComBat and CORAL in the proposal and adding the paired models that every result is measured against. Claude suggested adding mean shift and the training mean, and blending the alignments, so each model is judged against blends of them rather than each one alone. The author set the margin and the decision rules for judging it, and identified why a random real profile passes the realism test.
+- **What pairs buy.** Measuring how much paired data helps, and in what form:
+  - **As composition labels.** Networks trained on pairs read each sample's cell-type fractions, and the CycleGAN is trained to keep them.
+  - **As labels from networks that never saw the sample's donor.** These limit leakage from the pairs into the labels.
+  - **As regression targets.** Paired ridge regression is trained on the pairs.
+- **Rigor.** Requiring that the questions and decision rules be fixed before training, and that the test split be locked behind a hash of audited code. Claude ran the code audit, and the author reviewed the code.
