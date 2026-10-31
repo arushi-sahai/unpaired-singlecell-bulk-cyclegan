@@ -1,0 +1,73 @@
+direction,method,k,metric,value,seed SD,CI low,CI high,footing
+single-cell → bulk,weakly paired GAN (EMA),4,centered R²,-0.3590945221410073,0.06429869202382467,,,nested
+single-cell → bulk,weakly paired GAN (EMA),4,realism,0.6535832952293857,0.05380608953473209,,,nested
+single-cell → bulk,weakly paired GAN (EMA),4,marker composition R²,0.24531208499335455,0.035220899172009754,,,nested
+single-cell → bulk,weakly paired GAN (EMA),8,centered R²,-0.2697018883204289,0.03846559231017976,,,nested
+single-cell → bulk,weakly paired GAN (EMA),8,realism,0.6806889193720469,0.10025999417841505,,,nested
+single-cell → bulk,weakly paired GAN (EMA),8,marker composition R²,0.3393837446958088,0.04868572901962097,,,nested
+single-cell → bulk,weakly paired GAN (EMA),16,centered R²,-0.19038009203884607,0.021246110770838256,,,nested
+single-cell → bulk,weakly paired GAN (EMA),16,realism,0.6573510135650054,0.016706047742986566,,,nested
+single-cell → bulk,weakly paired GAN (EMA),16,marker composition R²,0.42244175703858655,0.02065269785340582,,,nested
+single-cell → bulk,weakly paired GAN (EMA),33,centered R²,-0.1680341299972291,0.02480356479147963,,,cross-fitted (not on the same footing)
+single-cell → bulk,weakly paired GAN (EMA),33,realism,0.7838561194939796,0.01498442911847748,,,cross-fitted (not on the same footing)
+single-cell → bulk,weakly paired GAN (EMA),33,marker composition R²,0.4761755149476942,0.01596636805148443,,,cross-fitted (not on the same footing)
+single-cell → bulk,weakly paired GAN (EMA),68,centered R²,-0.18823417544516538,0.0035830930988487372,,,cross-fitted (not on the same footing)
+single-cell → bulk,weakly paired GAN (EMA),68,realism,0.7497271757354063,0.07101999213861131,,,cross-fitted (not on the same footing)
+single-cell → bulk,weakly paired GAN (EMA),68,marker composition R²,0.554083126594729,0.021728878698058156,,,cross-fitted (not on the same footing)
+single-cell → bulk,ridge,8,centered R²,-0.0202614309543178,0.10097371339512094,,,nested
+single-cell → bulk,ridge,8,realism,0.013132144490169133,0.022745541469308628,,,nested
+single-cell → bulk,ridge,8,marker composition R²,0.11187059067770429,0.14825163218807122,,,nested
+single-cell → bulk,ridge,16,centered R²,0.07996774278175824,0.056394345592513946,,,nested
+single-cell → bulk,ridge,16,realism,0.05435756744398723,0.04778797778199509,,,nested
+single-cell → bulk,ridge,16,marker composition R²,0.2646597656166259,0.09793443196326014,,,nested
+single-cell → bulk,ridge + spread,16,centered R²,0.052950111188947165,0.02220778743056056,,,nested
+single-cell → bulk,ridge + spread,16,realism,0.2603017832647463,0.17411834252982705,,,nested
+single-cell → bulk,ridge + spread,16,marker composition R²,0.3324964830704921,0.07211978815494582,,,nested
+single-cell → bulk,ridge,33,centered R²,0.16900318036809014,,0.10446224928622005,0.21711658144524404,half A (deterministic fit)
+single-cell → bulk,ridge,33,realism,0.16625514403292185,,,,half A (deterministic fit)
+single-cell → bulk,ridge,33,marker composition R²,0.4068206421885892,,0.17955442681260364,0.4633870722505686,half A (deterministic fit)
+single-cell → bulk,ridge + spread,33,centered R²,0.09677107545629793,,-0.01861856158070356,0.16814275892304364,half A (deterministic fit)
+single-cell → bulk,ridge + spread,33,realism,0.698710562414266,,,,half A (deterministic fit)
+single-cell → bulk,ridge + spread,33,marker composition R²,0.47975802981630083,,0.19736878348625997,0.5635608715904522,half A (deterministic fit)
+single-cell → bulk,ridge,68,centered R²,0.17253910763734326,,0.12580935528355966,0.22633129574938304,all training pairs (deterministic fit)
+single-cell → bulk,ridge,68,realism,0.2364883401920439,,,,all training pairs (deterministic fit)
+single-cell → bulk,ridge,68,marker composition R²,0.54223488014111,,0.42128131386757595,0.5754361248936658,all training pairs (deterministic fit)
+single-cell → bulk,ridge + spread,68,centered R²,0.12591865760127252,,0.06595794575009661,0.18248788716698655,all training pairs (deterministic fit)
+single-cell → bulk,ridge + spread,68,realism,0.7567626886145404,,,,all training pairs (deterministic fit)
+single-cell → bulk,ridge + spread,68,marker composition R²,0.6368009030736216,,0.5108010283822,0.6706971271978657,all training pairs (deterministic fit)
+bulk → single-cell,weakly paired GAN (EMA),4,centered R²,-0.16444281266504893,0.031931003993257656,,,nested
+bulk → single-cell,weakly paired GAN (EMA),4,realism,0.4758299039780522,0.06145799843587685,,,nested
+bulk → single-cell,weakly paired GAN (EMA),4,marker composition R²,-0.000502495324649845,0.21074358012241087,,,nested
+bulk → single-cell,weakly paired GAN (EMA),8,centered R²,-0.17281637464643243,0.02021263401626553,,,nested
+bulk → single-cell,weakly paired GAN (EMA),8,realism,0.4851577503429354,0.05254236999134046,,,nested
+bulk → single-cell,weakly paired GAN (EMA),8,marker composition R²,0.11481756596174679,0.00838104740808207,,,nested
+bulk → single-cell,weakly paired GAN (EMA),16,centered R²,-0.14139191255296832,0.021284521800904788,,,nested
+bulk → single-cell,weakly paired GAN (EMA),16,realism,0.5163968907178783,0.05479905223702007,,,nested
+bulk → single-cell,weakly paired GAN (EMA),16,marker composition R²,0.15415819971960038,0.022420916298725328,,,nested
+bulk → single-cell,weakly paired GAN (EMA),33,centered R²,-0.12582728054210612,0.0035100570095156873,,,cross-fitted (not on the same footing)
+bulk → single-cell,weakly paired GAN (EMA),33,realism,0.5427221460143271,0.023678014308193843,,,cross-fitted (not on the same footing)
+bulk → single-cell,weakly paired GAN (EMA),33,marker composition R²,0.20089484776004263,0.0020288418360589655,,,cross-fitted (not on the same footing)
+bulk → single-cell,weakly paired GAN (EMA),68,centered R²,-0.13896269829728503,0.010133800768993473,,,cross-fitted (not on the same footing)
+bulk → single-cell,weakly paired GAN (EMA),68,realism,0.5487578113092516,0.040271878684919354,,,cross-fitted (not on the same footing)
+bulk → single-cell,weakly paired GAN (EMA),68,marker composition R²,0.19821015420914256,0.024959866437984434,,,cross-fitted (not on the same footing)
+bulk → single-cell,ridge,8,centered R²,0.08047319744903284,0.03142278865681069,,,nested
+bulk → single-cell,ridge,8,realism,0.006877000457247334,0.004444557343595748,,,nested
+bulk → single-cell,ridge,8,marker composition R²,0.04927774922461243,0.08865101661315289,,,nested
+bulk → single-cell,ridge,16,centered R²,0.1592795768742214,0.02087150295919748,,,nested
+bulk → single-cell,ridge,16,realism,0.036433470507544606,0.005539392906062592,,,nested
+bulk → single-cell,ridge,16,marker composition R²,0.18754682329514427,0.03389791244042032,,,nested
+bulk → single-cell,ridge + spread,16,centered R²,0.0024320919796839654,0.14361105400152183,,,nested
+bulk → single-cell,ridge + spread,16,realism,0.49638774577046196,0.16218225126393754,,,nested
+bulk → single-cell,ridge + spread,16,marker composition R²,-0.1469681722131286,0.3202467361164857,,,nested
+bulk → single-cell,ridge,33,centered R²,0.2053662662887944,,0.15179115749722932,0.29429495144812745,half A (deterministic fit)
+bulk → single-cell,ridge,33,realism,0.09229080932784628,,,,half A (deterministic fit)
+bulk → single-cell,ridge,33,marker composition R²,0.31504760811374816,,0.032505976181489496,0.37231831349557426,half A (deterministic fit)
+bulk → single-cell,ridge + spread,33,centered R²,0.1681597775528143,,0.09843098777187524,0.2565424031488745,half A (deterministic fit)
+bulk → single-cell,ridge + spread,33,realism,0.5640603566529492,,,,half A (deterministic fit)
+bulk → single-cell,ridge + spread,33,marker composition R²,0.2901929183115907,,-0.07083188674943712,0.3817149187041998,half A (deterministic fit)
+bulk → single-cell,ridge,68,centered R²,0.27227053222675557,,0.23882741739904423,0.3496970721167123,all training pairs (deterministic fit)
+bulk → single-cell,ridge,68,realism,0.1501234567901235,,,,all training pairs (deterministic fit)
+bulk → single-cell,ridge,68,marker composition R²,0.4343110088472674,,0.2552906353927421,0.4946472488109245,all training pairs (deterministic fit)
+bulk → single-cell,ridge + spread,68,centered R²,0.22390051092840124,,0.16705690849775667,0.2955792443757179,all training pairs (deterministic fit)
+bulk → single-cell,ridge + spread,68,realism,0.5973113854595336,,,,all training pairs (deterministic fit)
+bulk → single-cell,ridge + spread,68,marker composition R²,0.3738947790998415,,0.10531529737002941,0.486439251935709,all training pairs (deterministic fit)

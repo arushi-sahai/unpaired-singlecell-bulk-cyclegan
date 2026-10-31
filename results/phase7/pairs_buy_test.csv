@@ -1,0 +1,73 @@
+direction,method,k,metric,value,seed SD
+single-cell → bulk,weakly paired GAN (EMA),4,centered R²,-0.31471397377766425,0.08781427412937697
+single-cell → bulk,weakly paired GAN (EMA),4,realism,0.41848896421313625,0.08736707533375737
+single-cell → bulk,weakly paired GAN (EMA),4,marker composition R²,0.3576094094724613,0.04167743188272462
+single-cell → bulk,weakly paired GAN (EMA),8,centered R²,-0.32058734237429515,0.05605832511221348
+single-cell → bulk,weakly paired GAN (EMA),8,realism,0.5426798170248491,0.03879713854019527
+single-cell → bulk,weakly paired GAN (EMA),8,marker composition R²,0.37613447466032374,0.011325371224563839
+single-cell → bulk,weakly paired GAN (EMA),16,centered R²,-0.22398304370360667,0.04426959777094197
+single-cell → bulk,weakly paired GAN (EMA),16,realism,0.44270257122456824,0.06910345984926893
+single-cell → bulk,weakly paired GAN (EMA),16,marker composition R²,0.45204572529877685,0.06733639791697522
+single-cell → bulk,weakly paired GAN (EMA),33,centered R²,-0.2157712310328501,0.0014437854618216401
+single-cell → bulk,weakly paired GAN (EMA),33,realism,0.453593201986677,0.03311935585646063
+single-cell → bulk,weakly paired GAN (EMA),33,marker composition R²,0.5143912266342489,0.014569338318793524
+single-cell → bulk,weakly paired GAN (EMA),68,centered R²,-0.2303551140922616,
+single-cell → bulk,weakly paired GAN (EMA),68,realism,0.5283368249260488,
+single-cell → bulk,weakly paired GAN (EMA),68,marker composition R²,0.5884676108520465,
+single-cell → bulk,ridge,8,centered R²,-0.05187823648567017,0.12925462294311701
+single-cell → bulk,ridge,8,realism,0.04208742320457581,0.036678176219629044
+single-cell → bulk,ridge,8,marker composition R²,0.05131674418616979,0.11035059488985668
+single-cell → bulk,ridge,16,centered R²,0.05115777701158727,0.05260203063106525
+single-cell → bulk,ridge,16,realism,0.06520255160887885,0.06468983668615647
+single-cell → bulk,ridge,16,marker composition R²,0.2258068761792665,0.08009057840989572
+single-cell → bulk,ridge + spread,16,centered R²,0.0394140921024011,0.020611624301709954
+single-cell → bulk,ridge + spread,16,realism,0.26029235223501157,0.19638650560346188
+single-cell → bulk,ridge + spread,16,marker composition R²,0.32480626530459994,0.045152798779478094
+single-cell → bulk,ridge,33,centered R²,0.14577093294294552,
+single-cell → bulk,ridge,33,realism,0.24588658993008972,
+single-cell → bulk,ridge,33,marker composition R²,0.3744198784051031,
+single-cell → bulk,ridge + spread,33,centered R²,0.0633701451551717,
+single-cell → bulk,ridge + spread,33,realism,0.7334227808770568,
+single-cell → bulk,ridge + spread,33,marker composition R²,0.48892936013594707,
+single-cell → bulk,ridge,68,centered R²,0.15789002791321383,
+single-cell → bulk,ridge,68,realism,0.18967587034813915,
+single-cell → bulk,ridge,68,marker composition R²,0.5168189645357025,
+single-cell → bulk,ridge + spread,68,centered R²,0.13226334161592213,
+single-cell → bulk,ridge + spread,68,realism,0.4375397217710615,
+single-cell → bulk,ridge + spread,68,marker composition R²,0.6297961918130048,
+bulk → single-cell,weakly paired GAN (EMA),4,centered R²,-0.32680448437226645,0.08541419225106744
+bulk → single-cell,weakly paired GAN (EMA),4,realism,0.23593751225980586,0.08463595202045789
+bulk → single-cell,weakly paired GAN (EMA),4,marker composition R²,0.2570350666420966,0.1630802193979758
+bulk → single-cell,weakly paired GAN (EMA),8,centered R²,-0.30260457851813455,0.03103515757165121
+bulk → single-cell,weakly paired GAN (EMA),8,realism,0.2573264599957629,0.0818418046704515
+bulk → single-cell,weakly paired GAN (EMA),8,marker composition R²,0.35524421195515293,0.06677137961573591
+bulk → single-cell,weakly paired GAN (EMA),16,centered R²,-0.2728714250049939,0.01683163749384889
+bulk → single-cell,weakly paired GAN (EMA),16,realism,0.2751845836373766,0.03370123320571925
+bulk → single-cell,weakly paired GAN (EMA),16,marker composition R²,0.3858146042185371,0.037916536602596716
+bulk → single-cell,weakly paired GAN (EMA),33,centered R²,-0.27791314276492834,0.02023129314551376
+bulk → single-cell,weakly paired GAN (EMA),33,realism,0.286702916460702,0.02138274119696623
+bulk → single-cell,weakly paired GAN (EMA),33,marker composition R²,0.40991639242079375,0.00533330684291245
+bulk → single-cell,weakly paired GAN (EMA),68,centered R²,-0.28753237874755805,
+bulk → single-cell,weakly paired GAN (EMA),68,realism,0.342599785012044,
+bulk → single-cell,weakly paired GAN (EMA),68,marker composition R²,0.4291339873683007,
+bulk → single-cell,ridge,8,centered R²,0.03679485914829724,0.023713727317484036
+bulk → single-cell,ridge,8,realism,0.0016947955652849196,0.0018522529551025337
+bulk → single-cell,ridge,8,marker composition R²,0.0830611703238796,0.044873050448813345
+bulk → single-cell,ridge,16,centered R²,0.12533473313743174,0.017204410002771262
+bulk → single-cell,ridge,16,realism,0.004236988913212336,0.005605009486048837
+bulk → single-cell,ridge,16,marker composition R²,0.23466394226910656,0.05624406277361487
+bulk → single-cell,ridge + spread,16,centered R²,-0.07968788137008165,0.11625587064589263
+bulk → single-cell,ridge + spread,16,realism,0.28543181978673826,0.18172555815841512
+bulk → single-cell,ridge + spread,16,marker composition R²,0.09412958611240997,0.1494437496076479
+bulk → single-cell,ridge,33,centered R²,0.1755518870496039,
+bulk → single-cell,ridge,33,realism,0.01059247228303084,
+bulk → single-cell,ridge,33,marker composition R²,0.32334385553399264,
+bulk → single-cell,ridge + spread,33,centered R²,0.10469104413882346,
+bulk → single-cell,ridge + spread,33,realism,0.2242779464727065,
+bulk → single-cell,ridge + spread,33,marker composition R²,0.335514985274008,
+bulk → single-cell,ridge,68,centered R²,0.2378827369794846,
+bulk → single-cell,ridge,68,realism,0.040251394675517194,
+bulk → single-cell,ridge,68,marker composition R²,0.4618860492880504,
+bulk → single-cell,ridge + spread,68,centered R²,0.16807954712308615,
+bulk → single-cell,ridge + spread,68,realism,0.2888214109173082,
+bulk → single-cell,ridge + spread,68,marker composition R²,0.47659239205048115,

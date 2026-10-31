@@ -1,0 +1,8 @@
+phase,settings,runs
+3: M1 selection grid,12,36
+3: M2 selection grid,9,27
+4: ablations,13,39
+"5: references, tracks A and B",12,36
+5: confirmation (seeds 9–11),2,6
+6: OT comparator,8,16
+total,56,160

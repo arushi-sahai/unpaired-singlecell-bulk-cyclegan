@@ -1,0 +1,64 @@
+direction,translator,gene class,genes,median r,null 2.5%,null 97.5%
+single-cell → bulk,start,sex and HLA,5,0.7619455035239612,-0.1402973062182609,0.198012022887037
+single-cell → bulk,start,granulocyte,7,0.27847964657344004,-0.16800208933960986,0.15754369016958572
+single-cell → bulk,start,erythroid,8,-0.010996600547959558,-0.183743219022213,0.1534644487559022
+single-cell → bulk,start,lineage markers,26,0.5657423881071668,-0.16910474019984553,0.16419404202690047
+single-cell → bulk,start,other,4954,0.1748436660695084,-0.17194843642464147,0.17076742840540984
+single-cell → bulk,unpaired CycleGAN,sex and HLA,5,0.7224709053239095,-0.1402973062182609,0.198012022887037
+single-cell → bulk,unpaired CycleGAN,granulocyte,7,0.2580668165523672,-0.16800208933960986,0.15754369016958572
+single-cell → bulk,unpaired CycleGAN,erythroid,8,0.058397985224979965,-0.183743219022213,0.1534644487559022
+single-cell → bulk,unpaired CycleGAN,lineage markers,26,0.46744555575261526,-0.16910474019984553,0.16419404202690047
+single-cell → bulk,unpaired CycleGAN,other,4954,0.14715385634311834,-0.17194843642464147,0.17076742840540984
+single-cell → bulk,CycleGAN + composition labels,sex and HLA,5,0.6729165504856561,-0.1402973062182609,0.198012022887037
+single-cell → bulk,CycleGAN + composition labels,granulocyte,7,0.242777356492114,-0.16800208933960986,0.15754369016958572
+single-cell → bulk,CycleGAN + composition labels,erythroid,8,0.029705775243841624,-0.183743219022213,0.1534644487559022
+single-cell → bulk,CycleGAN + composition labels,lineage markers,26,0.45103445420566535,-0.16910474019984553,0.16419404202690047
+single-cell → bulk,CycleGAN + composition labels,other,4954,0.14089476740280518,-0.17194843642464147,0.17076742840540984
+single-cell → bulk,unpaired CycleGAN (averaged),sex and HLA,5,0.6697958842543883,-0.1402973062182609,0.198012022887037
+single-cell → bulk,unpaired CycleGAN (averaged),granulocyte,7,0.2980924625711905,-0.16800208933960986,0.15754369016958572
+single-cell → bulk,unpaired CycleGAN (averaged),erythroid,8,0.09628271690396939,-0.183743219022213,0.1534644487559022
+single-cell → bulk,unpaired CycleGAN (averaged),lineage markers,26,0.47189826229896914,-0.16910474019984553,0.16419404202690047
+single-cell → bulk,unpaired CycleGAN (averaged),other,4954,0.1507709723696043,-0.17194843642464147,0.17076742840540984
+single-cell → bulk,CycleGAN + composition labels (averaged),sex and HLA,5,0.5761768348410357,-0.1402973062182609,0.198012022887037
+single-cell → bulk,CycleGAN + composition labels (averaged),granulocyte,7,0.2162872060183411,-0.16800208933960986,0.15754369016958572
+single-cell → bulk,CycleGAN + composition labels (averaged),erythroid,8,0.04376935796696727,-0.183743219022213,0.1534644487559022
+single-cell → bulk,CycleGAN + composition labels (averaged),lineage markers,26,0.4729816017342251,-0.16910474019984553,0.16419404202690047
+single-cell → bulk,CycleGAN + composition labels (averaged),other,4954,0.1330338274500178,-0.17194843642464147,0.17076742840540984
+single-cell → bulk,CycleGAN + cross-fitted labels (averaged),sex and HLA,5,0.6678041140076407,-0.1402973062182609,0.198012022887037
+single-cell → bulk,CycleGAN + cross-fitted labels (averaged),granulocyte,7,0.24337992899670155,-0.16800208933960986,0.15754369016958572
+single-cell → bulk,CycleGAN + cross-fitted labels (averaged),erythroid,8,0.05672859518910569,-0.183743219022213,0.1534644487559022
+single-cell → bulk,CycleGAN + cross-fitted labels (averaged),lineage markers,26,0.45606006198853455,-0.16910474019984553,0.16419404202690047
+single-cell → bulk,CycleGAN + cross-fitted labels (averaged),other,4954,0.14205255888998347,-0.17194843642464147,0.17076742840540984
+single-cell → bulk,paired ridge regression,sex and HLA,5,0.7687080270425699,-0.1402973062182609,0.198012022887037
+single-cell → bulk,paired ridge regression,granulocyte,7,0.4687011021090321,-0.16800208933960986,0.15754369016958572
+single-cell → bulk,paired ridge regression,erythroid,8,0.12638956402540993,-0.183743219022213,0.1534644487559022
+single-cell → bulk,paired ridge regression,lineage markers,26,0.5908722459760637,-0.16910474019984553,0.16419404202690047
+single-cell → bulk,paired ridge regression,other,4954,0.2617021290795356,-0.17194843642464147,0.17076742840540984
+bulk → single-cell,start,sex and HLA,5,0.7619455035239616,-0.1419967726018176,0.16225174966499023
+bulk → single-cell,start,erythroid,8,-0.018733416936737808,-0.08405247576821086,0.2668667612670591
+bulk → single-cell,start,lineage markers,26,0.5632975361375714,-0.17702901931864223,0.1901145284915282
+bulk → single-cell,start,other,4954,0.1747970249729615,-0.1736258655536069,0.1689391710881519
+bulk → single-cell,unpaired CycleGAN,sex and HLA,5,0.6611706415763371,-0.1419967726018176,0.16225174966499023
+bulk → single-cell,unpaired CycleGAN,erythroid,8,-0.01070938988944578,-0.08405247576821086,0.2668667612670591
+bulk → single-cell,unpaired CycleGAN,lineage markers,26,0.5540346963773055,-0.17702901931864223,0.1901145284915282
+bulk → single-cell,unpaired CycleGAN,other,4954,0.19837193492689906,-0.1736258655536069,0.1689391710881519
+bulk → single-cell,CycleGAN + composition labels,sex and HLA,5,0.6296379567719536,-0.1419967726018176,0.16225174966499023
+bulk → single-cell,CycleGAN + composition labels,erythroid,8,-0.027241194624964396,-0.08405247576821086,0.2668667612670591
+bulk → single-cell,CycleGAN + composition labels,lineage markers,26,0.5747540349106959,-0.17702901931864223,0.1901145284915282
+bulk → single-cell,CycleGAN + composition labels,other,4954,0.1986225791628134,-0.1736258655536069,0.1689391710881519
+bulk → single-cell,unpaired CycleGAN (averaged),sex and HLA,5,0.7165326812822717,-0.1419967726018176,0.16225174966499023
+bulk → single-cell,unpaired CycleGAN (averaged),erythroid,8,-0.006351572008991185,-0.08405247576821086,0.2668667612670591
+bulk → single-cell,unpaired CycleGAN (averaged),lineage markers,26,0.5670980443737847,-0.17702901931864223,0.1901145284915282
+bulk → single-cell,unpaired CycleGAN (averaged),other,4954,0.19374760335822294,-0.1736258655536069,0.1689391710881519
+bulk → single-cell,CycleGAN + composition labels (averaged),sex and HLA,5,0.6178864035390157,-0.1419967726018176,0.16225174966499023
+bulk → single-cell,CycleGAN + composition labels (averaged),erythroid,8,-0.012413975645812349,-0.08405247576821086,0.2668667612670591
+bulk → single-cell,CycleGAN + composition labels (averaged),lineage markers,26,0.5675997898511256,-0.17702901931864223,0.1901145284915282
+bulk → single-cell,CycleGAN + composition labels (averaged),other,4954,0.19170208377005116,-0.1736258655536069,0.1689391710881519
+bulk → single-cell,CycleGAN + cross-fitted labels (averaged),sex and HLA,5,0.6717020063966088,-0.1419967726018176,0.16225174966499023
+bulk → single-cell,CycleGAN + cross-fitted labels (averaged),erythroid,8,0.0015467398331557329,-0.08405247576821086,0.2668667612670591
+bulk → single-cell,CycleGAN + cross-fitted labels (averaged),lineage markers,26,0.5680800577309827,-0.17702901931864223,0.1901145284915282
+bulk → single-cell,CycleGAN + cross-fitted labels (averaged),other,4954,0.1864764783170882,-0.1736258655536069,0.1689391710881519
+bulk → single-cell,paired ridge regression,sex and HLA,5,0.6487291561686513,-0.1419967726018176,0.16225174966499023
+bulk → single-cell,paired ridge regression,erythroid,8,-0.03440506750616583,-0.08405247576821086,0.2668667612670591
+bulk → single-cell,paired ridge regression,lineage markers,26,0.6452482221002203,-0.17702901931864223,0.1901145284915282
+bulk → single-cell,paired ridge regression,other,4954,0.36419445018585106,-0.1736258655536069,0.1689391710881519

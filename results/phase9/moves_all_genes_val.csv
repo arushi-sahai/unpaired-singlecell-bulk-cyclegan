@@ -1,0 +1,13 @@
+direction,comparison,median partial r,95% CI
+single-cell → bulk,unpaired CycleGAN,0.04747031694031557,0.014 to 0.089
+single-cell → bulk,CycleGAN + composition labels,0.0398728371279904,0.004 to 0.081
+single-cell → bulk,paired ridge regression,0.20974524530324157,0.137 to 0.268
+single-cell → bulk,CORAL (unpaired reference),0.041383955216716714,-0.003 to 0.097
+single-cell → bulk,unpaired CycleGAN − CORAL (unpaired reference),0.006086361723598853,-0.032 to 0.048
+single-cell → bulk,paired ridge regression − unpaired CycleGAN,0.162274928362926,0.103 to 0.204
+bulk → single-cell,unpaired CycleGAN,0.07712523190020143,0.049 to 0.112
+bulk → single-cell,CycleGAN + composition labels,0.08481637477111104,0.058 to 0.115
+bulk → single-cell,paired ridge regression,0.32498421860274385,0.278 to 0.379
+bulk → single-cell,CORAL (unpaired reference),0.19005531375744364,0.124 to 0.247
+bulk → single-cell,unpaired CycleGAN − CORAL (unpaired reference),-0.11293008185724221,-0.167 to -0.053
+bulk → single-cell,paired ridge regression − unpaired CycleGAN,0.24785898670254242,0.193 to 0.305

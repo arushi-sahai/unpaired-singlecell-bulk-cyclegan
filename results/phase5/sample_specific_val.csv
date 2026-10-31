@@ -1,0 +1,7 @@
+condition,single-cell → bulk,bulk → single-cell
+M1,0.097176835,0.16496433
+A-idoff identity loss off,0.11599208,0.15120406
+A-idS identity loss off for single-cell → bulk,0.11833227,0.16422291
+A-anc start-anchored identity loss,0.030342638,0.110691994
+"A-dist distance preservation, weight 0.56",0.06348877,0.07390155
+A-bn bottleneck residual (8),0.057985514,0.08077132

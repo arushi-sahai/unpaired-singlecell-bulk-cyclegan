@@ -1,0 +1,134 @@
+{
+ "M1_halving1_seed0": {
+  "canonical_hash": "f9df3325a5c28c39fc2e62fb9fe5611864a1fd3569f8aa9e78d5078d88a48608",
+  "chosen_step": 17000,
+  "code_key": "c5d4a6f0ea8d65d4",
+  "commit": "50e6a7a",
+  "config": "identity=True,lambda_cyc=20.0",
+  "file": "M1_halving1_seed0.pt",
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "halving": 1,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102"
+ },
+ "M1_halving1_seed1": {
+  "canonical_hash": "c4752cc8cb4b23b7f815ba03fab6ffb9d4e48a910a2d427988722c1d755e183b",
+  "chosen_step": 7500,
+  "code_key": "c5d4a6f0ea8d65d4",
+  "commit": "50e6a7a",
+  "config": "identity=True,lambda_cyc=20.0",
+  "file": "M1_halving1_seed1.pt",
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "halving": 1,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102"
+ },
+ "M1_halving1_seed2": {
+  "canonical_hash": "d28f8e426e97523ed92b1f3d261ddfcad8288779adbf2f733df407ac79f2ff53",
+  "chosen_step": 16000,
+  "code_key": "c5d4a6f0ea8d65d4",
+  "commit": "50e6a7a",
+  "config": "identity=True,lambda_cyc=20.0",
+  "file": "M1_halving1_seed2.pt",
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "halving": 1,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102"
+ },
+ "M1_seed0": {
+  "canonical_hash": "a63ddb1be51a549eeebf6cd0d5a6be50f942d8e104b2efe674bd94785a71b2ff",
+  "chosen_step": 14500,
+  "code_key": "c5d4a6f0ea8d65d4",
+  "commit": "50e6a7a",
+  "config": "identity=True,lambda_cyc=20.0",
+  "file": "M1_seed0.pt",
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "halving": 0,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102"
+ },
+ "M1_seed1": {
+  "canonical_hash": "dae9afe612c8e64fe0866c0e08f8af385d3e5b7e5c7eaab6a10cd7e652e553cd",
+  "chosen_step": 14000,
+  "code_key": "c5d4a6f0ea8d65d4",
+  "commit": "50e6a7a",
+  "config": "identity=True,lambda_cyc=20.0",
+  "file": "M1_seed1.pt",
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "halving": 0,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102"
+ },
+ "M1_seed2": {
+  "canonical_hash": "80122ebf39e933733a49b035dfb1930ffb1f17be9b8e9841c878075d4798ca3b",
+  "chosen_step": 15500,
+  "code_key": "c5d4a6f0ea8d65d4",
+  "commit": "50e6a7a",
+  "config": "identity=True,lambda_cyc=20.0",
+  "file": "M1_seed2.pt",
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "halving": 0,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102"
+ },
+ "M2_halving1_seed0": {
+  "canonical_hash": "d38848b1f5d4277a750c1f93c3e7a980b083b13e6bd399ca4c6db1e49b0c8a4a",
+  "chosen_step": 11000,
+  "code_key": "c5d4a6f0ea8d65d4",
+  "commit": "50e6a7a",
+  "config": "identity=True,lambda_cyc=20.0,lambda_task=10.0",
+  "file": "M2_halving1_seed0.pt",
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "halving": 1,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102"
+ },
+ "M2_halving1_seed1": {
+  "canonical_hash": "34b6696e1a3d09dc69b6bdfa59714c3cc7d1ccf197552571f001c2a72f4be6da",
+  "chosen_step": 14500,
+  "code_key": "c5d4a6f0ea8d65d4",
+  "commit": "50e6a7a",
+  "config": "identity=True,lambda_cyc=20.0,lambda_task=10.0",
+  "file": "M2_halving1_seed1.pt",
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "halving": 1,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102"
+ },
+ "M2_halving1_seed2": {
+  "canonical_hash": "4e0dda9ac90f6f7f1ddb1b0f29e8c18fa190435adae95d138e3939b05b57d65a",
+  "chosen_step": 14000,
+  "code_key": "c5d4a6f0ea8d65d4",
+  "commit": "50e6a7a",
+  "config": "identity=True,lambda_cyc=20.0,lambda_task=10.0",
+  "file": "M2_halving1_seed2.pt",
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "halving": 1,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102"
+ },
+ "M2_seed0": {
+  "canonical_hash": "d552de1c1dad41c27287537c039b73895ce3ee4d78efc4291ba6f6d7ccf76abb",
+  "chosen_step": 12500,
+  "code_key": "c5d4a6f0ea8d65d4",
+  "commit": "50e6a7a",
+  "config": "identity=True,lambda_cyc=20.0,lambda_task=10.0",
+  "file": "M2_seed0.pt",
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "halving": 0,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102"
+ },
+ "M2_seed1": {
+  "canonical_hash": "bd950649409c830a6769301ad6973eee015866ab85bf2f22225718e3c764f39e",
+  "chosen_step": 10000,
+  "code_key": "c5d4a6f0ea8d65d4",
+  "commit": "50e6a7a",
+  "config": "identity=True,lambda_cyc=20.0,lambda_task=10.0",
+  "file": "M2_seed1.pt",
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "halving": 0,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102"
+ },
+ "M2_seed2": {
+  "canonical_hash": "aa16c5f63ffc95582fa3f5a00f884a2d5c125a3cb66d08effe9fb5e79046a447",
+  "chosen_step": 13500,
+  "code_key": "c5d4a6f0ea8d65d4",
+  "commit": "50e6a7a",
+  "config": "identity=True,lambda_cyc=20.0,lambda_task=10.0",
+  "file": "M2_seed2.pt",
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "halving": 0,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102"
+ }
+}

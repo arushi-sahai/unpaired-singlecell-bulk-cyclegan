@@ -1,0 +1,176 @@
+{
+ "C_bulk": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "code_key": "63d30165a7b517be",
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "members": [
+   {
+    "canonical_hash": "e4b8b12cc9761e2bd7590f03d09b1721b55be920f5a13b43213790095a51d7e6",
+    "file": "C_bulk_seed0.pt"
+   },
+   {
+    "canonical_hash": "7726fab6a0450c5c2fd69f8d95e833bced532b7101bc8420bd3be0d4215aba94",
+    "file": "C_bulk_seed1.pt"
+   },
+   {
+    "canonical_hash": "70399b90f1ad2c2fadb8be9c3392be9cccfe9d3588617411f4753c1c1fbabe2e",
+    "file": "C_bulk_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "notebook_source": "2b4e5f766f44 (= HEAD)",
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "selection_table": "results/phase2/selection_bulk.csv",
+  "training_commit": "6255dca"
+ },
+ "C_sc": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "code_key": "63d30165a7b517be",
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "l1",
+   "noise": 0.1,
+   "scaling": "center",
+   "weight_decay": 1e-05
+  },
+  "epochs": 102,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "members": [
+   {
+    "canonical_hash": "b875d10700097a9b4f9faef346a1e0327cc4b0655c153a790d0db8a2fba06b71",
+    "file": "C_sc_seed0.pt"
+   },
+   {
+    "canonical_hash": "dd59209392cd4521465f1c1d6e6ecb0e50085c0ff4565d03e82b0283fe1a2800",
+    "file": "C_sc_seed1.pt"
+   },
+   {
+    "canonical_hash": "fbc1a0f1bf08e4aa7e517db80b05c58cf3f68114f7feba79ada27a02ea38b652",
+    "file": "C_sc_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "notebook_source": "2b4e5f766f44 (= HEAD)",
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "selection_table": "results/phase2/selection_sc.csv",
+  "training_commit": "6255dca"
+ },
+ "marker_bulk": {
+  "alpha": 1.0,
+  "canonical_hash": "478e69c722533aa6d87ef64e1dc5a5ac86f868b958306a8f236d0dfb7acbeda0",
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "code_key": "63d30165a7b517be",
+  "file": "marker_bulk.npz",
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "markers": [
+   "CD2",
+   "LCK",
+   "IL7R",
+   "CD5",
+   "CD6",
+   "MS4A1",
+   "CD79A",
+   "CD79B",
+   "CD19",
+   "BANK1",
+   "CD14",
+   "FCN1",
+   "LYZ",
+   "S100A9",
+   "VCAN",
+   "KLRF1",
+   "NCAM1",
+   "SH2D1B",
+   "NKG7",
+   "GNLY",
+   "FCER1A",
+   "CLEC10A",
+   "CD1C",
+   "LILRA4",
+   "PPBP",
+   "PF4",
+   "HBB",
+   "HBA2"
+  ],
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "training_commit": "925d4bc"
+ },
+ "marker_sc": {
+  "alpha": 0.01,
+  "canonical_hash": "e74fe5d88f08d8f25bba5316ee94960b7f89c989cff595766918c9f5d18e1c2b",
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "code_key": "63d30165a7b517be",
+  "file": "marker_sc.npz",
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "markers": [
+   "CD2",
+   "LCK",
+   "IL7R",
+   "CD5",
+   "CD6",
+   "MS4A1",
+   "CD79A",
+   "CD79B",
+   "CD19",
+   "BANK1",
+   "CD14",
+   "FCN1",
+   "LYZ",
+   "S100A9",
+   "VCAN",
+   "KLRF1",
+   "NCAM1",
+   "SH2D1B",
+   "NKG7",
+   "GNLY",
+   "FCER1A",
+   "CLEC10A",
+   "CD1C",
+   "LILRA4",
+   "PPBP",
+   "PF4",
+   "HBB",
+   "HBA2"
+  ],
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "training_commit": "925d4bc"
+ }
+}

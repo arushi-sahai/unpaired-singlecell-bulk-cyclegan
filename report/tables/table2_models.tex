@@ -1,0 +1,38 @@
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{llrrrlrrr}
+\toprule
+Direction & Model & Centered $R^2$ & Realism & Margin & Margin kind & Composition $R^2$ & Within-donor top-1 & Nearest-neighbor ratio \\
+\midrule
+single-cell $\to$ bulk & unpaired CycleGAN (chosen checkpoint) & $-$0.243 & 0.501 & +0.105 & realism$^{\dagger}$ & 0.414 & 0.171 & 0.826 \\
+ & CycleGAN + composition labels (chosen checkpoint) & $-$0.263 & 0.464 & +0.046 & realism$^{\dagger}$ & 0.587 & 0.165 & 0.822 \\
+ & unpaired CycleGAN (averaged weights) & $-$0.249 & 0.500 & +0.097 & realism$^{\dagger}$ & 0.420 & 0.192 & 0.811 \\
+ & CycleGAN + composition labels (averaged weights) & $-$0.214 & 0.563 & +0.207 & realism$^{\dagger}$ & 0.589 & 0.148 & 0.809 \\
+ & CycleGAN + cross-fitted labels (averaged weights) & $-$0.230 & 0.528 & +0.153 & realism$^{\dagger}$ & 0.588 & 0.162 & 0.806 \\
+ & mean shift & $-$0.081 & 0.035 & $-$0.118 & realism & 0.498 & 0.261 & 0.854 \\
+ & ComBat & $-$0.466 & 0.260 & $-$0.287 & realism & 0.528 & 0.244 & 1.102 \\
+ & CORAL & $-$0.705 & 0.544 & $-$0.024 & realism & 0.308 & 0.134 & 1.059 \\
+ & paired ridge regression & 0.132 & 0.438 & +0.118$^{*}$ & accuracy & 0.630 & 0.252 & 0.760 \\
+ & paired neural network & 0.045 & 0.070 & +0.042$^{*}$ & mixed & 0.584 & 0.275 & 0.827 \\
+ & optimal-transport retrieval & $-$0.990 & 0.609 & +0.041 & realism$^{\dagger}$ & $-$0.530 & 0.104 & 0.000 \\
+ & random real profile & $-$1.009 & 0.627 & +0.059 & realism$^{\dagger}$ & $-$0.668 & 0.109 & 0.000 \\
+ & another draw of the same donor & 0.029 & 0.975 & +0.015 & accuracy & 0.343 & 0.000 & 0.999 \\
+bulk $\to$ single-cell & unpaired CycleGAN (chosen checkpoint) & $-$0.347 & 0.255 & $-$0.372 & realism$^{\dagger}$ & 0.292 & 0.216 & 1.089 \\
+ & CycleGAN + composition labels (chosen checkpoint) & $-$0.295 & 0.348 & $-$0.235 & realism$^{\dagger}$ & 0.432 & 0.224 & 1.065 \\
+ & unpaired CycleGAN (averaged weights) & $-$0.314 & 0.263 & $-$0.337 & realism$^{\dagger}$ & 0.314 & 0.213 & 1.070 \\
+ & CycleGAN + composition labels (averaged weights) & $-$0.261 & 0.361 & $-$0.188 & realism$^{\dagger}$ & 0.451 & 0.244 & 1.061 \\
+ & CycleGAN + cross-fitted labels (averaged weights) & $-$0.288 & 0.343 & $-$0.234 & realism$^{\dagger}$ & 0.429 & 0.230 & 1.064 \\
+ & mean shift & $-$2.037 & 0.412 & $-$0.262 & realism & $-$0.918 & 0.210 & 1.885 \\
+ & ComBat & $-$0.111 & 0.037 & $-$0.251 & realism & 0.477 & 0.218 & 1.010 \\
+ & CORAL & $-$1.239 & 0.335 & $-$0.340 & realism & $-$0.775 & 0.210 & 1.415 \\
+ & paired ridge regression & 0.168 & 0.289 & +0.063$^{*}$ & accuracy & 0.477 & 0.261 & 0.820 \\
+ & paired neural network & $-$0.625 & 0.241 & $-$0.433$^{*}$ & realism$^{\dagger}$ & 0.112 & 0.319 & 1.428 \\
+ & optimal-transport retrieval & $-$0.916 & 0.756 & +0.082 & realism$^{\dagger}$ & $-$0.779 & 0.151 & 0.000 \\
+ & random real profile & $-$0.874 & 0.875 & +0.201 & realism$^{\dagger}$ & $-$1.019 & 0.146 & 0.000 \\
+ & another draw of the same donor & $-$0.046 & 0.959 & +0.788 & realism & 0.253 & 0.000 & 1.009 \\
+\bottomrule
+\end{tabular}
+\caption{Every model on the test split (119 pairs, 14 donors; point estimates). Chosen checkpoint: the models locked before test, at the checkpoints chosen on validation (seeds 0--2); averaged weights: exponential-moving-average weights, with no checkpoint selection (seeds 6--8, steps 15,000, 17,500 and 20,000). Realism: $1 - 2\lvert\mathrm{AUROC} - 0.5\rvert$ of a classifier two-sample test. Margin: the distance beyond the unpaired frontier, in realism units (realism kind: realism minus the frontier's realism at the model's accuracy), or in centered $R^2$ units when no blend is as accurate (accuracy kind); mixed: members of different kinds averaged. $^{\dagger}$Inferred for models averaged over several members: their mean accuracy is below the frontier's highest accuracy. $^{*}$Paired models' margins are descriptive. Composition $R^2$: read by the marker-gene readout. Within-donor top-1: the share of samples whose translation is closest to its own partner among the donor's draws. Nearest-neighbor ratio: the median distance from a translation to its nearest training target, over the same for the real targets. Zeros that hold by construction: the nearest-neighbor ratio of optimal-transport retrieval and the random real profile (they output training profiles) and the within-donor top-1 of another draw of the same donor.}
+\label{tab:models}
+\end{table*}

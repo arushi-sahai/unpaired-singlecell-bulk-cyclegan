@@ -1,0 +1,13 @@
+direction,ridge + spread minus,metric,difference,95% CI
+single-cell → bulk,M1,centered R²,0.37540470432300255,0.302 to 0.478
+single-cell → bulk,M1,marker composition R²,0.21629050275702544,0.128 to 0.420
+single-cell → bulk,M1,realism,-0.06374314431654982,-0.429 to 0.298
+single-cell → bulk,M2,centered R²,0.39497489602425584,0.293 to 0.488
+single-cell → bulk,M2,marker composition R²,0.04262320006796705,0.001 to 0.115
+single-cell → bulk,M2,realism,-0.02683426311701137,-0.357 to 0.270
+bulk → single-cell,M1,centered R²,0.5149016975736938,0.406 to 0.682
+bulk → single-cell,M1,marker composition R²,0.1844912242382551,0.063 to 0.438
+bulk → single-cell,M1,realism,0.03431961019702001,-0.222 to 0.380
+bulk → single-cell,M2,centered R²,0.46282444391412747,0.383 to 0.600
+bulk → single-cell,M2,marker composition R²,0.04482567757475353,-0.046 to 0.207
+bulk → single-cell,M2,realism,-0.059412000094155204,-0.330 to 0.280

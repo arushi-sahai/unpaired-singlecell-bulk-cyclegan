@@ -1,0 +1,13 @@
+direction,model,margin,SD over seeds
+single-cell → bulk,"M1, locked (raw weights, chosen checkpoints)",0.0231598303554699,
+single-cell → bulk,"M2, locked (raw weights, chosen checkpoints)",0.0217260315478289,
+single-cell → bulk,"M1, averaged weights (kept steps)",0.024210507215811528,0.03653431648073087
+single-cell → bulk,"M2, averaged weights (kept steps)",0.047065324810092395,0.012468263710746394
+single-cell → bulk,"B-cf, averaged weights (kept steps)",0.09772384128346699,0.0713171719705355
+single-cell → bulk,another draw of the same donor,0.6958008793435162,
+bulk → single-cell,"M1, locked (raw weights, chosen checkpoints)",-0.0261897559887513,
+bulk → single-cell,"M2, locked (raw weights, chosen checkpoints)",0.085730343860298,
+bulk → single-cell,"M1, averaged weights (kept steps)",-0.03638869466703403,0.032602826846760614
+bulk → single-cell,"M2, averaged weights (kept steps)",0.01162996563743647,0.030525520763317757
+bulk → single-cell,"B-cf, averaged weights (kept steps)",0.012837183686372928,0.043442606952539334
+bulk → single-cell,another draw of the same donor,0.45385868129220075,

@@ -1,0 +1,21 @@
+condition,direction,Δ centered R²,Δ centered R² CI,Δ marker composition R²,Δ marker composition R² CI
+A1 adversarial loss off,single-cell → bulk,-0.19123414,-0.312 to -0.082,0.019180472128173198,-0.111 to 0.169
+A1 adversarial loss off,bulk → single-cell,-1.38308,-1.597 to -0.952,-3.004351831666584,-5.048 to -2.374
+A2 affine-only,single-cell → bulk,-0.085558474,-0.231 to 0.016,-0.2393576707851084,-0.399 to -0.142
+A2 affine-only,bulk → single-cell,-0.0014692992,-0.053 to 0.077,0.20154860409075914,0.094 to 0.457
+A2 identity loss off,single-cell → bulk,0.025353462,-0.019 to 0.077,0.07110373132633002,0.024 to 0.142
+A2 identity loss off,bulk → single-cell,0.01774633,-0.013 to 0.043,-0.11178037025587975,-0.283 to 0.002
+"A2 affine-only, identity loss off",single-cell → bulk,-0.044667184,-0.263 to 0.120,-0.15436533367879834,-0.341 to -0.086
+"A2 affine-only, identity loss off",bulk → single-cell,-0.51863444,-0.608 to -0.432,-0.314568252932305,-0.619 to -0.161
+A3 cycle weight 0,single-cell → bulk,-1.2278799,-1.442 to -1.035,-0.2445434656238098,-0.387 to -0.137
+A3 cycle weight 0,bulk → single-cell,-1.5052608,-1.722 to -1.186,-1.3408937280268842,-2.239 to -1.047
+A3 cycle weight 40,single-cell → bulk,0.0004505217,-0.049 to 0.045,-0.16809600956297713,-0.249 to -0.103
+A3 cycle weight 40,bulk → single-cell,-0.019741684,-0.034 to 0.034,-0.023968521653998442,-0.099 to 0.050
+A4 half the donors,single-cell → bulk,0.024743974,-0.048 to 0.080,-0.12053536439218965,-0.259 to -0.036
+A4 half the donors,bulk → single-cell,0.05735731,0.032 to 0.121,-0.04374742219709985,-0.187 to 0.094
+A4 half the draws,single-cell → bulk,0.04261437,-0.035 to 0.101,-0.05970395725270228,-0.140 to 0.001
+A4 half the draws,bulk → single-cell,0.12192735,0.077 to 0.173,-0.002306707124887654,-0.142 to 0.118
+B0 M2,single-cell → bulk,0.07519239,-0.013 to 0.126,0.16013971744802313,0.118 to 0.260
+B0 M2,bulk → single-cell,0.03445594,-0.001 to 0.100,0.1964803282816831,0.074 to 0.397
+"B3 M2, half-A networks",single-cell → bulk,-0.0059699565,-0.049 to 0.055,-0.08788299810404221,-0.202 to -0.024
+"B3 M2, half-A networks",bulk → single-cell,0.015058905,-0.024 to 0.048,-0.02439358999472291,-0.092 to 0.054

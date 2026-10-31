@@ -1,0 +1,13 @@
+direction,reference,margin,centered R²,realism,within-donor top-1,composition R²
+single-cell → bulk,same-donor reference,0.014996049488739227,0.029163765881865533,0.9750723818939342,0.0,
+single-cell → bulk,no-information reference,0.058752912929878054,-1.0093840697366205,0.626509427300332,0.10924369747899158,
+single-cell → bulk,OT-s,0.04109879245815976,-0.9904829602913491,0.6088553068286137,0.10364145658263306,
+bulk → single-cell,same-donor reference,0.7884155370210493,-0.04612546408942664,0.9587599745780666,0.0,
+bulk → single-cell,no-information reference,0.2005037309041262,-0.8736311802338951,0.8751735988513052,0.14565826330532214,
+bulk → single-cell,OT-s,0.08167973071581562,-0.9156252092435473,0.7563495986629946,0.15126050420168066,
+single-cell → bulk,real targets read by the marker probe,,,,,0.540775994544387
+single-cell → bulk,real targets read by the ridge probe,,,,,0.470026934691935
+single-cell → bulk,real targets read by the composition network,,,,,0.4657905497978157
+bulk → single-cell,real targets read by the marker probe,,,,,0.8273236923160106
+bulk → single-cell,real targets read by the ridge probe,,,,,0.9203235209786328
+bulk → single-cell,real targets read by the composition network,,,,,0.8721726345748085

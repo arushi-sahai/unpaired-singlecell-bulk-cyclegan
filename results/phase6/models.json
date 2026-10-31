@@ -1,0 +1,86 @@
+{
+ "C_bulk_retrained": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "member_seeds": [
+   3,
+   4,
+   5
+  ],
+  "members": [
+   {
+    "canonical_hash": "0524425987115726f69cd751f06e59e15e35aa8e01feb293c20a7d568c003bf8",
+    "file": "C_bulk_retrained_seed0.pt"
+   },
+   {
+    "canonical_hash": "817b97619cbce10a6c8d903dd32e6724e9941a5fd08fa17bb57da50acc22723c",
+    "file": "C_bulk_retrained_seed1.pt"
+   },
+   {
+    "canonical_hash": "b8ad971849b28a55cc2290f2ab3bcb9b6814afeaffecc2939877c03d5e8d9f2a",
+    "file": "C_bulk_retrained_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "trained_on": "all 582 training rows (as the locked C_bulk)"
+ },
+ "C_sc_retrained": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "l1",
+   "noise": 0.1,
+   "scaling": "center",
+   "weight_decay": 1e-05
+  },
+  "epochs": 102,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "member_seeds": [
+   3,
+   4,
+   5
+  ],
+  "members": [
+   {
+    "canonical_hash": "01ed6a77edcd9f3fda551161e3254dd83ec94c3e4b605d18003d6a6eaad7b4d6",
+    "file": "C_sc_retrained_seed0.pt"
+   },
+   {
+    "canonical_hash": "13e2b60af93d5dad32928d3b51169c85014ba847f1955655853847b27223971d",
+    "file": "C_sc_retrained_seed1.pt"
+   },
+   {
+    "canonical_hash": "246d6306d63a7642f913a074e03d1af8d316dc08cc20473fc83464a51422b2f6",
+    "file": "C_sc_retrained_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "trained_on": "all 582 training rows (as the locked C_sc)"
+ }
+}

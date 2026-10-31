@@ -1,0 +1,25 @@
+direction,model,metric,validation,test,validation minus test
+single-cell → bulk,"M1, locked (raw weights, chosen checkpoints)",margin,0.0231598303554699,0.10523628979411881,-0.08207645943864891
+single-cell → bulk,"M1, locked (raw weights, chosen checkpoints)",centered R²,-0.2629466432485186,-0.24314130651800733,-0.01980533673051124
+single-cell → bulk,"M1, locked (raw weights, chosen checkpoints)",marker composition R²,0.3980838300218614,0.4135056890559794,-0.015421859034118024
+single-cell → bulk,"M1, averaged weights (no checkpoint selection)",margin,0.024210507215811528,0.09709553420500193,-0.0728850269891904
+single-cell → bulk,"M1, averaged weights (no checkpoint selection)",centered R²,-0.22938386327179625,-0.24931685022694428,0.01993298695514803
+single-cell → bulk,"M1, averaged weights (no checkpoint selection)",marker composition R²,0.41304947238530526,0.41958043386198907,-0.006530961476683805
+single-cell → bulk,"M2, locked (raw weights, chosen checkpoints)",margin,0.0217260315478289,0.046200231274409975,-0.024474199726581075
+single-cell → bulk,"M2, locked (raw weights, chosen checkpoints)",centered R²,-0.2293426817615565,-0.26271158642510456,0.033368904663548055
+single-cell → bulk,"M2, locked (raw weights, chosen checkpoints)",marker composition R²,0.587419827698198,0.5871729917450378,0.0002468359531602182
+single-cell → bulk,"M2, averaged weights (no checkpoint selection)",margin,0.047065324810092395,0.20745346507969645,-0.16038814026960405
+single-cell → bulk,"M2, averaged weights (no checkpoint selection)",centered R²,-0.18697525979540552,-0.21355138814867433,0.026576128353268808
+single-cell → bulk,"M2, averaged weights (no checkpoint selection)",marker composition R²,0.5496414543078442,0.5891297788743172,-0.039488324566473
+bulk → single-cell,"M1, locked (raw weights, chosen checkpoints)",margin,-0.0261897559887513,-0.37247054733439594,0.34628079134564466
+bulk → single-cell,"M1, locked (raw weights, chosen checkpoints)",centered R²,-0.1877930740250107,-0.34682220823731336,0.15902913421230266
+bulk → single-cell,"M1, locked (raw weights, chosen checkpoints)",marker composition R²,-0.0668867418236374,0.29210116781222606,-0.35898790963586347
+bulk → single-cell,"M1, averaged weights (no checkpoint selection)",margin,-0.03638869466703403,-0.337009833855755,0.30062113918872096
+bulk → single-cell,"M1, averaged weights (no checkpoint selection)",centered R²,-0.18806219183233586,-0.3139698412841302,0.12590764945179433
+bulk → single-cell,"M1, averaged weights (no checkpoint selection)",marker composition R²,-0.002113420457654646,0.31406754737230036,-0.31618096782995503
+bulk → single-cell,"M2, locked (raw weights, chosen checkpoints)",margin,0.085730343860298,-0.23455157705458776,0.3202819209148858
+bulk → single-cell,"M2, locked (raw weights, chosen checkpoints)",centered R²,-0.1533252235166681,-0.29474490936280223,0.14141968584613412
+bulk → single-cell,"M2, locked (raw weights, chosen checkpoints)",marker composition R²,0.2057357504962247,0.4317667144757276,-0.22603096397950292
+bulk → single-cell,"M2, averaged weights (no checkpoint selection)",margin,0.01162996563743647,-0.18818787406446694,0.19981783970190342
+bulk → single-cell,"M2, averaged weights (no checkpoint selection)",centered R²,-0.12528548857245123,-0.2605477200999832,0.135262231527532
+bulk → single-cell,"M2, averaged weights (no checkpoint selection)",marker composition R²,0.21421182064010724,0.45117126031066224,-0.236959439670555

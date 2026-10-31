@@ -1,0 +1,5 @@
+model,direction,"margin, halving 0","margin, halving 1"
+OT-s,single-cell → bulk,-0.10831275720164608,-0.07403749428440783
+OT-s,bulk → single-cell,0.21230909922267957,-0.10692272519433026
+"M1 (locked, raw)",single-cell → bulk,0.0231598303554699,0.0940311114175017
+"M1 (locked, raw)",bulk → single-cell,-0.0261897559887513,-0.33159249418047937

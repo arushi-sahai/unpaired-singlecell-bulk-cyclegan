@@ -1,0 +1,78 @@
+{
+ "C_bulk_halfA0": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "half_a_rows_hash": "dc5d49f57b48fb4495c9ba76c380e7928ae45e6700305a9a8b09776e9124982f",
+  "members": [
+   {
+    "canonical_hash": "95200d9217f975aadbafa422145b319cd61d5d2d54d6cf6988b6fd882964ad99",
+    "file": "C_bulk_halfA0_seed0.pt"
+   },
+   {
+    "canonical_hash": "2874a03a9fb04463f51db7d87b9c18a813cc26dd4de9bb4304ffbca067ba2f94",
+    "file": "C_bulk_halfA0_seed1.pt"
+   },
+   {
+    "canonical_hash": "f47b396759a40d6e09367cef8e9ac678945d92bb29be71130d5ba76d40a9b744",
+    "file": "C_bulk_halfA0_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "trained_on": "half A of halving 0 (288 rows)"
+ },
+ "C_sc_halfA0": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "l1",
+   "noise": 0.1,
+   "scaling": "center",
+   "weight_decay": 1e-05
+  },
+  "epochs": 102,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "half_a_rows_hash": "dc5d49f57b48fb4495c9ba76c380e7928ae45e6700305a9a8b09776e9124982f",
+  "members": [
+   {
+    "canonical_hash": "171ce40c8068ee114ec9c89d765dc8552d9a2cfe2a29aa10d181c735446f7575",
+    "file": "C_sc_halfA0_seed0.pt"
+   },
+   {
+    "canonical_hash": "2f951a0a95e3687f6c90834e6d0aa712e7d0cba2d63ce0efd3e96f46c3bc6674",
+    "file": "C_sc_halfA0_seed1.pt"
+   },
+   {
+    "canonical_hash": "36521bc0be739283bbd90b1ceb962ae29b627757737066576fe35e4d04568785",
+    "file": "C_sc_halfA0_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "trained_on": "half A of halving 0 (288 rows)"
+ }
+}

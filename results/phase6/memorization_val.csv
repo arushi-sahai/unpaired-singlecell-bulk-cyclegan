@@ -1,0 +1,27 @@
+direction,translations,weights,memorization ratio (training halves),memorization ratio (all training targets)
+single-cell → bulk,start,—,0.8700290728257671,0.8704600910563793
+single-cell → bulk,"M1, fresh seeds (raw)",raw,0.8272217305582883,0.8443439269374722
+single-cell → bulk,"M2, fresh seeds (raw)",raw,0.8062358226356063,0.8228323242413267
+single-cell → bulk,M1 (EMA),averaged (EMA),0.8145698795896407,0.8324231583089307
+single-cell → bulk,M2 (EMA),averaged (EMA),0.7984424312249225,0.8146592202483489
+single-cell → bulk,B-cf (EMA),averaged (EMA),0.7996919465685108,0.8158281562659483
+single-cell → bulk,ridge + spread (all training pairs),—,0.7934927147681355,0.7899877852393468
+single-cell → bulk,same-donor reference,—,1.0002826265157083,0.997068914572151
+single-cell → bulk,"OT-b, ε 0.01",—,0.34372420720189195,0.3515224904011793
+single-cell → bulk,"OT-b, ε 0.03",—,0.6271000087095152,0.641327413587403
+single-cell → bulk,"OT-b, ε 0.1",—,0.6892808623371838,0.6984101865233101
+single-cell → bulk,"OT-b, ε 0.3",—,0.6862099491623471,0.6936814479887395
+single-cell → bulk,"OT-s, ε 0.3",—,1.1191013666272475e-07,1.1444911099238049e-07
+bulk → single-cell,start,—,0.9596375074936954,0.9909258933233108
+bulk → single-cell,"M1, fresh seeds (raw)",raw,1.0159673376789373,1.0551786065784685
+bulk → single-cell,"M2, fresh seeds (raw)",raw,1.0044130001428102,1.0424840224379082
+bulk → single-cell,M1 (EMA),averaged (EMA),1.0018202948720414,1.0404135284612979
+bulk → single-cell,M2 (EMA),averaged (EMA),0.9985103607950759,1.0347184268519942
+bulk → single-cell,B-cf (EMA),averaged (EMA),0.9940231079280076,1.030792269087331
+bulk → single-cell,ridge + spread (all training pairs),—,0.8276298265196785,0.83430512786907
+bulk → single-cell,same-donor reference,—,0.9863184616204792,1.0
+bulk → single-cell,"OT-b, ε 0.01",—,0.18492580701168343,0.19211887138661038
+bulk → single-cell,"OT-b, ε 0.03",—,0.5504407363143451,0.5718512452902023
+bulk → single-cell,"OT-b, ε 0.1",—,0.672512374323666,0.6986711072750894
+bulk → single-cell,"OT-b, ε 0.3",—,0.6707108078808348,0.6967994652510919
+bulk → single-cell,"OT-s, ε 0.3",—,1.0181725436408764e-07,1.0577764300293742e-07

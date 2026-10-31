@@ -1,0 +1,25 @@
+# Environment the results in this repository were produced with (Linux, CPU training; CUDA optional).
+#   conda env create -f environment.yml && conda activate dgm-soundlife
+#   python -m ipykernel install --user --name dgm-soundlife   # the kernel name the notebooks record
+name: dgm-soundlife
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10.14
+  - pip
+  - pip:
+      - numpy==1.26.4
+      - scipy==1.15.3
+      - pandas==2.3.3
+      - scikit-learn==1.7.2
+      - anndata==0.11.4
+      - scanpy==1.9.8
+      - h5py==3.13.0
+      - harmonypy==2.0.2
+      - umap-learn==0.5.7
+      - matplotlib==3.10.8
+      - threadpoolctl==3.6.0
+      - torch==2.8.0          # results used 2.8.0+cu129 with training on the CPU; a CPU-only build should match, but it changes the cache keys, so runs retrain
+      - ipykernel==6.29.5
+      - nbconvert==7.17.0
+      - jupyterlab==4.5.3

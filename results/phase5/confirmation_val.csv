@@ -1,0 +1,2 @@
+setting,Δ margin single-cell → bulk (mean ± SD),Δ margin bulk → single-cell (mean ± SD),Δ mean over directions,own margin single-cell → bulk,own margin bulk → single-cell,mean over directions > 2 SD,no direction worse by > 1 SD,margin > 0 in a direction,promising
+A-idoff identity loss off,0.034 ± 0.054,-0.015 ± 0.049,0.010 ± 0.025,0.06586916690811927,-0.044111699018234495,False,True,True,False

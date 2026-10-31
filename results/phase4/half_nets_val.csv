@@ -1,0 +1,3 @@
+networks,C_B on half B's bulk (M2's pseudo-labels),C_B on validation bulk,C_S on validation single-cell
+locked (all 582 training pairs),0.9776340735571125,0.4737229071745131,0.8373510472957654
+retrained on half A,0.4053694938509007,0.4104027299951081,0.7600622065147135

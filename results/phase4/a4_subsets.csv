@@ -1,0 +1,10 @@
+condition,seed,single-cell rows,bulk rows,single-cell donors,bulk donors
+full model,3,288,294,33,35
+full model,4,288,294,33,35
+full model,5,288,294,33,35
+A4 half the donors,3,144,147,16,17
+A4 half the donors,4,135,141,16,17
+A4 half the donors,5,143,138,16,17
+A4 half the draws,3,144,147,33,35
+A4 half the draws,4,135,141,33,35
+A4 half the draws,5,143,138,33,35

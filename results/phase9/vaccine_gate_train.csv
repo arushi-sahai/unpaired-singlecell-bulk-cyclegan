@@ -1,0 +1,5 @@
+target assay,direction,program,training change,CI low,CI high,gate passed
+bulk,single-cell → bulk,plasmablast and immunoglobulin,0.4943545132528275,0.27594836685538365,0.722407699848515,True
+bulk,single-cell → bulk,interferon response,-0.13608032604868076,-0.2294155514571141,-0.054541146547866515,
+single-cell,bulk → single-cell,plasmablast and immunoglobulin,0.3807562405337055,0.20882319493510554,0.5623036412628725,True
+single-cell,bulk → single-cell,interferon response,-0.16038809176577257,-0.28790560904513607,-0.050016201103860146,

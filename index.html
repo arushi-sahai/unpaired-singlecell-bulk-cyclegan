@@ -1,0 +1,998 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What can a generative model recover about a person&#39;s immune cells without paired samples?</title>
+<meta name="description" content="What an unpaired CycleGAN carries between PBMC single-cell (pseudobulk) and whole-blood bulk profiles: the person, the draw, and cells only one assay sees (Sound Life cohort).">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://arushi-sahai.github.io/unpaired-singlecell-bulk-cyclegan/">
+<meta property="og:title" content="What can a generative model recover about a person&#39;s immune cells without paired samples?">
+<meta property="og:description" content="What an unpaired CycleGAN carries between PBMC single-cell (pseudobulk) and whole-blood bulk profiles: the person, the draw, and cells only one assay sees (Sound Life cohort).">
+<meta property="og:image" content="https://arushi-sahai.github.io/unpaired-singlecell-bulk-cyclegan/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The page title above the test setup: training donors divided by assay, the models compared, and how each prediction is scored.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="author" content="Arushi Sahai">
+<style>
+  :root {
+    --bg: #ffffff; --surface: #f6f5f2; --ink: #0b0b0b; --ink-2: #52514e; --muted: #8a8984; --rule: #e4e3df;
+    --accent: #2a78d6; --warn: #eb6834; --good: #1baf7a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg: #141413; --surface: #1d1d1b; --ink: #f2f1ee; --ink-2: #c3c2bd; --muted: #8f8e89; --rule: #34332f; --accent: #6aa5ec; }
+    :root:not([data-theme="light"]) img.fig { background: #ffffff; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 980px; margin: 0 auto; padding: 32px 16px 80px; }
+  h1 { font-size: 1.9rem; line-height: 1.25; margin: 0 0 8px; letter-spacing: -0.01em; }
+  h2 { font-size: 1.3rem; margin: 48px 0 12px; padding-top: 12px; border-top: 1px solid var(--rule); }
+  h3 { font-size: 1.05rem; margin: 28px 0 8px; }
+  p, li { color: var(--ink-2); max-width: 80ch; }
+  .tagline { margin: 0 0 6px; color: var(--ink-2); font-size: 1.05rem; }
+  .dataline { margin: 6px 0 10px; color: var(--ink-2); max-width: 80ch; }
+  .byline { margin: 4px 0 2px; color: var(--ink); }
+  .sub { color: var(--muted); margin: 0 0 24px; }
+  .lead { background: var(--surface); border-radius: 12px; padding: 20px 22px; margin: 20px 0; }
+  .lead p { color: var(--ink); margin: 6px 0; }
+  .lead .gloss { font-size: 1.12rem; font-weight: 600; }
+  .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+  .card { background: var(--surface); border-radius: 10px; padding: 14px 16px; }
+  .card .k { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .card .v { font-size: 1.5rem; font-weight: 650; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .card .r { font-size: 0.9rem; color: var(--ink-2); }
+  .toc { border: 1px solid var(--rule); border-radius: 12px; padding: 14px 18px; margin: 20px 0 8px; }
+  .toc-h { margin: 0 0 8px; font-weight: 650; color: var(--ink); }
+  .toc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 4px 24px; }
+  .toc-sub { margin: -2px 0 6px; font-size: 0.82rem; font-style: italic; color: var(--ink-2); }
+  .toc-g { margin: 6px 0 4px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+  .toc ul, .toc ol { margin: 0; padding-left: 20px; font-size: 0.92rem; }
+  .toc li { margin: 2px 0; }
+  .toc ul.toc-pre { margin-bottom: 2px; }
+  .toc-g2 { margin: 6px 0 2px; font-size: 0.82rem; font-style: italic; color: var(--ink-2); }
+  .toc a { text-decoration: none; } .toc a:hover { text-decoration: underline; }
+  .lead .lh { font-weight: 650; margin: 16px 0 4px; }
+  .lead ul { margin: 0; padding-left: 20px; }
+  .lead p, .lead li { max-width: none; }
+  .lead li { color: var(--ink); margin: 10px 0; }
+  .siglab.sm { font-size: 0.62rem; padding: 0 6px; margin: 0 0 0 4px; }
+  h3 .siglab { margin-right: 10px; vertical-align: 2px; }
+  .siglab { display: inline-block; margin-right: 8px; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); border: 1px solid var(--rule); border-radius: 999px; padding: 0 8px; vertical-align: 1px; }
+  .lead li a { white-space: nowrap; font-size: 0.9rem; }
+  h2, h3 { scroll-margin-top: 12px; }
+  .card .cn, .cref .cn { display: inline-block; min-width: 1.4em; margin-right: 6px; padding: 0 5px; border-radius: 4px; background: var(--rule); color: var(--ink); font-weight: 650; text-align: center; letter-spacing: 0; }
+  .cref { margin-left: 6px; position: relative; top: -0.45em; font-size: 0.72rem; }
+  .cref .cn { margin-right: 3px; padding: 1px 5px; line-height: 1.3; }
+  .sig { border-left: 3px solid var(--rule); padding: 2px 0 2px 16px; margin: 18px 0; }
+  .sig p { margin: 4px 0; }
+  .sig .sig-h { color: var(--ink); font-size: 1.05rem; }
+  .sig .sig-need { color: var(--ink); font-style: italic; margin-top: 8px; }
+  table.donors { max-width: 760px; margin: 14px 0 6px; }
+  table.donors tr.total td { font-weight: 650; color: var(--ink); border-top: 1px solid var(--ink-2); }
+  figure { margin: 18px 0; }
+  img.fig { width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--rule); }
+  figcaption { font-size: 0.9rem; color: var(--ink-2); margin-top: 6px; max-width: none; }
+  .tag { display: inline-block; font-size: 0.75rem; padding: 1px 8px; border-radius: 999px; margin-right: 6px; border: 1px solid var(--rule); color: var(--ink-2); }
+  .tag.test { border-color: var(--accent); color: var(--accent); }
+  .tag.val { border-color: var(--muted); }
+  .box { border-left: 3px solid var(--accent); padding: 8px 14px; background: var(--surface); border-radius: 0 8px 8px 0; margin: 14px 0; }
+  .box p { margin: 4px 0; color: var(--ink); }
+  .seg { display: inline-flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  .seg button { font: inherit; font-size: 0.9rem; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .tablewrap { overflow-x: auto; margin: 12px 0; -webkit-overflow-scrolling: touch; }
+  #t1 { min-width: 680px; } #t2 { min-width: 760px; }
+  table { border-collapse: collapse; font-size: 0.88rem; width: 100%; font-variant-numeric: tabular-nums; }
+  th, td { padding: 6px 8px; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+  th { color: var(--ink-2); font-weight: 600; white-space: nowrap; }
+  th button.sort { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  th button.sort::after { content: " ↕"; color: var(--muted); }
+  th[aria-sort="ascending"] button.sort::after { content: " ↑"; }
+  th[aria-sort="descending"] button.sort::after { content: " ↓"; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  td.n, th.n { text-align: right; white-space: nowrap; }
+  table.align th[colspan] { text-align: center; }
+  .foot { font-size: 0.82rem; color: var(--muted); }
+  .terms { display: grid; grid-template-columns: 13rem 1fr; gap: 10px 20px; border: 1px solid var(--rule); border-radius: 12px; padding: 16px 20px; margin: 14px 0 26px; }
+  .terms .terms-h { grid-column: 1 / -1; margin: 0 0 4px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); max-width: none; }
+  .terms dt { font-weight: 650; color: var(--ink); }
+  .terms dd { margin: 0; color: var(--ink-2); }
+  @media (max-width: 640px) { .terms { grid-template-columns: 1fr; gap: 2px; } .terms dd { margin-bottom: 10px; } }
+  h3 + .ans { margin-top: 8px; }
+  .ans { background: var(--surface); border-radius: 12px; padding: 14px 18px; margin: 10px 0 14px; border-left: 4px solid var(--ink-2); }
+  .ans p { max-width: none; margin: 4px 0; }
+  .ans-q { font-style: italic; color: var(--ink-2); font-size: 0.95rem; }
+  .ans-a { color: var(--ink); font-weight: 600; font-size: 1.06rem; }
+  .fgroup { margin: 40px 0 -20px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 650; }
+  .ans-n { color: var(--muted); font-size: 0.85rem; margin-top: 6px !important; }
+  ul.ev { padding-left: 20px; }
+  ul.ev > li { margin: 8px 0; }
+  .take { color: var(--ink); border-left: 3px solid var(--rule); padding-left: 14px; }
+  table.ratio { max-width: 560px; margin: 8px 0; }
+  .pdfig svg { width: 100%; max-width: 680px; height: auto; display: block; }
+  .pdsvg text { font-family: inherit; }
+  .pdsvg .zero { stroke: var(--rule); stroke-width: 1; }
+  .pdsvg .ax { stroke: var(--ink-2); stroke-width: 1.2; }
+  .pdsvg .tick { fill: var(--muted); font-size: 15px; }
+  .pdsvg .axl { fill: var(--ink-2); font-size: 16px; }
+  .pdsvg .dn { fill: var(--ink); font-size: 17px; font-weight: 650; }
+  .pdsvg .pp { stroke: var(--ink); stroke-width: 2.4; stroke-dasharray: 7 5; }
+  .pdsvg .pl { fill: var(--ink); font-size: 15px; font-weight: 650; }
+  .pdsvg .dp { stroke: var(--ink-2); stroke-width: 2.4; }
+  .pdsvg .ah { fill: var(--ink-2); }
+  .pdsvg .pt { fill: var(--ink); stroke: var(--bg); stroke-width: 1.5; }
+  .pdsvg .dl { fill: var(--ink-2); font-size: 15px; }
+  @media (max-width: 600px) { .pdsvg .tick, .pdsvg .pl, .pdsvg .dl { font-size: 21px; } .pdsvg .axl { font-size: 21px; } .pdsvg .dn { font-size: 22px; } }
+  .takeaways { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 16px 0 26px; counter-reset: tk; }
+  @media (max-width: 600px) { .takeaways { grid-template-columns: 1fr; } }
+  .tk { counter-increment: tk; display: flex; flex-direction: column; gap: 4px; background: var(--surface); border-radius: 12px; padding: 14px 16px; text-decoration: none; color: inherit; border: 1px solid transparent; }
+  .tk:hover { border-color: var(--rule); }
+  .tk-aud { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+  .tk-t { font-weight: 650; color: var(--ink); font-size: 1.02rem; }
+  .tk-b { color: var(--ink-2); font-size: 0.93rem; line-height: 1.5; }
+  .tk-ref { margin-top: auto; padding-top: 6px; font-size: 0.8rem; color: var(--accent); }
+  .fgroup.tkg { margin: 18px 0 -4px; }
+  ol.mdetail > li { margin: 10px 0; }
+  .lead-more { margin: 14px 0 0 !important; }
+  .lead-more a { font-weight: 600; }
+  a.term { color: inherit; text-decoration: underline dotted var(--muted); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  a.cite { color: inherit; text-decoration: underline dotted var(--muted); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  a.cite:hover { color: var(--accent); text-decoration-color: var(--accent); }
+  a.paper { font-size: 0.78rem; margin-left: 4px; }
+  a.term:hover { color: var(--accent); text-decoration-color: var(--accent); }
+  li:target, li.flash { background: color-mix(in srgb, var(--accent) 14%, transparent); border-radius: 6px; transition: background 1.5s; }
+  #termpop { position: absolute; z-index: 50; background: var(--bg); color: var(--ink-2); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; box-shadow: 0 8px 24px rgba(0,0,0,.18); font-size: 0.9rem; line-height: 1.5; max-height: 280px; overflow: auto; }
+  #termpop .tp-body ul { padding-left: 18px; margin: 6px 0; }
+  #termpop .tp-body li { margin: 3px 0; }
+  #termpop b { color: var(--ink); }
+  #termpop .tp-body p { margin: 0; max-width: none; color: var(--ink-2); }
+  #termpop .tp-more { display: inline-block; margin-top: 8px; font-size: 0.85rem; font-weight: 600; }
+  .nextgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 16px 0 10px; }
+  .nx { background: var(--surface); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; border-left: 4px solid var(--ink-2); }
+  .nx p { margin: 0; max-width: none; }
+  .nx-k { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+  .nx-q { font-style: italic; color: var(--ink-2); font-size: 0.93rem; margin-top: 4px !important; }
+  .nx-t { font-weight: 650; color: var(--ink); font-size: 1.04rem; margin-top: 6px !important; }
+  .nx-b { color: var(--ink-2); font-size: 0.94rem; line-height: 1.55; margin-top: 6px !important; }
+  .nx-ref { margin-top: auto !important; padding-top: 10px; font-size: 0.82rem; }
+  @media (max-width: 640px) { .nextgrid { grid-template-columns: 1fr; } }
+  .card .vd { font-size: 0.95rem; font-weight: 650; color: var(--ink); margin-top: 6px; }
+  .tapnote { display: none; font-size: 0.85rem; color: var(--muted); margin: 6px 0 -6px; }
+  @media (max-width: 640px) { .tapnote { display: block; } }
+  .tag { cursor: help; }
+  .fdetail { margin: 18px 0 6px; padding: 2px 0 2px 14px; border-left: 2px solid var(--rule); }
+  .fdetail-h { margin: 0 0 6px; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 600; }
+  details.section-dd { margin: 36px 0 10px; border-top: 1px solid var(--rule); padding-top: 18px; }
+  details.section-dd > summary { font-size: 1.25rem; font-weight: 650; }
+  ul.files li { margin: 3px 0; }
+  details.section-dd > details { margin-left: 18px; }
+  details.finding { margin: 6px 0; border-bottom: 1px solid var(--rule); }
+  details.finding > summary { list-style: none; padding: 10px 0; display: flex; align-items: baseline; gap: 10px; }
+  details.finding > summary::-webkit-details-marker { display: none; }
+  details.finding > summary::before { content: "▸"; color: var(--muted); font-size: 0.9rem; transition: transform .15s; display: inline-block; }
+  details.finding[open] > summary::before { transform: rotate(90deg); }
+  details.finding > summary h3 { margin: 0 !important; display: inline; }
+  details.finding > summary { flex-wrap: wrap; }
+  details.finding .fsum { flex-basis: 100%; padding-left: 20px; margin-top: 2px; color: var(--ink-2); font-size: 0.95rem; }
+  details.finding[open] .fsum { display: none; }
+  details.finding[open] { padding-bottom: 14px; }
+  .fgroup:not(.tkg) { margin: 34px 0 6px !important; }
+  .rq { background: var(--surface); border-left: 4px solid var(--ink); border-radius: 0 12px 12px 0; padding: 14px 20px; margin: 20px 0 8px; }
+  .rq p, .rq li { max-width: none; }
+  .rq ul { margin: 6px 0 10px; }
+  .rq .rq-q { color: var(--ink); font-weight: 650; font-size: 1.06rem; margin: 14px 0 8px; }
+  details.mfold > summary { display: none; }
+  @media (max-width: 600px) {
+    details.mfold { border: 1px solid var(--rule); border-radius: 12px; padding: 10px 14px; margin: 14px 0; }
+    details.mfold > summary { display: list-item; }
+    details.mfold .toc { border: 0; padding: 0; margin: 8px 0 0; } details.mfold .toc-h { display: none; }
+    details.mfold .grid3 { margin: 10px 0 0; }
+  }
+  .cref a.cn { text-decoration: none; }
+  details.finding > summary { display: grid !important; grid-template-columns: 1em 1fr; column-gap: 8px; align-items: baseline; }
+  details.finding .fsum { grid-column: 2; padding-left: 0 !important; }
+  #lightbox { position: fixed; inset: 0; z-index: 100; background: rgba(12,12,11,.96); overflow: auto; display: flex; align-items: flex-start; justify-content: center; padding: 48px 8px 16px; touch-action: pan-x pan-y pinch-zoom; }
+  #lightbox[hidden] { display: none; }
+  #lightbox .lbwrap { max-width: 100%; }
+  #lightbox img { display: block; max-width: 100%; height: auto; background: #fff; border-radius: 6px; cursor: zoom-in; }
+  #lightbox .lbcap { color: #e8e7e3; font-size: 0.9rem; line-height: 1.5; margin: 10px 2px 0; max-width: 60rem; }
+  #lightbox.zoomed { justify-content: flex-start; }
+  #lightbox.zoomed .lbwrap { max-width: none; }
+  #lightbox.zoomed img { max-width: none; width: 250%; cursor: zoom-out; }
+  #lightbox.zoomed .lbcap { position: sticky; left: 2px; max-width: calc(100vw - 20px); }
+  #lightbox button { position: fixed; top: 10px; right: 12px; font-size: 1rem; padding: 6px 12px; border-radius: 8px; border: 0; background: #fff; color: #111; cursor: pointer; }
+  details > summary .dsum { display: block; margin: 2px 0 0 1.2em; font-weight: 400; font-size: 0.9rem; color: var(--ink-2); }
+  details[open] > summary .dsum { display: none; }
+  details#cards-fold > summary { display: list-item; }
+  details#cards-fold { border: 1px solid var(--rule); border-radius: 12px; padding: 10px 14px; margin: 14px 0; }
+  details#cards-fold .grid3 { margin: 10px 0 0; }
+  #backbtn { position: fixed; right: 16px; bottom: 16px; z-index: 60; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); box-shadow: 0 4px 14px rgba(0,0,0,.18); cursor: pointer; font: inherit; font-size: 0.9rem; }
+  #backbtn[hidden] { display: none; }
+  .result1 { margin: 10px 0 12px; font-size: 1.02rem; color: var(--ink); }
+  details { margin: 10px 0; }
+  ol.steps { list-style: none; counter-reset: step; padding: 0; margin: 14px 0 6px; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+  ol.steps li { counter-increment: step; background: var(--surface); border-radius: 10px; padding: 12px 14px; max-width: none; font-size: 0.93rem; }
+  ol.steps li::before { content: counter(step); display: inline-block; min-width: 1.5em; margin-right: 6px; padding: 0 5px; border-radius: 4px; background: var(--rule); color: var(--ink); font-weight: 650; text-align: center; }
+  .steps-note { font-size: 0.9rem; color: var(--ink-2); }
+  table.align { max-width: 640px; margin: 10px 0 4px; }
+  table.align tr.ref td { color: var(--ink-2); font-style: italic; border-top: 1px solid var(--rule); }
+  summary { cursor: pointer; color: var(--ink); font-weight: 600; }
+  a { color: var(--accent); }
+  .seg button { min-height: 40px; }
+  @media (max-width: 600px) {
+    main { padding: 20px 12px 64px; }
+    h1 { font-size: 1.45rem; } h2 { font-size: 1.15rem; margin-top: 36px; }
+    .card .v { font-size: 1.25rem; } .lead { padding: 16px; } .lead .gloss { font-size: 1.02rem; }
+    table { font-size: 0.8rem; } th, td { padding: 5px 6px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>What can a generative model recover about a person's immune cells without paired samples?</h1>
+  <p class="tagline"><i>Predicting between PBMC single-cell (pseudobulk) and whole-blood transcriptomes.</i></p>
+  <p class="dataline">Many large cohorts have only <a class="term" href="#def-bulk">whole-blood bulk</a> RNA-seq. Predicting single-cell profiles from bulk profiles could bring single-cell information to those cohorts. In the Allen Institute for Immunology's <a class="term" href="#def-cohort">Sound Life</a> cohort, 96 healthy adults had each blood draw profiled by both assays, <a class="term" href="#def-pbmc">PBMC</a> single-cell RNA-seq and whole-blood bulk RNA-seq (<a class="cite" href="#ref-gong2025">Gong et al., 2025</a>). Because most cohorts have only one assay, models were trained as if the two assays came from different people. The pairs were used only for scoring.</p>
+  <p class="result1"><b>Result:</b> without paired samples, the <a class="term" href="#def-cyclegan">CycleGAN</a> mostly recovered who the donor is, which a simple <a class="term" href="#def-pergene">per-gene correction</a> already captures. Paired donors added accuracy: plain <a class="term" href="#def-ridge">ridge regression</a> trained on all 68 paired donors reached <a class="term" href="#def-accuracy">centered R²</a> 0.16 and 0.24, where 0 means no better than predicting the average profile and 1 is perfect. No unpaired method got above 0, and every method's accuracy remained low. In practice, a cohort with only bulk data gains more accuracy from profiling some donors with both assays than from an unpaired model (<a href="#meaning">What this means</a>).</p>
+  <p class="byline"><b>Arushi Sahai</b> · <a href="mailto:arushis@cs.unc.edu">arushis@cs.unc.edu</a> · <a href="https://www.linkedin.com/in/arushisahai">LinkedIn</a> · <a href="https://github.com/arushi-sahai">GitHub</a></p>
+  <p class="sub">Final project (solo) for COMP 690-204: Deep Generative Models, UNC Chapel Hill, Fall 2026<br>Code, notebooks, and results: <a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan">the project repository</a></p>
+
+  <details class="mfold" id="toc-fold" open><summary>On this page</summary>
+  <nav class="toc" aria-label="On this page">
+    <p class="toc-h">On this page</p>
+    <div class="toc-grid">
+      <div><p class="toc-g">Summary and setup</p><p class="toc-sub">What was asked, on what data</p><ul>
+        <li><a href="#glance">Results at a glance</a></li>
+        <li><a href="#question">The question</a></li>
+        <li><a href="#how">The test setup</a></li>
+        <li><a href="#signal">Three kinds of signal in blood</a></li>
+        <li><a href="#comparator">How realism is judged</a></li>
+      </ul></div>
+      <div><p class="toc-g">What the predictions carry</p><p class="toc-sub">Which signals the predictions recover</p>        <p class="toc-g2">Machine-learning questions</p><ol>
+        <li><a href="#f1">Looking real vs. carrying information</a></li>
+        <li><a href="#f2">Cell-type composition</a></li>
+        <li><a href="#f3">What pairs buy</a></li>
+      </ol>
+        <p class="toc-g2">Biological readouts</p><ol start="4">
+        <li><a href="#f4">Who the donor is</a> <span class="siglab sm">The person</span></li>
+        <li><a href="#f5">Specific traits</a> <span class="siglab sm">The person</span></li>
+        <li><a href="#f6">Cells the input lacks</a> <span class="siglab sm">The assay</span></li>
+        <li><a href="#f7">A response to vaccination</a> <span class="siglab sm">The draw</span></li>
+      </ol></div>
+      <div><p class="toc-g">Context and details</p><ul>
+        <li><a href="#meaning">What this means</a></li>
+        <li><a href="#limitations">Limitations</a> · <a href="#next">Next steps</a></li>
+        <li><a href="#development">Development</a> · <a href="#test-results">All test results</a></li>
+        <li><a href="#definitions">Definitions</a></li>
+        <li><a href="#code">Code and report</a> · <a href="#references">References</a></li>
+      </ul></div>
+    </div>
+  </nav>
+  </details>
+
+  <h2 id="glance">Results at a glance</h2>
+  <p>The short answers, each linked to the finding that explains it.<br><span class="tag test">test</span> results come from <span data-n="NTestDonors"></span> <a class="term" href="#def-splits">held-out donors</a>, scored once.<br><span class="tag val">validation</span> results come from donors held out of training but used to tune the models.<br>Every interval and reading is in <a href="#test-results">All test results</a>.</p>
+  <div class="lead">
+    <p class="gloss">Paired donors are what add accuracy. With 8 paired donors, plain <a class="term" href="#def-ridge">ridge regression</a> (without the <a class="term" href="#def-ridge">spread step</a>) roughly matched the average profile, and with all 68 it scored above the average profile (<a class="term" href="#def-accuracy">centered R²</a> 0.16 and 0.24, point estimates), which no unpaired method did. Every method's accuracy remained low.</p>
+    <p class="lh">Machine-learning questions <span class="tag test">test</span></p>
+    <ul>
+      <li><b>Can a model trained without pairs beat simple methods?</b><span class="cref"><a class="cn" href="#card1">A</a><a class="cn" href="#card2">B</a></span><br>No. When predicting bulk, the CycleGAN <a class="term" href="#def-top1">picked out its own sample</a> among the donor's draws less often than its <a class="term" href="#def-pergene">per-gene correction</a> did (the reverse of validation), and it was no more <a class="term" href="#def-realism">realistic</a> than <a class="term" href="#def-alignments">simple alignments</a>, or <a class="term" href="#def-frontier">mixtures of two of them</a>, at equal accuracy. A <a class="term" href="#def-random">random real profile</a>, which ignores the input, also scored as realistic, so <a class="term" href="#def-realism">realism</a> scores alone cannot validate a model trained without pairs. <a href="#f1">Finding 1</a></li>
+      <li><b>Do <a class="term" href="#def-complabels">composition labels</a> from paired data help?</b><br>Partly. Paired data used only to train the composition labels brought composition back to about the per-gene correction's level, a little above it when predicting bulk and a little below it when predicting single-cell profiles. <a href="#f2">Finding 2</a></li>
+      <li><b>What do pairs buy?</b><span class="cref"><a class="cn" href="#card3">C</a></span><br>Accuracy. Plain ridge regression on 8 paired donors roughly matched the average profile, already above every CycleGAN variant, and on all 68 it scored above the average profile (0.16 and 0.24, point estimates). At 8 donors its predictions looked much less real. <a href="#f3">Finding 3</a></li>
+    </ul>
+    <p class="lh">Biological readouts <span class="tag val">validation</span></p>
+    <ul>
+      <li><span class="siglab">The person</span><b>Do the predictions carry who the donor is?</b><span class="cref"><a class="cn" href="#card4">D</a></span><br>Yes, mostly through stable differences between donors, such as NK-cell abundance or a CMV-associated cytotoxic signature, but the per-gene correction already carries those differences. In this study, most <a class="term" href="#def-personlevel">person-level</a> signal in the CycleGAN's predictions was already present after that correction. <a href="#f4">Finding 4</a></li>
+      <li><span class="siglab">The person</span><b>Do predictions keep specific traits of the person?</b><br>The direction, not always the size. Every method kept which way the sex difference goes, but only paired ridge regression came close on its size, so comparisons of trait size on predicted profiles need checking against measured data. <a href="#f5">Finding 5</a></li>
+      <li><span class="siglab">The assay</span><b>Can predictions generate cells their input lacks?</b> <span class="tag test">test</span> <span class="tag val">validation</span><span class="cref"><a class="cn" href="#card5">E</a></span><br>Barely. Predicted whole blood recovered little <a class="term" href="#def-granulocyte">neutrophil</a> variation beyond each donor's usual level, and only paired ridge regression clearly <a class="term" href="#def-tracked">tracked</a> it. <a href="#f6">Finding 6</a></li>
+      <li><span class="siglab">The draw</span><b>Do predictions capture a change at a single blood draw?</b><span class="cref"><a class="cn" href="#card6">F</a></span><br>Only partly. <a class="term" href="#def-interferon">Interferon</a>'s visit-to-visit changes, which both assays measure strongly, passed through the per-gene correction (<a class="xref" href="#f4">Finding 4</a>), but the <a class="term" href="#def-plasmablast">plasmablast</a> rise after flu vaccination came through loosely, and about equally, for the per-gene correction, the CycleGAN, and paired ridge regression. Predicted profiles are not a reliable stand-in for measured ones in studies of single visits. <a href="#f7">Finding 7</a></li>
+    </ul>
+    <p class="lead-more"><a href="#meaning">What this means for using such predictions →</a></p>
+  </div>
+
+  <details class="mfold" id="cards-fold" open><summary>Key numbers (cards A–F)</summary>
+  <div class="grid3">
+    <div class="card" id="card1"><div class="k"><span class="cn">A</span>Unpaired CycleGAN vs. <a class="term" href="#def-alignments">simple alignments</a></div><div class="vd">No clear difference when predicting bulk, worse when predicting single-cell profiles</div><div class="v"><span data-n="HOneSBMargin"></span> / <span data-n="HOneBSMargin"></span></div><div class="r">How much more <a class="term" href="#def-realism">realistic</a> than the <a class="term" href="#def-frontier">best mixture</a> of simple alignments at the same accuracy, single-cell → bulk / bulk → single-cell. 0 means no better. Once uncertainty is accounted for, the CycleGAN shows no clear difference from the simple alignments when predicting bulk and is less realistic when predicting single-cell profiles, a borderline result (interval upper end <span data-n="HOneBSHi"></span>). For scale, <a class="term" href="#def-realism">realism</a> differences between two models of up to about 0.2 can arise by chance.</div></div>
+    <div class="card" id="card2"><div class="k"><span class="cn">B</span><a class="term" href="#def-random">Random real profile</a> vs. simple alignments</div><div class="vd">At or above 0, with no information</div><div class="v"><span data-n="NoinfoSBMargin"></span> / <span data-n="NoinfoBSMargin"></span></div><div class="r">The same <a class="term" href="#def-frontier">margin</a> as card A, for a real profile picked at random. Its point estimates are above 0 when predicting either assay, without any information about the input.</div></div>
+    <div class="card" id="card3"><div class="k"><span class="cn">C</span>Accuracy and the number of paired donors</div><div class="vd">8 paired donors roughly match the average profile, and all 68 score above it</div><div class="v"><span data-n="BioRidge8SB"></span> / <span data-n="BioRidge8BS"></span> → 0.16 / 0.24</div><div class="r"><a class="term" href="#def-accuracy">Centered R²</a> of plain <a class="term" href="#def-ridge">ridge regression</a> (without the <a class="term" href="#def-ridge">spread step</a>), trained on 8 and on all 68 paired donors, single-cell → bulk / bulk → single-cell. 0 is the accuracy of predicting the average profile for every sample. Higher scores can come from the donor's usual profile as well as from the specific draw. Every CycleGAN variant stayed below 0, the best on the main division of the training donors at <span data-best="SB"></span> / <span data-best="BS"></span>. The 8-donor result is exploratory, with spread over 3 training runs only.</div></div>
+    <div class="card" id="card4"><div class="k"><span class="cn">D</span><a class="term" href="#def-program">Gene programs</a> the <a class="term" href="#def-pergene">per-gene correction</a> <a class="term" href="#def-tracked">tracks</a></div><div class="vd">Most programs, before any training</div><div class="v"><span data-b="StartTrackedSB"></span> / <span data-b="StartTrackedBS"></span></div><div class="r">Immune gene programs whose predicted scores follow the true program scores more closely than random real profiles do, single-cell → bulk / bulk → single-cell (the <a class="term" href="#def-granulocyte">granulocyte</a> program exists only in whole blood). The unpaired CycleGAN shows no clear difference from the per-gene correction on most of these programs.</div></div>
+    <div class="card" id="card5"><div class="k"><span class="cn">E</span>Neutrophil signal in the CycleGAN's predicted whole blood</div><div class="vd">Not clearly above chance</div><div class="v">r <span data-b="GanGran2"></span></div><div class="r">Correlation between the CycleGAN's predicted neutrophil signal and the true neutrophil signal, on the <a class="term" href="#def-splits">validation donors</a>. The per-gene correction reached <span data-b="GranStart"></span> and paired ridge regression <span data-b="GranRidge"></span>. Against a <a class="term" href="#def-tracked">chance level</a> of <span data-b="GranNull2"></span>, the value random real profiles exceed only 2.5% of the time, only ridge regression's <a class="term" href="#def-ci">95% CI</a> stays above the chance level.</div></div>
+    <div class="card" id="card6"><div class="k"><span class="cn">F</span>Vaccine rise recovered</div><div class="vd">Clearly above chance only for paired ridge regression predicting single-cell profiles</div><div class="v">r <span data-b="VacRLo"></span>–<span data-b="VacRHi"></span></div><div class="r">Correlation between the predicted and true <a class="term" href="#def-plasmablast">plasmablast</a> rise across 26 vaccinations. When predicting bulk, the per-gene correction, the CycleGAN, and paired ridge regression reached <span data-b="VacStartSB"></span>, <span data-b="VacGANSB"></span>, and <span data-b="VacRidgeSB"></span>, and when predicting single-cell profiles <span data-b="VacStartBS"></span>, <span data-b="VacGANBS"></span>, and <span data-b="VacRidgeBS"></span>. With only 26 vaccinations, the chance level, the value random real profiles exceed only 2.5% of the time, is high (<span data-b="VacNull2"></span>). Of these three, only paired ridge regression, when predicting single-cell profiles, is clearly above the chance level.</div></div>
+  </div>
+  </details>
+
+  <h2 id="question">The question</h2>
+  <p><a class="term" href="#def-bulk">Whole-blood bulk</a> RNA-seq is cheap and is the only transcriptome in many large clinical and biobank cohorts, while single-cell RNA-seq of <a class="term" href="#def-pbmc">PBMCs</a> resolves immune cell types but is costly. A reliable mapping from one to the other, which we call <a class="term" href="#def-crossassay">cross-assay prediction</a>, would let bulk-only cohorts borrow single-cell resolution. <a class="term" href="#def-deconv">Deconvolution</a> methods estimate cell-type fractions, and some also cell-type-specific expression, from bulk profiles (<a class="cite" href="#ref-newman2019">Newman et al., 2019</a>; <a class="cite" href="#ref-chu2022">Chu et al., 2022</a>), and Bulk2Space maps bulk profiles to single-cell resolution using single-cell references (<a class="cite" href="#ref-liao2022">Liao et al., 2022</a>).</p>
+  <p>Most cohorts have only one assay, so the mapping would have to be learned without paired samples. Unpaired mappings between biological measurements have been learned with GANs (<a class="cite" href="#ref-amodio2018">Amodio and Krishnaswamy, 2018</a>) and with optimal transport (<a class="cite" href="#ref-demetci2022">Demetci et al., 2022</a>). Without a partner to regress onto, a model cannot be trained directly to predict each sample's true counterpart. A generative model can still be trained. It learns to produce outputs that pass as real profiles of the other assay. A CycleGAN (<a class="cite" href="#ref-zhu2017">Zhu et al., 2017</a>), a standard machine-learning model for unpaired prediction between two collections, adds a cycle-consistency constraint: mapping a profile to the other assay and back should return the original, which is meant to keep each output tied to its input.</p>
+  <div class="rq">
+    <p>We frame a blood transcriptome as a mix of three kinds of signal, each of which a prediction has to carry across assays:</p>
+  <ul>
+    <li><span class="siglab">The person</span>A stable mix of immune cells, <a class="term" href="#def-cmv">cytomegalovirus</a> (CMV) status, which leaves a lasting imprint on NK and T cells (<a class="cite" href="#ref-guma2004">Gumá et al., 2004</a>), sex, and <a class="term" href="#def-hla">HLA</a> gene expression.</li>
+    <li><span class="siglab">The draw</span>What is happening in that person's blood that day, such as the <a class="term" href="#def-plasmablast">plasmablast</a> surge a week after flu vaccination (<a class="cite" href="#ref-wrammert2008">Wrammert et al., 2008</a>; <a class="cite" href="#ref-nakaya2011">Nakaya et al., 2011</a>).</li>
+    <li><span class="siglab">The assay</span>Whole blood keeps the <a class="term" href="#def-granulocyte">neutrophils</a> and most other granulocytes that PBMC isolation removes.</li>
+  </ul>
+    <p class="rq-q">We trained a CycleGAN without any pairs and asked which of these it carries, and what <a class="term" href="#def-gan">adversarial training</a> adds to the <a class="term" href="#def-pergene">per-gene correction</a> the CycleGAN builds on.</p>
+    <p>The data come from 96 healthy adults in the Allen Institute for Immunology's <a class="term" href="#def-cohort">Sound Life</a> cohort, each with several blood draws over about two years, and every draw was profiled by PBMC single-cell RNA-seq and by whole-blood bulk RNA-seq. Each sample's single-cell data are summed over its cells into one <b><a class="term" href="#def-singlecell">pseudobulk</a></b> profile, so the single-cell and bulk data each give one expression profile per blood sample over the same 5,000 genes.</p>
+  </div>
+
+  <h2 id="how">The test setup</h2>
+  <p>The unpaired CycleGAN trains on single-cell profiles from one group of donors and bulk profiles from a different group, so no blood sample appears in both assays during its training (<a class="xref" href="#fig1">Figure 1</a>). Its predictions are then compared with <a class="term" href="#def-alignments">simple alignments</a> and with models that use pairs, ordered by how much paired data each one gets.</p>
+  <p class="tapnote">Tap any figure to enlarge it.</p>
+  <figure id="fig1"><a href="assets/test_setup.png"><img class="fig" style="padding:14px 18px; background:#fff" src="assets/test_setup.png" alt="Test setup: (a) training donors divided by assay so the unpaired CycleGAN never trains on both assays from the same blood sample, with held-out pairs used only for scoring; (b) the five models compared, ordered by how much paired data each uses; (c) each prediction scored against its true partner for accuracy, against real profiles for realism, and on gene programs for the biological readouts."></a><figcaption><b>Figure 1.</b> (a) The split. The CycleGAN learns from single-cell profiles of 33 training donors and bulk profiles of 35 different donors, so it never trains on both assays from the same blood sample. Each training donor's other assay is kept for the models that use pairs. <a class="term" href="#def-splits">Held-out donors</a> keep their pairs and are used only for scoring. (b) The models, with meters showing how much paired data each uses: none for the simple alignments and the unpaired CycleGAN, other donors' pairs (through <a class="term" href="#def-complabels">composition labels</a>) for CycleGAN + <a class="term" href="#def-complabels">cross-fitted</a> labels, all 582 training pairs (through composition labels) for CycleGAN + composition labels, and all 582 training pairs as regression targets for <a class="term" href="#def-ridge">paired ridge regression</a>. The unpaired CycleGAN learns a correction on top of a per-gene alignment (<a class="term" href="#def-meanshift">mean shift</a> for single-cell → bulk, <a class="term" href="#def-combat">ComBat</a> for bulk → single-cell). Composition labels are explained in <a href="#f2">Finding 2</a>. (c) Each prediction is scored three ways: against the real profile measured from the same blood sample (accuracy, <a class="term" href="#def-accuracy">centered R²</a>), against real profiles of the assay being predicted (<a class="term" href="#def-realism">realism</a>, explained in <a href="#comparator">How realism is judged</a>), and on <a class="term" href="#def-program">gene programs</a> for the person, the draw, and the assay (biological readouts). The machine-learning questions are scored on the test donors, and the biological readouts on the validation donors.</figcaption></figure>
+  <details id="donor-table"><summary>Where the 96 donors go</summary>
+  <div class="tablewrap"><table class="donors"><caption class="sr-only">Where the 96 donors go</caption>
+    <thead><tr><th scope="col">Donor group</th><th scope="col" class="n">Donors</th><th scope="col" class="n">Blood draws</th><th scope="col">Used for</th></tr></thead>
+    <tbody>
+      <tr><td>Training, single-cell group</td><td class="n">33</td><td class="n">288</td><td>Single-cell profiles for the CycleGAN</td></tr>
+      <tr><td>Training, bulk group</td><td class="n">35</td><td class="n">294</td><td>Bulk profiles for the CycleGAN</td></tr>
+      <tr><td>Training, all</td><td class="n">68</td><td class="n">582</td><td>Matched pairs for the models that use pairs</td></tr>
+      <tr><td>Validation</td><td class="n">14</td><td class="n">135</td><td>Choosing settings and <a class="term" href="#def-checkpoint">checkpoints</a>, and the biological readouts</td></tr>
+      <tr><td>Test</td><td class="n">14</td><td class="n">119</td><td>Scored once: the machine-learning questions</td></tr>
+      <tr class="total"><td>Total</td><td class="n">96</td><td class="n">836</td><td></td></tr>
+    </tbody></table></div>
+  </details>
+
+  <h2 id="signal">Three kinds of signal in blood</h2>
+  <p>Before testing any model, we checked that each kind of signal a prediction has to recreate is really present in the measured profiles.</p>
+  <div class="sig">
+    <p class="sig-h"><b>The person.</b> Each donor has a consistent immune makeup across visits.</p>
+    <p>Only <span data-n="BioWithinLo"></span>–<span data-n="BioWithinHi"></span> of the variance of T, B, NK, monocyte, and dendritic-cell fractions lies within a donor, and <span data-b="PersonLevelSB"></span> <a class="term" href="#def-program">gene programs</a> in bulk and <span data-b="PersonLevelBS"></span> in single-cell profiles are <a class="term" href="#def-personlevel">person-level</a>, varying more between donors than within one donor.</p>
+    <p class="sig-need">A prediction must recreate who the donor is.</p>
+  </div>
+  <div class="sig">
+    <p class="sig-h"><b>The draw.</b> One visit can differ from the next for a known reason, and flu vaccination is a perturbation with known timing.</p>
+    <p>Seven days after flu vaccination, the <a class="term" href="#def-plasmablast">plasmablast</a> and immunoglobulin program rises by about 0.5 standard deviations in bulk and 0.4 in single-cell profiles, across 116 vaccinations in the training donors. Signal specific to one draw is small overall, though: a sample's bulk profile is only slightly more similar to its own single-cell partner than to the same donor's other draws (<a class="xref" href="#fig2">Figure 2</a>).</p>
+    <p class="sig-need">A prediction for a Day 7 blood sample must show this rise.</p>
+  </div>
+  <div class="sig">
+    <p class="sig-h"><b>The assay.</b> Whole blood carries signal that <a class="term" href="#def-pbmc">PBMC</a> profiles lack.</p>
+    <p><a class="term" href="#def-granulocyte">Granulocyte</a> genes are several log units higher in whole blood and nearly absent from PBMC <a class="term" href="#def-singlecell">pseudobulk</a> (<a class="xref" href="#fig3">Figure 3</a>). Whole blood also blurs PBMC composition: cell-type fractions read from 28 <a class="term" href="#def-markers">marker genes</a> matched the fractions counted from the cells with <b><a class="term" href="#def-readout">composition R²</a></b> <span data-n="BioCompSC"></span> from real single-cell profiles but only <span data-n="BioCompBulk"></span> from real bulk (test).</p>
+    <p class="sig-need">A prediction must generate granulocyte signal that its single-cell input lacks, and recover PBMC composition that whole blood blurs.</p>
+  </div>
+  <details id="signal-figs"><summary>The evidence (Figures 2 and 3)</summary>
+  <figure id="fig2"><a href="assets/gap.png"><img class="fig" src="assets/gap.png" alt="Principal components of single-cell pseudobulk and whole-blood bulk profiles, and the similarity of each sample to its own pair, to other draws of the same donor, and to other donors."></a><figcaption><b>Figure 2.</b> Before any model, across all 836 paired samples from 96 donors. (a) The first two <a class="term" href="#def-pcs">principal components</a> of both assays' profiles. The first separates the assays almost completely and explains 82% of the variance. (b) The share of each component's variance explained by assay or by age group. The assay explains 99% of the first component, and age group at most 2.9% of any of the top five. (c) The centered correlation (correlation after subtracting each gene's average across samples) between a single-cell profile and a bulk profile, for the sample's own pair, for other draws of the same donor, and for other donors (medians 0.27, 0.21, and about 0). A sample's own pair is only slightly more similar than the same donor's other draws. Most of the shared signal belongs to the donor.</figcaption></figure>
+  <figure id="fig3" style="max-width:520px"><a href="assets/granulocytes.png"><img class="fig" src="assets/granulocytes.png" alt="Mean expression of seven granulocyte genes and three lineage-marker controls in PBMC pseudobulk and whole-blood bulk, across the 836 paired samples." loading="lazy"></a><figcaption><b>Figure 3.</b> Granulocyte genes such as FCGR3B, CSF3R, and CXCR2 are several log units higher in whole blood than in PBMC pseudobulk, where they are nearly absent (all 836 pairs). Lineage markers serve as controls.</figcaption></figure>
+  </details>
+
+  <h2 id="comparator">How realism is judged</h2>
+  <p>Accuracy and realism pull against each other. One way to raise realism is to make predictions resemble the cohort as a whole rather than the specific input: a profile drawn at random from the cohort passes as real but has nothing to do with its sample. The opposite extreme changes the input as little as possible. A <a class="term" href="#def-pergene">per-gene correction</a> such as <a class="term" href="#def-meanshift">mean shift</a> or <a class="term" href="#def-combat">ComBat</a> stays close to its input, but its predictions still vary the way the input assay does, so a classifier easily tells them from real profiles. A model trained without pairs can move between these extremes, trading accuracy for realism, without learning which output belongs to which input. So we judge both together: a model improves on simple methods only if no blend of them is at least as accurate and at least as realistic. The upper edge of what such blends reach is the <b>unpaired accuracy–realism frontier</b> (<a class="xref" href="#fig4">Figure 4</a>).</p>
+  <details><summary>The simple alignments, and where they land on our data</summary>
+    <p>The three alignments build on each other: each makes the input match one more property of the assay being predicted, from each gene's average, to its spread, to the correlations between genes. All are fit on the same unpaired training data as the CycleGAN.</p>
+    <ul>
+      <li id="rs-meanshift"><b>Mean shift</b> adds each gene's average difference between the two assays to the input. The CycleGAN builds on it when predicting bulk.</li>
+      <li id="rs-combat"><b>ComBat</b> (<a class="cite" href="#ref-johnson2007">Johnson et al., 2007</a>) also matches each gene's spread, with empirical-Bayes shrinkage, which pulls adjustments for noisy genes toward the average across genes. It is a widely used batch correction in genomics. The CycleGAN builds on it when predicting single-cell.</li>
+      <li id="rs-coral"><b><a class="term" href="#def-coral">CORAL</a></b> (<a class="cite" href="#ref-sun2016">Sun et al., 2016</a>) also matches the correlations between genes. It is a standard unpaired domain-adaptation method in machine learning.</li>
+      <li><b>The <a class="term" href="#def-trainingmean">training mean</a></b> ignores the input and predicts the same profile for every sample: the average profile of the assay being predicted, over the training data. Every prediction is identical, so its realism is 0, but it is the most accurate simple method when predicting either assay, because <a class="term" href="#def-accuracy">centered R²</a> rewards staying near the average. It is in the set so that pulling predictions toward the average cannot pass the frontier.</li>
+    </ul>
+    <div class="tablewrap"><table class="align">
+      <thead>
+        <tr><th rowspan="2">Method</th><th colspan="2">Single-cell → bulk</th><th colspan="2">Bulk → single-cell</th></tr>
+        <tr><th class="n">Accuracy</th><th class="n">Realism</th><th class="n">Accuracy</th><th class="n">Realism</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Mean shift</td><td class="n">−0.08</td><td class="n">0.03</td><td class="n">−2.04</td><td class="n">0.41</td></tr>
+        <tr><td>ComBat</td><td class="n">−0.47</td><td class="n">0.26</td><td class="n">−0.11</td><td class="n">0.04</td></tr>
+        <tr><td>CORAL</td><td class="n">−0.70</td><td class="n">0.54</td><td class="n">−1.24</td><td class="n">0.34</td></tr>
+        <tr><td>Training mean</td><td class="n">−0.06</td><td class="n">0.00</td><td class="n">−0.04</td><td class="n">0.00</td></tr>
+        <tr class="ref"><td><a class="term" href="#def-random">Random real profile</a></td><td class="n">−1.01</td><td class="n">0.63</td><td class="n">−0.87</td><td class="n">0.88</td></tr>
+      </tbody>
+    </table></div>
+    <p class="foot"><a class="term" href="#def-splits">Test donors</a>. Accuracy is centered R² against the true partner. Realism is 1 when a classifier cannot tell the predictions from real profiles. The random real profile is not one of the blended methods.</p>
+  </details>
+  <figure id="fig4"><a href="assets/frontier.png"><img class="fig" style="max-width:820px" src="assets/frontier.png" alt="Conceptual drawing of the accuracy–realism plane: simple alignments as gray points joined by blend curves, a dashed frontier along the upper edge of the shaded region the blends reach, a model above the frontier with an arrow marking its margin, and a random real profile high on realism with almost no accuracy." loading="lazy"></a><figcaption><b>Figure 4.</b> The unpaired accuracy–realism frontier, illustrated. The points are placed by hand and are not data. Each simple method is one point, and blends of two methods trace the gray curves. Every point under the frontier is matched or beaten by a blend of <a class="term" href="#def-alignments">simple alignments</a>, which uses no pairs. A model counts only if it lands above the frontier at its own accuracy, and its margin is the height above. A random real profile looks real but carries no information about the input. The layout follows single-cell → bulk.</figcaption></figure>
+  <details id="frontier-steps"><summary>How the frontier is computed</summary>
+  <ol class="steps">
+    <li><b>Score each simple alignment.</b> Mean shift, ComBat, CORAL, and the training mean predicted every test sample. Each method was scored for accuracy and realism, giving one point per method.</li>
+    <li><b>Blend every pair.</b> For methods A and B and weights w = 0, 0.1, …, 1, each sample's prediction is w × A + (1 − w) × B, scored like any method. A blend's realism is measured, not averaged from A and B. Six pairs and 11 weights give six curves.</li>
+    <li><b>Take the upper edge.</b> At each accuracy, the frontier is the highest realism reached by any blend at that accuracy or better.</li>
+    <li><b>Measure the margin.</b> A model's margin is its realism minus the frontier's realism at the model's accuracy. If the model is more accurate than every blend, the margin is its accuracy lead instead.</li>
+  </ol>
+  <p class="steps-note">The frontier was computed once for each direction. For the <a class="term" href="#def-ci">confidence intervals</a>, the whole construction was repeated on each of 1,000 resamples of the test donors. The test frontier curve drawn in Figure 5 was traced from the saved test figure, and every margin comes from the saved computation.</p>
+  </details>
+  <p><b>Caveat.</b> Landing above the frontier does not by itself show that a model carries information about its input, because a random real profile also lands at or above it when predicting either assay, and another real draw of the same donor lands far above it when predicting single-cell profiles (margin 0.79). The findings therefore also check whether each prediction carries information about its own sample. The frontier is biased both ways: it is a maximum over many noisy blends, which favors the simple methods, and the CycleGAN's settings were chosen on validation with this same margin, which favors the CycleGAN.</p>
+  <details><summary>Why this comparator: precedents and known biases</summary>
+    <ul>
+      <li><b>Why not beat each simple method separately?</b> No unpaired method can be both as accurate as the most accurate alignment and as realistic as the most realistic one, so that test fails every trade-off and cannot tell a useful model from a useless one.</li>
+      <li><b>Precedents.</b>
+        <ul>
+          <li>The perception–distortion trade-off (<a class="cite" href="#ref-blau2018">Blau and Michaeli, 2018</a>) compares methods on the same two-axis plane: accuracy against a reference, and how well outputs can be told from real samples.</li>
+          <li>The ROC convex hull (<a class="cite" href="#ref-provost2001">Provost and Fawcett, 2001</a>) asks whether a new classifier beats what combining existing ones already achieves.</li>
+          <li>Single-cell integration benchmarks (<a class="cite" href="#ref-luecken2022">Luecken et al., 2022</a>) score methods on two competing axes, batch removal and conservation of biology.</li>
+          <li>What is new in this project is a comparator that uses no pairs and compares methods at equal accuracy. The frontier is one reasonable comparator, not an established standard.</li>
+        </ul></li>
+      <li><b>Stronger classifiers:</b> on validation, logistic regression on 50 <a class="term" href="#def-pcs">principal components</a> and a boosted classifier gave the CycleGAN margins at or below 0, never above, though both partly detect differences between donors.</li>
+      <li><b>Not offered to the model:</b> the model itself is never blended with the training mean. Doing so could only raise its margin, so leaving it out is conservative.</li>
+      <li><b>Approximations:</b> blends are scored at 11 weights and joined by straight lines in between, and other unpaired methods could raise the frontier.</li>
+      <li><b>Realism's scope:</b> realism is measured on the top 10 principal components, so it reflects the main axes of variation, not every gene, and it partly detects differences between donors, so real profiles from other donors don't score 1.</li>
+    </ul>
+  </details>
+
+  <h2 id="findings">What the predictions carry</h2>
+  <p>The machine-learning findings use the <a class="term" href="#def-splits">test donors</a>. The biological readouts use the validation donors, whose data also chose the CycleGANs' settings and <a class="term" href="#def-checkpoint">checkpoints</a>, so those results may favor the CycleGANs.</p>
+  <p>Each CycleGAN starts at the <a class="term" href="#def-pergene">per-gene correction</a>, the most accurate <a class="term" href="#def-alignments">simple alignment</a> in its direction, so training starts where accuracy is best and has to add <a class="term" href="#def-realism">realism</a> on top of that correction. <a class="term" href="#def-frontier">Blends</a> of alignments serve as the yardstick for judging the CycleGAN and were not tried as starting points. Because the cycle loss also keeps each CycleGAN near that start, a small change from the correction is partly expected by design. <a class="term" href="#def-ot">Optimal-transport retrieval</a>, which has no such start, passed the <a class="term" href="#def-frontier">frontier</a> only by giving up accuracy, as a <a class="term" href="#def-random">random real profile</a> does (<a class="xref" href="#fig5">Figure 5</a>), and a CycleGAN trained without the per-gene start was not run.</p>
+
+  <p class="tapnote">Tap any figure to enlarge it.</p>
+  <figure id="fig5"><a href="assets/plane.png"><img class="fig" src="assets/plane.png" alt="Accuracy–realism plane on the test split with the unpaired frontier, the simple alignments, the unpaired CycleGAN, CycleGAN + composition labels, CycleGAN + cross-fitted labels, paired ridge regression, and reference profiles; arrows show the locked models' moves from validation to test."></a><figcaption><b>Figure 5.</b> Each model's test position in (a) single-cell → bulk and (b) bulk → single-cell, with accuracy (<a class="term" href="#def-accuracy">centered R²</a>) on x and realism on y (higher is better on both). Arrows start at the models' validation positions. The dashed curve is the frontier on test. A blend can be more <a class="term" href="#def-realism">realistic</a> than either of its two methods, so the frontier can lie above every single alignment, as in (b). The dotted line marks centered R² = 0, the accuracy of predicting the average profile, and every unpaired method sits left of that line. A random real profile (gray cross) and optimal-transport retrieval (dark gray plus), which returns training profiles, lie beyond the frontier with very low accuracy.</figcaption></figure>
+  <p class="fgroup">Machine-learning questions <span class="tag test">test</span></p>
+  <details class="finding" id="f1"><summary><h3>1. Looking real vs. carrying information <span class="tag test">test</span></h3><span class="fsum">The CycleGAN looks no more real than simple alignments of equal accuracy.</span></summary>
+  <div class="ans">
+    <p class="ans-q">At equal accuracy, is the unpaired CycleGAN more <a class="term" href="#def-realism">realistic</a> than the best <a class="term" href="#def-frontier">blend</a> of <a class="term" href="#def-alignments">simple alignments</a>?</p>
+    <p class="ans-a">No. <a class="term" href="#def-gan">Adversarial training</a> makes the CycleGAN's predictions look more real by trading away accuracy, and blends of simple alignments look at least as real at the same accuracy. Looking real alone is not evidence that a prediction carries information about its sample.</p>
+  </div>
+  <ul class="ev">
+    <li><b>Single-cell → bulk.</b> The CycleGAN was no more realistic than blends of simple alignments at the same accuracy (<a class="term" href="#def-frontier">margin</a> <span data-n="HOneSBMargin"></span>, <a class="term" href="#def-ci">95% CI</a> <span data-n="HOneSBLo"></span> to <span data-n="HOneSBHi"></span>; <a class="xref" href="#fig5">Figure 5</a>). For scale, <a class="term" href="#def-realism">realism</a> differences between two models of up to about 0.2 can arise by chance (<a href="#dev-checks">Checks on the pipeline</a>).</li>
+    <li><b>Bulk → single-cell.</b> The CycleGAN was less realistic than blends at the same accuracy, a borderline result (margin <span data-n="HOneBSMargin"></span>, 95% CI <span data-n="HOneBSLo"></span> to <span data-n="HOneBSHi"></span>).</li>
+    <li><b><a class="term" href="#def-top1">Finding its own sample</a>.</b> In single-cell → bulk, the CycleGAN picked out its own sample among the donor's draws clearly less often than the <a class="term" href="#def-pergene">per-gene correction</a> did (difference <span data-n="WithinSBStart"></span>, 95% CI <span data-n="WithinSBStartLo"></span> to <span data-n="WithinSBStartHi"></span>; <a class="xref" href="#fig7">Figure 7d</a>).</li>
+  </ul>
+  <p class="take">Two unpaired collections never say which profile belongs to which sample, so the CycleGAN learns what profiles of the other assay look like as a group, and mostly not which output belongs to which input.</p>
+  <div class="fdetail"><p class="fdetail-h"><span class="nolink">What the predictions look like <span class="tag val">validation</span></span></p>
+    <p>Every validation prediction in the top two <a class="term" href="#def-pcs">principal components</a> of the target assay, each joined by a line to its true partner. The gray cloud is the real profiles. Overlap with the cloud gives a <span class="nolink">two-component view of realism</span>. Line length is the distance to the partner within these two components, while accuracy is measured over all genes (<a class="xref" href="#fig6">Figure 6</a>).</p>
+    <div class="seg" role="group" aria-label="Direction">
+      <button type="button" data-dir="sb" aria-pressed="true">single-cell → bulk</button>
+      <button type="button" data-dir="bs" aria-pressed="false">bulk → single-cell</button>
+    </div>
+    <figure id="fig6"><a id="linesLink" href="assets/lines_sb.png"><img class="fig" id="linesImg" src="assets/lines_sb.png" alt="Single-cell → bulk partner-line plots for the per-gene correction (mean shift), the unpaired CycleGAN, CycleGAN + composition labels, paired ridge regression, and a random real profile."></a><figcaption><b>Figure 6.</b> <span data-dir-cap="sb">The unpaired CycleGAN spreads its predictions over the real profiles, unlike the per-gene correction, whose predictions cluster tightly in this view, but its partner lines stay long, between those of the per-gene correction and of a <a class="term" href="#def-random">random real profile</a>. <a class="term" href="#def-ridge">Paired ridge regression</a> stays closest.</span><span data-dir-cap="bs" hidden>The same view for bulk → single-cell, where the per-gene correction is <a class="term" href="#def-combat">ComBat</a>.</span> <a class="term" href="#def-splits">Validation donors</a> also chose the models, so the figure is qualitative only.</figcaption></figure>
+  </div>
+  </details>
+
+  <details class="finding" id="f2"><summary><h3>2. Cell-type composition <span class="tag test">test</span> <span class="tag val">validation</span></h3><span class="fsum">Composition labels bring composition back to about the per-gene correction's level.</span></summary>
+  <div class="ans">
+    <p class="ans-q">Do <a class="term" href="#def-complabels">composition labels</a>, added as a loss on the CycleGAN, restore each sample's cell-type fractions?</p>
+    <p class="ans-a">Partly. <a class="term" href="#def-gan">Adversarial training</a> loses some cell types, and the labels bring most of them back, to about the <a class="term" href="#def-pergene">per-gene correction</a>'s level.</p>
+  </div>
+  <ul class="ev">
+    <li><b>Adversarial training lost T cells and NK cells</b> <span class="tag val">validation</span> when predicting either assay, and every major cell type in bulk → single-cell. In single-cell → bulk, T-cell <a class="term" href="#def-readout">composition R²</a> fell from <span data-n="BioTStart"></span> for the per-gene correction to <span data-n="BioTGAN"></span> for the CycleGAN with <a class="term" href="#def-checkpoint">weights averaged over training</a>.</li>
+    <li><b>Composition labels brought most of them back.</b> <span class="tag val">validation</span> T cells, B cells, and monocytes returned to about the correction's level or above, and NK cells only in single-cell → bulk.</li>
+    <li><b>On test, the gain is clear.</b> <span class="tag test">test</span> The labels clearly raised composition R² when predicting either assay (by <span data-n="HTwoSBDiff"></span> in single-cell → bulk and <span data-n="HTwoBSDiff"></span> in bulk → single-cell, both with <a class="term" href="#def-ci">95% CIs</a> above 0; <a class="xref" href="#fig7">Figure 7</a>).</li>
+    <li><b>The labels brought composition back to about the per-gene correction's level.</b> <span class="tag test">test</span> With labels, composition R² reached 0.59 against <a class="term" href="#def-meanshift">mean shift</a>'s 0.50 in single-cell → bulk, and 0.43 against <a class="term" href="#def-combat">ComBat</a>'s 0.48 in bulk → single-cell.</li>
+    <li><b>Labels from networks that never saw the sample's donor</b> <span class="tag test">test</span> gave about the same gain (exploratory).</li>
+    <li><b>Dendritic cells were poorly recovered by every model.</b> <span class="tag val">validation</span> They make up about 1.3% of <a class="term" href="#def-pbmc">PBMCs</a> in the cohort, roughly 40 of 3,000 cells per sample.</li>
+  </ul>
+  <figure id="fig7"><a href="assets/mechanism.png"><img class="fig" src="assets/mechanism.png" alt="Composition over training for the unpaired CycleGAN and CycleGAN + composition labels, how much of each model's move points toward the right sample, and differences in finding its own sample among the donor's draws on test." loading="lazy"></a><figcaption><b>Figure 7.</b> (a, b) Over training, adversarial training lowered composition, and composition labels restored it in single-cell → bulk (to ComBat's level) and partly in bulk → single-cell (validation). (c, d) Colored by the assay being predicted (orange bulk, blue single-cell). (c) Only part of the unpaired CycleGAN's change from the per-gene correction pointed toward the right sample. (d) On test, in single-cell → bulk, the unpaired CycleGAN <a class="term" href="#def-top1">picked out its own sample</a> among the donor's draws less often than the per-gene correction (<span data-n="WithinSBStart"></span>, 95% CI <span data-n="WithinSBStartLo"></span> to <span data-n="WithinSBStartHi"></span>), the reverse of validation.</figcaption></figure>
+  <div class="fdetail"><p class="fdetail-h"><span class="nolink">Other readouts of the gain</span></p>
+    <ul>
+      <li><b>The readout is imperfect on bulk.</b> The <a class="term" href="#def-readout">marker-gene readout</a> itself reached composition R² <span data-n="BioCompBulk"></span> on real bulk profiles, so composition scores when predicting bulk measure agreement with the readout as much as true composition. Predictions can score above that reference.</li>
+      <li><b>The gain holds under other readouts.</b> On test, composition labels raised composition R² by 0.26 and 0.17 under a ridge readout and by 0.33 and 0.18 under the composition networks themselves, against 0.17 and 0.14 under the marker-gene readout.</li>
+      <li><b>The marker-gene readout is the conservative one.</b> On validation, the labels closed a median 47% (single-cell → bulk) and 40% (bulk → single-cell) of the gap to the true composition as read by the networks the CycleGAN trained against, but only 22% and 25% as read by the independent marker-gene readout.</li>
+    </ul>
+  </div>
+
+  
+  </details>
+
+  <details class="finding" id="f3"><summary><h3>3. What pairs buy <span class="tag test">test</span></h3><span class="fsum">Pairs buy accuracy: 8 paired donors roughly match the average profile, and all 68 score above the average profile.</span></summary>
+  <div class="ans">
+    <p class="ans-q">How do models trained on paired donors compare with the CycleGAN, and how many paired donors does that take?</p>
+    <p class="ans-a">Accuracy, which grows with the number of paired donors. <a class="term" href="#def-ridge">Ridge regression</a> trained on 8 paired donors, the fewest tested, roughly matched the average profile and was already more accurate than every CycleGAN variant. Trained on all 68, it scored above the average profile, which no unpaired method did. At 8 donors its predictions looked much less real.</p>
+  </div>
+  <ul class="ev">
+    <li><b>Accuracy.</b> Plain ridge regression (without the <a class="term" href="#def-ridge">spread step</a>), trained on 8 paired donors, reached <a class="term" href="#def-accuracy">centered R²</a> near 0 when predicting either assay, above every CycleGAN variant (<a class="xref" href="#fig8">Figure 8</a>). Trained on all 68, it reached 0.16 when predicting bulk and 0.24 when predicting single-cell profiles. These gains can come from the donor's usual profile as well as from the specific draw, and ridge regression <a class="term" href="#def-top1">picked out its own sample</a> among a donor's draws no more often than the <a class="term" href="#def-pergene">per-gene correction</a>.</li>
+    <li><b><a class="term" href="#def-realism">Realism</a>.</b> With all 68 training donors paired, paired ridge regression showed no clear difference in realism from the CycleGANs'. Without the spread step, and at 8 donors, ridge predictions were much less <a class="term" href="#def-realism">realistic</a> (<a class="xref" href="#fig8">Figure 8</a>).</li>
+    <li><b>A calibrated paired model can match on both axes.</b> With all 68 donors paired, ridge regression with its output recalibrated along the <a class="term" href="#def-pcs">principal components</a> of the assay being predicted was more accurate than every CycleGAN variant and about as realistic when predicting bulk (0.51 against at most 0.56 on the main division of the training donors), and more realistic when predicting single-cell profiles (0.88). These are point estimates, and no comparison with them was planned.</li>
+    <li><b>As <a class="term" href="#def-complabels">composition labels</a>,</b> a few paired donors kept more of each sample's composition than regression on the same donors, and regression caught up when every training donor was paired (<a class="xref" href="#fig8">Figure 8</a>).</li>
+  </ul>
+  <figure id="fig8"><a href="assets/pairs.png"><img class="fig" src="assets/pairs.png" alt="Centered R², realism, and composition against the number of paired training donors for CycleGAN + composition labels, paired ridge without and with the output stretch, on test with validation faint." loading="lazy"></a><figcaption><b>Figure 8.</b> Regression on the paired donors was more accurate than the CycleGAN with composition labels at every number of paired donors where both are shown. As composition labels, a few paired donors kept more of each sample's composition than regression on the same donors, and regression caught up when every training donor was paired. Bars are the spread over 3 training runs. At 33 and 68 donors (open circles) the labels are <a class="term" href="#def-complabels">cross-fitted</a>. Nothing was chosen on these test points.</figcaption></figure>
+  </details>
+
+  <p class="fgroup">Biological readouts <span class="tag val">validation</span></p>
+  <details class="finding" id="f4"><summary><h3><span class="siglab">The person</span>4. Who the donor is <span class="tag val">validation</span></h3><span class="fsum">Predictions carry who the donor is, mostly through the per-gene correction.</span></summary>
+  <div class="ans">
+    <p class="ans-q">Do predicted <a class="term" href="#def-program">program scores</a> track the true scores, and does <a class="term" href="#def-gan">adversarial training</a> improve on the <a class="term" href="#def-pergene">per-gene correction</a>?</p>
+    <p class="ans-a">Most programs do, but the per-gene correction already <a class="term" href="#def-tracked">tracks</a> those programs. Adversarial training adds little when predicting bulk and somewhat more when predicting single-cell profiles, and what it changes says little about the specific sample.</p>
+  </div>
+  <p>We scored 13 gene programs: markers for five immune cell types (T, B, NK, monocyte, and dendritic cells) and for platelets, erythroid (hemoglobin) cells, and <a class="term" href="#def-granulocyte">granulocytes</a>, plus programs for the <a class="term" href="#def-interferon">interferon response</a>, <a class="term" href="#def-plasmablast">plasmablasts</a> and immunoglobulin (Ig, the antibody genes), CMV-associated cytotoxicity, and one program of sex and <a class="term" href="#def-hla">HLA</a> genes, with ribosomal-protein genes, whose measured levels depend more on assay chemistry than on biology, as an assay-artifact control. The granulocyte program exists only in whole blood, so single-cell profiles have 12.</p>
+  <figure id="fig9" class="pdfig"><svg viewBox="0 0 680 340" role="img" aria-labelledby="pdTitle" class="pdsvg"><title id="pdTitle">Two hypothetical donors with three visits each: a dashed line at each donor's average score and arrows from that average to each visit's score.</title><defs><marker id="dpArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs><line x1="78" y1="157.6" x2="670" y2="157.6" class="zero"/><text x="68" y="74.6" class="tick" text-anchor="end">1</text><text x="68" y="162.6" class="tick" text-anchor="end">0</text><text x="68" y="250.6" class="tick" text-anchor="end">−1</text><line x1="78" y1="30.0" x2="78" y2="272.0" class="ax"/><text transform="translate(26 151.0) rotate(-90)" class="axl" text-anchor="middle">interferon score</text><line x1="120" y1="113.6" x2="360" y2="113.6" class="pp"/><text x="120" y="103.6" class="pl">baseline +0.5</text><line x1="160" y1="113.6" x2="160" y2="142.8" class="dp" marker-end="url(#dpArrow)"/><circle cx="160" cy="148.8" r="7" class="pt"/><text x="172" y="136.2" class="dl" text-anchor="start">−0.4</text><line x1="240" y1="113.6" x2="240" y2="134.0" class="dp" marker-end="url(#dpArrow)"/><circle cx="240" cy="140.0" r="7" class="pt"/><text x="252" y="131.8" class="dl" text-anchor="start">−0.3</text><line x1="320" y1="113.6" x2="320" y2="58.0" class="dp" marker-end="url(#dpArrow)"/><circle cx="320" cy="52.0" r="7" class="pt"/><text x="332" y="87.8" class="dl" text-anchor="start">+0.7</text><text x="160" y="294.0" class="tick" text-anchor="middle">visit 1</text><text x="240" y="294.0" class="tick" text-anchor="middle">visit 2</text><text x="320" y="294.0" class="tick" text-anchor="middle">visit 3</text><text x="240" y="318.0" class="dn" text-anchor="middle">Donor A</text><line x1="410" y1="201.6" x2="650" y2="201.6" class="pp"/><text x="410" y="191.6" class="pl">baseline −0.5</text><line x1="450" y1="201.6" x2="450" y2="230.8" class="dp" marker-end="url(#dpArrow)"/><circle cx="450" cy="236.8" r="7" class="pt"/><text x="462" y="224.2" class="dl" text-anchor="start">−0.4</text><circle cx="530" cy="201.6" r="7" class="pt"/><text x="530" y="225.6" class="dl" text-anchor="middle">0.0</text><line x1="610" y1="201.6" x2="610" y2="172.4" class="dp" marker-end="url(#dpArrow)"/><circle cx="610" cy="166.4" r="7" class="pt"/><text x="622" y="189.0" class="dl" text-anchor="start">+0.4</text><text x="450" y="294.0" class="tick" text-anchor="middle">visit 1</text><text x="530" y="294.0" class="tick" text-anchor="middle">visit 2</text><text x="610" y="294.0" class="tick" text-anchor="middle">visit 3</text><text x="530" y="318.0" class="dn" text-anchor="middle">Donor B</text></svg><figcaption><b>Figure 9.</b> Splitting a program score into a <a class="term" href="#def-basedev">donor baseline</a> and visit deviations, for two hypothetical donors with three visits each (illustrative numbers). The dashed line is each donor's baseline, the average over visits. Each arrow runs from the baseline to one visit's score, and its length is that visit's deviation.</figcaption></figure>
+  <ul class="ev">
+    <li><b>Tracking and accuracy measure different things.</b> A program score's correlation ignores errors of scale and offset that <a class="term" href="#def-accuracy">centered R²</a> penalizes, so the per-gene correction can track who the donor is while scoring below the average profile in accuracy.</li>
+    <li><b>The per-gene correction already tracked most programs,</b> <span data-b="StartTrackedSB"></span> in single-cell → bulk and <span data-b="StartTrackedBS"></span> in bulk → single-cell, mostly through donors' baselines rather than visit deviations (Figures <a class="xref" href="#fig9">9</a> and <a class="xref" href="#fig10">10</a>).</li>
+    <li><b>The CycleGAN showed no clear difference from the correction.</b> On <span data-b="InheritSB"></span> programs in single-cell → bulk and <span data-b="InheritBS"></span> in bulk → single-cell, the per-gene correction tracked the program and the CycleGAN showed no clear difference from the correction.</li>
+    <li><b>Visit-to-visit changes came through for interferon.</b> The per-gene correction followed each donor's interferon deviations from visit to visit (visit-deviation r <span data-b="IfnStartWithinSB"></span> in single-cell → bulk).</li>
+    <li><b>What training changed carried little about the sample.</b> Across genes, the CycleGAN's change from the per-gene correction was only weakly related to the true partner in single-cell → bulk (median <a class="term" href="#def-partial">partial correlation</a> <span data-b="MoveGANSB"></span>), against <span data-b="MoveRidgeSB"></span> for <a class="term" href="#def-ridge">paired ridge regression</a>'s change.</li>
+  </ul>
+  <figure id="fig10"><a href="assets/person_visit.png"><img class="fig" src="assets/person_visit.png" alt="Recovered share of each program's between-donor and within-donor variation for the per-gene correction, the unpaired CycleGAN, and paired ridge regression, for predictions of either assay, against the no-information band." loading="lazy"></a><figcaption><b>Figure 10.</b> For each program, ordered from <a class="term" href="#def-personlevel">visit-level</a> (left) to person-level (right), the share of the true score's variation that each method recovered (r²), separately for donor baselines (a, b) and visit deviations (c, d). (a, c) Single-cell → bulk; (b, d) bulk → single-cell. The gray band is the <a class="term" href="#def-tracked">chance level</a> (<a class="term" href="#def-random">random real profiles</a>). The per-gene correction (gray squares) already recovered most of the person, and the unpaired CycleGAN (black) recovered about the same. Paired ridge regression (green) recovered more of the visit.</figcaption></figure>
+  <div class="fdetail"><p class="fdetail-h"><span class="nolink">Programs where the CycleGAN differed from the per-gene correction</span></p>
+    <p>Exploratory, and not corrected for multiple comparisons.</p>
+    <ul>
+      <li><b>Hallmark gene sets.</b> On 49 broader Hallmark sets (<a class="cite" href="#ref-liberzon2015">Liberzon et al., 2015</a>), the CycleGAN's point correlation was above the chance level on more sets than the per-gene correction's when predicting single-cell profiles (28 against 17) and on about as many when predicting bulk (21 against 20). These are point estimates on overlapping sets, and the 13 programs above were the pre-specified test.</li>
+      <li><b>Below the correction, in single-cell → bulk (<a class="xref" href="#fig11">Figure 11</a>).</b> Interferon response (<a class="term" href="#def-tracked">Δr</a> <span data-b="IfnSB"></span>, <a class="term" href="#def-ci">95% CI</a> <span data-b="IfnSBCI"></span>), platelets (<span data-b="PltSB"></span>, <span data-b="PltSBCI"></span>), and monocyte markers (<span data-b="MonoSB"></span>, <span data-b="MonoSBCI"></span>).</li>
+      <li><b>Above the correction, in bulk → single-cell.</b> Plasmablasts (<span data-b="PlasmaBS"></span>, <span data-b="PlasmaBSCI"></span>) and T-cell markers (<span data-b="TBS"></span>, <span data-b="TBSCI"></span>). Correlation ignores level and scale, so the T-cell gain does not conflict with the CycleGAN's lower T-cell composition (<a class="xref" href="#f2">Finding 2</a>).</li>
+      <li><b>Above the correction in single-cell → bulk, though neither program was tracked.</b> Erythroid (<span data-b="EryGANSB"></span>, <span data-b="EryGANSBCI"></span>) and ribosomal (<span data-b="RiboGANSB"></span>, <span data-b="RiboGANSBCI"></span>).</li>
+      <li><b>Partial correlation in bulk → single-cell.</b> The CycleGAN's change reached <span data-b="MoveGANBS"></span> (<span data-b="MoveGANBSCI"></span>), against <span data-b="MoveRidgeBS"></span> for paired ridge regression.</li>
+      <li><b><a class="term" href="#def-coral">CORAL</a> comparison.</b> The CycleGAN's partial correlation minus CORAL's was <span data-b="MoveGANvCoralSB"></span> (<span data-b="MoveGANvCoralSBCI"></span>) in single-cell → bulk and <span data-b="MoveGANvCoralBS"></span> (<span data-b="MoveGANvCoralBSCI"></span>) in bulk → single-cell, so the CycleGAN's change carried no more than this second unpaired alignment's.</li>
+    </ul>
+    <figure id="fig11"><a href="assets/delta_start.png"><img class="fig" src="assets/delta_start.png" alt="Change in tracking correlation from the per-gene correction, with 95% confidence intervals, per program, for the unpaired CycleGAN, CycleGAN + composition labels, and paired ridge regression." loading="lazy"></a><figcaption><b>Figure 11.</b> The change in tracking correlation from the per-gene correction (Δr), with donor-bootstrap 95% CIs, for the unpaired CycleGAN (black), <a class="term" href="#def-complabels">CycleGAN + composition labels</a> (purple), and paired ridge regression (green). (a) Single-cell → bulk, (b) bulk → single-cell. The dashed line marks no change. The CycleGANs' intervals are optimistic, since the CycleGANs were chosen on the <a class="term" href="#def-splits">validation donors</a>.</figcaption></figure>
+  </div>
+  </details>
+
+  <details class="finding" id="f5"><summary><h3><span class="siglab">The person</span>5. Specific traits <span class="tag val">validation</span></h3><span class="fsum">Predictions keep the direction of the sex difference, but only paired ridge regression comes close on its size.</span></summary>
+  <div class="ans">
+    <p class="ans-q">Do predictions keep the sex difference in XIST, in direction and size, and donors' <a class="term" href="#def-hla">HLA</a> levels?</p>
+    <p class="ans-a">The direction of the sex difference, yes, but only <a class="term" href="#def-ridge">paired ridge regression</a> comes close on its size. Most methods also appear to keep donors' HLA levels.</p>
+  </div>
+  <ul class="ev">
+    <li><b>Sex.</b> Every method kept the direction of the female − male difference in XIST expression, a gene expressed only from the inactive X chromosome, so only in females (<a class="cite" href="#ref-brown1991">Brown et al., 1991</a>). Paired ridge regression got its size right in single-cell → bulk (a ratio of predicted to true difference near 1) and came closest in bulk → single-cell.
+      <div class="tablewrap"><table class="ratio">
+        <thead><tr><th>Predicted ÷ true XIST difference</th><th class="n">Single-cell → bulk</th><th class="n">Bulk → single-cell</th></tr></thead>
+        <tbody>
+          <tr><td><a class="term" href="#def-pergene">Per-gene correction</a></td><td class="n"><span data-b="XistStartSB"></span></td><td class="n"><span data-b="XistStartBS"></span></td></tr>
+          <tr><td>Unpaired CycleGAN</td><td class="n"><span data-b="XistGANSB"></span></td><td class="n"><span data-b="XistGANBS"></span></td></tr>
+          <tr><td>Paired ridge regression</td><td class="n"><span data-b="XistRidgeSB"></span></td><td class="n"><span data-b="XistRidgeBS"></span></td></tr>
+        </tbody>
+      </table></div></li>
+    <li><b>HLA.</b> Most methods appeared to keep donors' HLA gene expression, the per-gene correction included (<a class="term" href="#def-basedev">baseline r</a> <span data-b="HlaLo"></span> to <span data-b="HlaHi"></span>, against a <a class="term" href="#def-tracked">chance level</a> of about 0.5 to 0.6 for the sex and HLA program). HLA expression measured from short reads partly reflects which alleles a donor carries, because reads from some alleles map poorly to the reference genome.</li>
+    <li><b><a class="term" href="#def-cmv">CMV</a>.</b> Predictions <a class="term" href="#def-tracked">tracked</a> the CMV-associated program from donor to donor (<a class="xref" href="#f4">Finding 4</a>). With 8 CMV-positive and 6 CMV-negative donors, though, the difference between the two groups was too uncertain to judge for every method.</li>
+  </ul>
+
+  
+  <div class="fdetail"><p class="fdetail-h"><span class="nolink">Sex separation and HLA</span></p>
+    <ul>
+      <li>In single-cell → bulk, <a class="term" href="#def-meanshift">mean shift</a> carried the single-cell difference over unscaled, which overshoots in bulk units.</li>
+      <li>In bulk → single-cell, the CycleGANs separated the sexes less cleanly. Their donor-level AUROC, where 1 means each donor's predicted XIST separates females from males perfectly, was <span data-b="XistAucGANLo"></span>–<span data-b="XistAucGANHi"></span>, against 1.00 for the per-gene correction and paired ridge regression.</li>
+      <li>No intervals were computed for the HLA correlations.</li>
+    </ul>
+  </div>
+  </details>
+
+  <details class="finding" id="f6"><summary><h3><span class="siglab">The assay</span>6. Cells the input lacks <span class="tag test">test</span> <span class="tag val">validation</span></h3><span class="fsum">Predicted whole blood barely carries the neutrophil signal that the input lacks.</span></summary>
+  <div class="ans">
+    <p class="ans-q">Do predicted whole-blood profiles track the true <a class="term" href="#def-granulocyte">granulocyte</a> program, which the <a class="term" href="#def-pbmc">PBMC</a> input lacks, and the erythroid (hemoglobin) program?</p>
+    <p class="ans-a">Barely. Predicted whole blood carries a weak neutrophil signal that is mostly the donor's usual level, and only <a class="term" href="#def-ridge">paired ridge regression</a> clearly <a class="term" href="#def-tracked">tracks</a> that signal. Nothing tracks the erythroid program.</p>
+  </div>
+  <ul class="ev">
+    <li><b>The neutrophil level is mostly a trait of the person</b> <span class="tag test">test</span> <a class="term" href="#def-samedonor">Another visit of the same donor</a> matched a sample's true level more closely than the CycleGAN did (r <span data-n="BioGranSame"></span>, against <span data-n="BioGranGAN"></span>).</li>
+    <li><b>Only paired ridge regression was clearly above the <a class="term" href="#def-tracked">chance level</a></b> <span class="tag val">validation</span> with r <span data-b="GranRidge"></span> (<a class="term" href="#def-ci">95% CI</a> <span data-b="GranRidgeCI"></span>) against a chance level of <span data-b="GranNull"></span>. Neither <a class="term" href="#def-meanshift">mean shift</a> nor the CycleGAN reached that level (<a class="xref" href="#fig12">Figure 12</a>).</li>
+    <li><b>Nothing tracked the erythroid (hemoglobin) program</b> <span class="tag val">validation</span> when predicting either assay.</li>
+  </ul>
+  <figure id="fig12"><a href="assets/absent_cells.png"><img class="fig" src="assets/absent_cells.png" alt="Predicted against true granulocyte and erythroid program scores in single-cell → bulk for mean shift, the unpaired CycleGAN, and paired ridge regression, colored by donor." loading="lazy"></a><figcaption><b>Figure 12.</b> Single-cell → bulk predicted against true scores of the granulocyte (a–c) and erythroid (d–f) programs, for the <a class="term" href="#def-pergene">per-gene correction</a> (mean shift; a, d), the unpaired CycleGAN (b, e), and paired ridge regression (c, f), on the validation samples. Points are colored by donor, and these colors identify donors only. Mean shift's granulocyte scores barely vary, because it adds the training-average whole-blood signal but almost none of the sample-to-sample variation. The r in each panel title is a point estimate, and tracking is judged by its confidence interval.</figcaption></figure>
+  <div class="fdetail"><p class="fdetail-h"><span class="nolink">Other correlations, and reading composition from whole blood</span></p>
+    <ul>
+      <li><b>Other test correlations.</b> Mean shift reached <span data-n="BioGranMS"></span>, paired ridge regression <span data-n="BioGranRidge"></span>, and a <a class="term" href="#def-random">random real profile</a> <span data-n="BioGranRandom"></span>. These are point estimates, and no interval was computed on test.</li>
+      <li><b>Validation correlations.</b> Mean shift reached <span data-b="GranStart"></span> and the CycleGAN <span data-b="GranGAN"></span>, so on validation the CycleGAN fell slightly below mean shift, the reverse of test. The difference had no clear direction.</li>
+      <li><b>Paired ridge regression against mean shift.</b> Its gain was not clearly different from 0 (<a class="term" href="#def-tracked">Δr</a> <span data-b="GranRidgeDelta"></span>, 95% CI <span data-b="GranRidgeDeltaCI"></span>).</li>
+      <li><b>A plain <a class="term" href="#def-deconv">deconvolution</a> read whole blood with a bias.</b> Reference deconvolution (<a class="cite" href="#ref-abbas2009">Abbas et al., 2009</a>; <a class="cite" href="#ref-newman2015">Newman et al., 2015</a>) with signatures from labeled single cells ranked samples moderately well (correlation <span data-n="BioDeconvRLo"></span>–<span data-n="BioDeconvRHi"></span> across T, B, NK cells, and monocytes) but miscalibrated them, under-reading T cells by about <span data-n="BioDeconvT"></span> percentage points and over-reading monocytes by about <span data-n="BioDeconvMono"></span>. Neutrophil genes shared with monocytes remain in whole blood, which likely explains the monocyte excess. Calibrating the readout to the training average raised its R² from −1.08 and −1.55 to 0.23 and 0.05 on the two halves of the training donors, which is still low. This check used training donors and read real bulk profiles directly, without any prediction.</li>
+    </ul>
+  </div>
+  </details>
+
+  <details class="finding" id="f7"><summary><h3><span class="siglab">The draw</span>7. A response to vaccination <span class="tag val">validation</span></h3><span class="fsum">Predictions follow the vaccine response only partly.</span></summary>
+  <div class="ans">
+    <p class="ans-q">Do predictions follow each donor's <a class="term" href="#def-plasmablast">plasmablast</a> rise from Day 0 to Day 7 after flu vaccination?</p>
+    <p class="ans-a">Only partly. The <a class="term" href="#def-pergene">per-gene correction</a>, the CycleGAN, and <a class="term" href="#def-ridge">paired ridge regression</a> follow the plasmablast rise a week after vaccination about equally, and only paired ridge regression is clearly above the <a class="term" href="#def-tracked">chance level</a>, when predicting single-cell profiles.</p>
+  </div>
+  <ul class="ev">
+    <li><b>Vaccination is a perturbation with known timing, and the rise is clearly present in the true profiles,</b> about <span data-b="VacTrueSB"></span> standard deviations in bulk and <span data-b="VacTrueBS"></span> in single-cell profiles, across 26 vaccinations from 14 donors.</li>
+    <li><b>Predicted and true rises correlated loosely.</b> The per-gene correction, the CycleGAN, and paired ridge regression all reached r <span data-b="VacRLo"></span>–<span data-b="VacRHi"></span> (<a class="xref" href="#fig13">Figure 13</a>).</li>
+    <li><b>Among the three main methods, only paired ridge regression was clearly above the chance level,</b> in bulk → single-cell only, with r <span data-b="VacRidgeBS"></span> (<a class="term" href="#def-ci">95% CI</a> <span data-b="VacRidgeBSCI"></span>) against a chance level of <span data-b="VacNullBS"></span>.</li>
+    <li><b><a class="term" href="#def-interferon">Interferon</a> varies from visit to visit (<a class="xref" href="#f4">Finding 4</a>) but cannot be judged at Day 7.</b> Its true score did not rise by Day 7, as expected for a response that peaks within a day of vaccination (<a class="cite" href="#ref-obermoser2013">Obermoser et al., 2013</a>).</li>
+  </ul>
+  <figure id="fig13"><a href="assets/vaccine.png"><img class="fig" src="assets/vaccine.png" alt="Day 7 minus Day 0 change in the plasmablast program for each validation donor-year, predicted against true, for the per-gene correction, the unpaired CycleGAN, and paired ridge regression, with the true change in training and validation." loading="lazy"></a><figcaption><b>Figure 13.</b> For each validation <a class="term" href="#def-donoryear">donor-year</a> (one donor's Day 0 and Day 7 draws in one vaccine season), the Day 7 − Day 0 change in the plasmablast and immunoglobulin <a class="term" href="#def-program">program score</a>, predicted (x) against true (y). (a–c) Single-cell → bulk; (e–g) bulk → single-cell. Panels show the per-gene correction, the unpaired CycleGAN, and paired ridge regression. A donor's two years are joined by a line, and the dashed line is equality. (d, h) The true change in bulk (d) and single-cell (h) profiles, in training (bars, 116 donor-years) and validation (diamonds), with 95% CIs. Points are colored by donor, and these colors identify donors only.</figcaption></figure>
+  <div class="fdetail"><p class="fdetail-h"><span class="nolink">Intervals and close calls</span></p>
+    <ul>
+      <li>The true rise had a 95% CI of <span data-b="VacTrueSBCI"></span> in bulk and <span data-b="VacTrueBSCI"></span> in single-cell profiles.</li>
+      <li>The CycleGANs with <a class="term" href="#def-complabels">composition labels</a> followed the rise less than the per-gene correction in single-cell → bulk (r <span data-b="VacLabelRLo"></span>–<span data-b="VacLabelRHi"></span>).</li>
+      <li>The unpaired CycleGAN with <a class="term" href="#def-checkpoint">weights averaged over training</a>, instead of a chosen <a class="term" href="#def-checkpoint">checkpoint</a>, was just above the chance level in bulk → single-cell (lower end of its interval <span data-b="VacAvgBSLo"></span>, against <span data-b="VacNullBS"></span>), on the <a class="term" href="#def-splits">validation donors</a> that also chose that model.</li>
+      <li>Paired ridge regression was just below the chance level in single-cell → bulk (lower end <span data-b="VacRidgeSBLo"></span>, against <span data-b="VacNullSB"></span>).</li>
+    </ul>
+  </div>
+  </details>
+
+  <h2 id="meaning">What this means</h2>
+  <p class="fgroup tkg">Machine-learning questions <span class="tag test">test</span></p>
+  <div class="takeaways">
+    <a class="tk" href="#m2"><span class="tk-t">Looking real is not evidence of information</span><span class="tk-b">Adversarial training buys realism but little information about the input, and a random real profile looks real without any.</span><span class="tk-ref">Findings 1 and 4</span></a>
+    <a class="tk" href="#m4"><span class="tk-t">Pairs buy accuracy</span><span class="tk-b">Donors profiled by both assays added more than any unpaired change tested, and enough of them score above the average profile.</span><span class="tk-ref">Findings 2 and 3</span></a>
+  </div>
+  <p class="fgroup tkg">Biological readouts <span class="tag val">validation</span></p>
+  <div class="takeaways">
+    <a class="tk" href="#m1"><span class="tk-t">Mostly the person</span><span class="tk-b">Predictions from an unpaired model mostly describe who the donor is. Interferon's visit-to-visit changes came through strongly, and the vaccine rise only partly.</span><span class="tk-ref">Findings 4–7</span></a>
+    <a class="tk" href="#m3"><span class="tk-t">Credit the simple correction</span><span class="tk-b">Most of the biology an unpaired model recovers was already present after a per-gene correction.</span><span class="tk-ref">Finding 4</span></a>
+    <a class="tk" href="#m5"><span class="tk-t">Calibrate deconvolution</span><span class="tk-b">A plain deconvolution with PBMC-only reference profiles under-read T cells and over-read monocytes in whole blood, likely through neutrophil genes shared with monocytes.</span><span class="tk-ref">Finding 6, training donors</span></a>
+    <a class="tk" href="#m1"><span class="tk-t">In practice</span><span class="tk-b">Profile some donors with both assays rather than relying on an unpaired model. Check donor-level predictions against measured data, and don't use predicted profiles for associations with a single visit.</span><span class="tk-ref">Findings 3–7</span></a>
+  </div>
+  <details id="meaning-detail"><summary>In detail</summary>
+  <ol class="mdetail">
+    <li id="m2"><b>Looking real is not evidence of information.</b> A <a class="term" href="#def-random">random real profile</a>, which ignores the input, landed at or above the <a class="term" href="#def-frontier">frontier</a> when predicting either assay (<a href="#f1">Finding 1</a>). Claims of <a class="term" href="#def-realism">realistic</a> prediction need a check against the true partner, and biological claims need checks against signal of known structure, such as <a class="term" href="#def-basedev">donor baselines</a> versus visit deviations, or a perturbation with known timing like vaccination. Without pairs, <a class="term" href="#def-gan">adversarial training</a> buys <a class="term" href="#def-realism">realism</a> but little information. The CycleGAN looked more like real profiles only by giving up accuracy, and <a class="term" href="#def-frontier">blends</a> of <a class="term" href="#def-alignments">simple alignments</a> were at least as realistic at the same accuracy (<a href="#f1">Finding 1</a>). The CycleGAN's change from the <a class="term" href="#def-pergene">per-gene correction</a> carried no more information about the sample than <a class="term" href="#def-coral">CORAL</a>'s (<a href="#f4">Finding 4</a>).</li>
+    <li id="m4"><b>Pairs bought more than any unpaired change tested.</b> <a class="term" href="#def-complabels">Composition labels</a>, from networks trained on pairs, restored most of the cell types that adversarial training lost (<a href="#f2">Finding 2</a>). <a class="term" href="#def-ridge">Ridge regression</a> trained on 8 paired donors roughly matched the average profile, already more accurate than every CycleGAN variant, and trained on all 68 it scored above the average profile (<a href="#f3">Finding 3</a>). In practice, a cohort with only bulk data gains more accuracy from profiling some donors with both assays than from an unpaired model.</li>
+    <li id="m1"><b>A prediction from an unpaired model is mostly a profile of the person.</b>
+      <ul>
+        <li><b>The person.</b> Predictions carried donors' baselines on most <a class="term" href="#def-program">gene programs</a>, mostly through the per-gene correction (<a href="#f4">Finding 4</a>).</li>
+        <li><b>The draw.</b> Visit deviations that both assays measure came through that correction, strongly for <a class="term" href="#def-interferon">interferon</a> (visit-deviation r <span data-b="IfnStartWithinSB"></span> in single-cell → bulk) and only partly for the Day 7 <a class="term" href="#def-plasmablast">plasmablast</a> rise (r <span data-b="VacRLo"></span>–<span data-b="VacRHi"></span>), where, among the per-gene correction, the CycleGAN, and <a class="term" href="#def-ridge">paired ridge regression</a>, only paired ridge regression was clearly above the <a class="term" href="#def-tracked">chance level</a>, and only when predicting single-cell profiles (<a href="#f7">Finding 7</a>). Adversarial training added little information about single visits.</li>
+        <li><b>The assay.</b> The <a class="term" href="#def-granulocyte">granulocyte</a> (neutrophil) program, which only whole blood carries, was recovered little beyond each donor's usual level (<a href="#f6">Finding 6</a>).</li>
+        <li><b>In practice.</b> Questions about donors' baselines may be answerable from such predictions, with checks against measured data. Associations with a phenotype measured at one visit should not rely on predicted profiles.</li>
+      </ul>
+    </li>
+    <li id="m3"><b>Read biological claims for an unpaired model against its per-gene correction.</b> Most programs the CycleGAN <a class="term" href="#def-tracked">tracked</a> were already tracked by the per-gene correction, and adversarial training changed little about which ones (<a href="#f4">Finding 4</a>).</li>
+    <li id="m5"><b><a class="term" href="#def-deconv">Deconvolving</a> <a class="term" href="#def-pbmc">PBMC</a> composition from whole blood needs calibration.</b> A plain reference deconvolution with PBMC-only single-cell signatures ranked samples moderately well but under-read T cells by about <span data-n="BioDeconvT"></span> percentage points and over-read monocytes by about <span data-n="BioDeconvMono"></span>, because neutrophil genes shared with monocytes remain in whole blood (<a href="#f6">Finding 6</a>).</li>
+  </ol>
+  </details>
+
+  <h2 id="limitations">Limitations</h2>
+  <div class="nextgrid limgrid">
+    <div class="nx">
+      <p class="nx-t"><a class="term" href="#def-singlecell">Pseudobulk</a>, not single cells</p>
+      <p class="nx-b">Each sample's cells were summed into one profile before any model saw them, so the predictions run between <a class="term" href="#def-pbmc">PBMC</a> pseudobulk and <a class="term" href="#def-bulk">whole-blood bulk</a>, not between individual cells and bulk. Cell-to-cell variation, rare cell states, and anything else that needs single-cell resolution were not predicted or tested.</p>
+    </div>
+    <div class="nx">
+      <p class="nx-t">Few donors, one healthy cohort</p>
+      <p class="nx-b">The test split has few donors (<span data-n="NTestDonors"></span>), so intervals are wide and many comparisons end in no clear difference. With 14 donors, intervals from resampling donors can be too narrow, so verdicts near the edge of their interval are borderline, such as the CycleGAN being less <a class="term" href="#def-realism">realistic</a> when predicting single-cell profiles (upper end <span data-n="HOneBSHi"></span>). A second division of the training donors moved the test <a class="term" href="#def-frontier">margin</a> when predicting bulk from <span data-n="HOneSBMargin"></span> to <span data-n="HOneSBHalvingOne"></span>, and program-level results are not corrected for multiple comparisons. All donors are healthy adults aged 25 to 67 from one cohort (<a class="term" href="#def-cohort">Sound Life</a>), profiled on one platform. Disease, other ages, and other protocols, which the motivating bulk-only cohorts include, were not tested.</p>
+    </div>
+    <div class="nx">
+      <p class="nx-t">Biology measured on <a class="term" href="#def-splits">validation donors</a></p>
+      <p class="nx-b">The biological readouts were added after the test evaluation and use the validation donors, whose data also chose the CycleGANs' settings and <a class="term" href="#def-checkpoint">checkpoints</a>, so those results may favor the CycleGANs. The readouts are exploratory and not corrected for multiple comparisons. The vaccine contrast rests on 26 <a class="term" href="#def-donoryear">donor-years</a> from 14 donors.</p>
+    </div>
+    <div class="nx">
+      <p class="nx-t"><a class="term" href="#def-realism">Realism</a> is a partial test</p>
+      <p class="nx-b">Realism is a classifier test on the top 10 <a class="term" href="#def-pcs">principal components</a>. It partly detects differences between donors, so even real profiles from other donors don't score 1, and a <a class="term" href="#def-random">random real profile</a>, which carries no information, landed at or above the <a class="term" href="#def-frontier">frontier</a>. A margin alone therefore can't show that a prediction carries information. On validation, the CycleGAN's margin stayed near or below 0 under stronger classifiers.</p>
+    </div>
+  </div>
+  <details><summary>More limitations</summary><ul>
+    <li><b>The two assays measure different cells.</b> Whole blood contains <a class="term" href="#def-granulocyte">granulocytes</a> that PBMC preparations remove, so part of every whole-blood target cannot be recovered from a single-cell input. That missing signal lowers the accuracy any method can reach when predicting bulk.</li>
+    <li><b>The composition readout has its own error.</b> The <a class="term" href="#def-readout">marker-gene readout</a> reached <a class="term" href="#def-readout">composition R²</a> <span data-n="BioCompSC"></span> on real single-cell profiles but only <span data-n="BioCompBulk"></span> on real bulk, so composition scores for predictions measure agreement with the readout as much as true composition, especially when predicting bulk.</li>
+    <li><b><a class="term" href="#def-complabels">Composition labels</a> need paired data.</b> The label networks are trained on pairs, so the composition-label variants are not strictly unpaired. The <a class="term" href="#def-complabels">cross-fitted</a> variant limits leakage but still uses other donors' pairs.</li>
+    <li><b>One model family and a small search.</b> Only the CycleGAN was tested, with 12 settings × 3 seeds (9 × 3 with composition labels) at one network size.</li>
+    <li><b>The 5,000-gene panel.</b> The panel holds the most variable genes in the training donors. Genes outside it were neither predicted nor scored.</li>
+    <li><b>One vaccine contrast.</b> Only flu vaccination, Day 0 against Day 7, was tested as a <a class="term" href="#def-personlevel">visit-level</a> event.</li>
+    <li><b><a class="term" href="#def-program">Program scores</a> are linear summaries.</b> A score averages <a class="term" href="#def-markers">marker genes</a>, so a program can follow composition rather than expression within cells.</li>
+    <li><b>The frontier is our construction.</b> It is built from three <a class="term" href="#def-alignments">simple alignments</a> and the <a class="term" href="#def-trainingmean">training mean</a>, and other unpaired methods could raise the frontier.</li>
+    <li><b>Validation was optimistic.</b> Settings and checkpoints were chosen on the validation donors, so validation was optimistic. From validation to test, the CycleGAN's realism fell (<a class="xref" href="#fig5">Figure 5</a>).</li>
+    <li><b>Cross-fitted labels are exploratory.</b> Their design used validation results, and they have no check on a second split of the training donors.</li>
+  </ul></details>
+
+  <h2 id="next">Next steps</h2>
+  <div class="nextgrid">
+    <div class="nx">
+      <span class="nx-k">Resolution</span>
+      <p class="nx-q">Can a prediction carry cells, not just their sum?</p>
+      <p class="nx-t">Predicting cells, not <a class="term" href="#def-singlecell">pseudobulk</a></p>
+      <p class="nx-b">Generate a set of cells for each sample instead of one summed profile, so that a prediction from bulk carries cell states and composition directly and can be scored against the sample's measured cells.</p>
+    </div>
+    <div class="nx">
+      <span class="nx-k">Model</span>
+      <p class="nx-q">Is the limit the CycleGAN or the unpaired setting?</p>
+      <p class="nx-t">Other generative families, same yardstick</p>
+      <p class="nx-b">Test other families of generative models (diffusion, <a class="cite" href="#ref-ho2020">Ho et al., 2020</a>; flow matching, <a class="cite" href="#ref-lipman2023">Lipman et al., 2023</a>; and Schrödinger bridges, <a class="cite" href="#ref-debortoli2021">De Bortoli et al., 2021</a>) against the same <a class="term" href="#def-frontier">frontier</a> and biological readouts, with the same training data, budget, and comparator. If none passes them, the limit is more likely the unpaired setting than the CycleGAN. Matching two unpaired collections cannot in general identify which output belongs to which input, so signal specific to one draw may be out of reach without pairs, and these results are consistent with that.</p>
+    </div>
+    <div class="nx">
+      <span class="nx-k">Data</span>
+      <p class="nx-q">Can predictions support studies of single visits?</p>
+      <p class="nx-t">More paired donors and a second cohort</p>
+      <p class="nx-b">Add donors profiled by both assays and a second cohort, ideally with <a class="term" href="#def-personlevel">visit-level</a> phenotypes or other perturbations with known timing, such as infection or the start of a treatment. With only 14 <a class="term" href="#def-splits">test donors</a>, the estimates are uncertain, and many differences can't be told apart from no difference at all.</p>
+    </div>
+    <div class="nx">
+      <span class="nx-k">Mixtures</span>
+      <p class="nx-q">Is the missing signal a mixing problem?</p>
+      <p class="nx-t">Model whole blood as a mixture</p>
+      <p class="nx-b">Model each whole-blood profile as its <a class="term" href="#def-pbmc">PBMC</a> profile plus a <a class="term" href="#def-granulocyte">granulocyte</a> profile in a sample-specific proportion, estimated from neutrophil genes such as FCGR3B and CSF3R. A <a class="term" href="#def-pergene">per-gene correction</a> cannot represent a proportion that varies by sample, which may be why every per-gene method scores below the average profile. The same model gives a <a class="term" href="#def-deconv">deconvolution</a> comparator next to established methods such as BayesPrism (<a class="cite" href="#ref-chu2022">Chu et al., 2022</a>) and CIBERSORTx (<a class="cite" href="#ref-newman2019">Newman et al., 2019</a>).</p>
+    </div>
+  </div>
+  <details><summary>Further analyses</summary><ul>
+    <li><b>A synthetic mixing benchmark.</b> Bulk profiles simulated by mixing single-cell profiles of known cell types in set proportions, so the right prediction for every sample is known. If unpaired models fail on these data, two unpaired collections alone do not determine the mapping. The CycleGAN already recovered simpler simulated mappings (<a href="#dev-checks">Development</a>).</li>
+    <li><b>Interval checks for few donors.</b> Bias-corrected bootstrap or leave-one-donor-out intervals for the validation verdicts near the edge of their intervals. The test verdicts cannot be rechecked without scoring the test split again.</li>
+    <li><b>A second, planned test scoring.</b> Score the biological readouts on the test split under a fixed plan, and add an interval for the <a class="term" href="#def-random">random real profile</a>'s <a class="term" href="#def-frontier">margin</a>, which was reported as a point estimate.</li>
+    <li><b>Trait intervals.</b> <a class="term" href="#def-ci">Confidence intervals</a> and per-split counts of female and male donors for the XIST ratios.</li>
+    <li><b><a class="term" href="#def-realism">Realism</a> beyond 10 <a class="term" href="#def-pcs">principal components</a>.</b> A two-sample test on all genes, such as a kernel test, so that realism does not depend on the main axes of variation alone.</li>
+    <li><b>Reusable preprocessing.</b> The Phase 0 steps as tested functions in an installable package, with the tests run automatically on every change.</li>
+  </ul></details>
+
+  <h2 id="development">Development</h2>
+  <p>The machine-learning questions and the rules for judging their answers were fixed before training (<a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/blob/main/notes/phase3_plan.md">analysis plan</a>), with one dated change after a pilot on validation data. Every deviation from the plan is logged in a <a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/blob/main/notes/deviations.md">change log</a>. Model results below were measured on the <a class="term" href="#def-splits">validation donors</a> that also chose the models, unless marked <span class="tag test">test</span>. Preprocessing used every donor, and the known-answer checks used simulated data.</p>
+  <details id="dev-prep"><summary>Preprocessing<span class="dsum">3,000 cells and one pseudobulk per sample, 5,000 genes chosen on training donors only</span></summary><ul>
+    <li><b>Cells.</b> The provider's single-cell files were reduced to "slim" files of a uniform random 3,000 cells per sample, drawn before any filtering, and every later step used the slims. Cells were kept with at least 200 genes detected and under 20% mitochondrial counts, and a sample needed at least 500 kept cells. Every cell passed, because the provider had already filtered its files.</li>
+    <li><b><a class="term" href="#def-singlecell">Pseudobulk</a>.</b> Each single-cell sample was summed over all its kept cells into one profile (median 3,000 cells, minimum 984).</li>
+    <li><b>Bulk.</b> Two kits sequenced twice had their libraries summed, and libraries under 1 million counts were dropped.</li>
+    <li><b>Gene names.</b> Gene symbols that the provider had made unique with suffixes such as "-1" were merged back into one gene when the base symbol is a real gene.</li>
+    <li><b>Normalization.</b> Both assays were normalized as log(1 + counts per 10,000), with each library size taken over the genes measured in both assays.</li>
+    <li><b>Pairs.</b> 868 single-cell samples and 836 bulk kits gave 836 pairs from 96 donors.</li>
+    <li><b>Gene panel.</b> Of the 32,965 genes measured in both assays, the 13,775 detected in at least half of the training samples in both assays were ranked by variability within each assay, and the 5,000 with the best average rank form the panel. The panel used training donors only, and it stayed the same when the validation and test donors' data were scrambled. Canonical T-cell markers such as CD3E, CD3D, and TRAC fell outside the panel.</li>
+    <li><b>Splits.</b> Within each age group, donors were divided at random into training (68 donors), validation (14), and test (14), so all of a donor's draws stay in one split and both age groups appear in every split. For unpaired training, the training donors were divided again into two halves matched in age mix and number of draws, one giving only single-cell profiles and the other only bulk profiles.</li>
+  </ul></details>
+  <details><summary>The locked models against the frontier<span class="dsum">On validation, the CycleGAN sat on the frontier, not beyond it</span></summary><figure id="fig15"><a href="assets/plane_val.png"><img class="fig" src="assets/plane_val.png" alt="Validation accuracy–realism plane with the frontier, the simple alignments, the locked unpaired CycleGAN, CycleGAN + composition labels, and paired ridge regression." loading="lazy"></a><figcaption><b>Figure 15.</b> The models as they were locked, on the validation accuracy–<a class="term" href="#def-realism">realism</a> plane (<span data-n="NValPairs"></span> pairs, <span data-n="NValDonors"></span> donors): the unpaired CycleGAN sat on the <a class="term" href="#def-frontier">frontier</a>, not clearly beyond the frontier.</figcaption></figure></details>
+  <details id="dev-ablations"><summary>Ablations: what each component does<span class="dsum">The discriminator buys realism, and the cycle loss keeps predictions on the data</span></summary><ul>
+    <li><b>The <a class="term" href="#def-gan">discriminator</a> is what buys realism.</b> Without the adversarial loss, realism stayed near 0.1 when predicting either assay, the level of the per-gene corrections the generators build on (<a class="xref" href="#fig16">Figure 16</a>).</li>
+    <li><b>The cycle and identity losses alone still moved the generators.</b> Without the adversarial loss, the generators moved away from the <a class="term" href="#def-pergene">per-gene correction</a> in a direction that cost accuracy, to <a class="term" href="#def-accuracy">centered R²</a> −0.47 when predicting bulk.</li>
+    <li><b>A per-gene scale and shift is not enough.</b> A generator restricted to a per-gene scale and shift stayed near realism 0.1 under the same losses.</li>
+    <li><b>The cycle loss keeps predictions on the data.</b> Without it, accuracy collapsed, to centered R² −1.42 when predicting bulk.</li>
+    <li><b>The CycleGAN's move was mostly sideways.</b> Its move away from the per-gene correction was mostly at right angles to the correction each sample needs, with only a small part toward it (<a class="xref" href="#fig7">Figure 7c</a>).</li>
+  </ul>
+  <figure id="fig16"><a href="assets/ablations.png"><img class="fig" src="assets/ablations.png" alt="Validation accuracy–realism plane showing the unpaired CycleGAN and versions with one component removed or changed." loading="lazy"></a><figcaption><b>Figure 16.</b> Ablations of the unpaired CycleGAN on the validation accuracy–realism plane, (a) single-cell → bulk and (b) bulk → single-cell. The black point is the full unpaired CycleGAN, and each gray point removes or changes one component. Without the adversarial loss, with only a per-gene scale and shift, or without the cycle loss, predictions stay far below the frontier. Points are means over 3 seeds.</figcaption></figure>
+</details>
+  <details><summary>What did not work: changes to the unpaired CycleGAN<span class="dsum">None of five changes moved the CycleGAN clearly beyond the frontier</span></summary><p>None of five changes moved the unpaired CycleGAN clearly beyond the frontier: removing the identity loss in one or both directions, an identity loss pulling toward the per-gene correction, a loss preserving distances between samples, and a bottleneck generator (<a class="xref" href="#fig17">Figure 17</a>). The most promising change, removing the identity loss, gained 0.01 in mean <a class="term" href="#def-frontier">margin</a> on three fresh seeds, smaller than the seed-to-seed spread of 0.03.</p>
+  <figure id="fig17"><a href="assets/changes.png"><img class="fig" src="assets/changes.png" alt="Validation accuracy–realism plane showing the unpaired CycleGAN and five changes to it, with seed spread." loading="lazy"></a><figcaption><b>Figure 17.</b> Five changes to the unpaired CycleGAN on the validation accuracy–realism plane, (a) single-cell → bulk and (b) bulk → single-cell. Points are means over 3 seeds, with bars of one standard deviation across seeds. None moves the CycleGAN clearly beyond the frontier.</figcaption></figure>
+</details>
+  <details id="dev-robust"><summary>Robustness of the verdict<span class="dsum">Other classifiers and checkpoint choice leave the verdict in place, and a second division of donors moves the margins</span></summary><ul>
+    <li><b>Other classifiers.</b> With a 50-component logistic classifier or gradient-boosted trees in place of the realism classifier, the locked CycleGAN's margin stayed near or below 0 when predicting either assay.</li>
+    <li><b>A second split of the training donors.</b> Trained on a second division of the training donors into unpaired halves, the CycleGAN's validation margins ranged from −0.02 to 0.20 when predicting bulk and from −0.42 to −0.19 when predicting single-cell profiles, across three seeds. <span class="tag test">test</span> Its test margins on that division were <span data-n="HOneSBHalvingOne"></span> and <span data-n="HOneBSHalvingOne"></span> (point estimates), against <span data-n="HOneSBMargin"></span> and <span data-n="HOneBSMargin"></span> on the first.</li>
+    <li><b><a class="term" href="#def-checkpoint">Checkpoint</a> choice.</b> <span class="tag test">test</span> Generator <a class="term" href="#def-checkpoint">weights averaged over training</a>, which involve no checkpoint choice, moved from validation to test as the chosen checkpoints did, so the drop on test when predicting single-cell profiles does not come from a lucky checkpoint.</li>
+    <li><b>The comparison as first planned.</b> <span class="tag test">test</span> Under the comparison as written before the dated change after the pilot, the verdict on test was the same.</li>
+  </ul></details>
+  <details id="dev-checks"><summary>Checks on the pipeline<span class="dsum">Known answers were recovered, a negative control failed, and the CycleGAN hid no information</span></summary><ul>
+    <li><b>Known answers were recovered.</b> On simulated data where the true mapping between the assays is a per-gene scale and shift, the CycleGAN at the size and training length used on real data recovered it somewhat less well than <a class="term" href="#def-combat">ComBat</a> (accuracy 0.85 against 0.96).</li>
+    <li><b>Mixing genes favors the CycleGAN.</b> With a smaller network, the CycleGAN nearly matched ComBat on the per-gene mapping (0.94), and when the mapping also mixed genes it recovered much more than ComBat (0.45 against 0.08).</li>
+    <li><b>The realism measure's noise level.</b> When real partners were relabeled at random within pairs, the realism classifier's AUROC averaged 0.50 and varied by 0.04 (one standard deviation), so realism differences between two models of up to about 0.2 can arise by chance.</li>
+    <li><b>A negative control failed as it should.</b> With the discriminator's real and predicted labels shuffled, realism fell below 0.01 when predicting bulk and 0.05 when predicting single-cell profiles, and accuracy collapsed.</li>
+    <li><b>No hidden information.</b> A CycleGAN can satisfy its cycle loss by hiding the input in imperceptible signals (<a class="cite" href="#ref-chu2017">Chu et al., 2017</a>). In this project, the cycle error responded to small input noise as much as it did for the untrained per-gene correction (sensitivity ratio 0.95 to 1.01), so the CycleGAN was not hiding information this way.</li>
+  </ul></details>
+  <details id="dev-access"><summary>Test access and reproducibility<span class="dsum">One scoring run on test, with audited code</span></summary><ul>
+    <li><b>One scoring run.</b> The test split was read by one scoring run, with code checked against an audited version. A second, presentation-only run after display-only edits reproduced every result file, and both runs are recorded in a <a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/blob/main/results/phase7/test_touch.json">run log</a>. The biological readouts in Findings 4–7 never read it, and the few test numbers in those findings come from the one scoring run.</li>
+    <li><b>Determinism.</b> Training is deterministic on CPU, and raw inputs are checked against pinned checksums.</li>
+    <li><b>Every number checked.</b> Each phase has one executed notebook, and every number on this page was checked against the result files.</li>
+  </ul></details>
+
+  <h2 id="test-results">All test results</h2>
+  <details><summary>Every comparison, with intervals and readings</summary>
+  <div class="tablewrap"><table id="t1"><caption class="sr-only">Main results on the test split</caption><thead><tr><th scope="col">Direction</th><th scope="col">Comparison</th><th scope="col">Estimate</th><th scope="col">95% CI</th><th scope="col">Reading</th></tr></thead><tbody></tbody></table></div>
+  <p class="foot" id="t1foot"></p>
+  </details>
+  <details><summary>Every model and measure (sortable)</summary>
+    <div class="tablewrap"><table id="t2"><caption class="sr-only">Every model on the test split. Select a column heading to sort.</caption><thead><tr><th scope="col">Direction</th><th scope="col">Model</th><th scope="col">Centered R²</th><th scope="col">Realism</th><th scope="col">Margin</th><th scope="col">Margin kind</th><th scope="col">Composition R²</th><th scope="col">Within-donor top-1</th><th scope="col">Nearest-neighbor ratio</th></tr></thead><tbody></tbody></table></div>
+    <p class="foot">Point estimates. The chosen <a class="term" href="#def-checkpoint">checkpoint</a> is the one chosen on validation. <a class="term" href="#def-checkpoint">Averaged weights</a> are exponential-moving-average weights, with no checkpoint selection. The <a class="term" href="#def-frontier">margin</a> is the distance beyond the unpaired <a class="term" href="#def-frontier">frontier</a>, in <a class="term" href="#def-realism">realism</a> units (realism kind), or in centered-R² units when no <a class="term" href="#def-frontier">blend</a> is as accurate (accuracy kind). Mixed means members of different kinds were averaged. † For models averaged over several runs, the margin kind is inferred from their average accuracy. * Paired models' margins are descriptive. <a class="term" href="#def-readout">Composition R²</a> is read from <a class="term" href="#def-markers">marker genes</a>. Within-donor top-1 is the share of samples whose prediction is closest to its own partner among the donor's draws. The nearest-neighbor ratio is the distance to the nearest training target relative to that of real targets (0 for methods that output training profiles).</p>
+  </details>
+  <details><summary>Interval plot of every comparison (Figure 14)</summary>
+  <figure id="fig14"><a href="assets/intervals.png"><img class="fig" src="assets/intervals.png" alt="Interval plot of every test comparison: the unpaired CycleGAN's margin, composition differences, accuracy and realism differences of paired ridge regression, and the exploratory cross-fitted labels." loading="lazy"></a><figcaption><b>Figure 14.</b> Every comparison with its paired <a class="term" href="#def-ci">donor-bootstrap</a> 95% CI (<span data-n="NTestPairs"></span> pairs, <span data-n="NTestDonors"></span> donors). Colors show the assay being predicted (orange bulk, blue single-cell).</figcaption></figure>
+  </details>
+  <details><summary>Result files</summary>
+  <p>The result files behind these tables, one row per comparison or model:</p>
+  <ul class="files">
+    <li><a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/blob/main/results/phase7/models_test.csv"><code>models_test.csv</code></a>: every model and reference, every measure</li>
+    <li><a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/blob/main/results/phase7/h1_test.csv"><code>h1_test.csv</code></a>: the unpaired CycleGAN against the frontier</li>
+    <li><a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/blob/main/results/phase7/h2_test.csv"><code>h2_test.csv</code></a>: <a class="term" href="#def-complabels">composition labels</a></li>
+    <li><a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/blob/main/results/phase7/h3_test.csv"><code>h3_test.csv</code></a>: what pairs buy</li>
+    <li><a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/blob/main/results/phase7/pairs_buy_test.csv"><code>pairs_buy_test.csv</code></a>: accuracy, realism, and composition by number of paired donors</li>
+    <li><a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/blob/main/results/phase7/references_test.csv"><code>references_test.csv</code></a>: the <a class="term" href="#def-random">random real profile</a>, <a class="term" href="#def-ot">optimal-transport retrieval</a>, and <a class="term" href="#def-samedonor">another draw of the same donor</a></li>
+    <li><a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/blob/main/results/phase7/h1_within_donor_test.csv"><code>h1_within_donor_test.csv</code></a>: picking out the own sample among a donor's draws</li>
+    <li><a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/blob/main/results/phase7/bcf_test.csv"><code>bcf_test.csv</code></a>: <a class="term" href="#def-complabels">cross-fitted</a> composition labels</li>
+  </ul>
+  <p>The full folder, with the validation results, is <a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/tree/main/results">results/</a>.</p>
+  </details>
+
+  
+
+  <h2 id="definitions">Definitions</h2>
+  <details><summary>The data</summary><ul>
+    <li id="def-singlecell" data-title="Single-cell RNA-seq" data-short="Measures gene expression in individual cells. In this project, the cells are PBMCs (the lymphocytes, monocytes, and dendritic cells of blood), and each sample's cells are summed into one pseudobulk profile."><b>Single-cell RNA-seq</b> measures gene expression in individual cells. In this project, the cells are <b>PBMCs</b> (peripheral blood mononuclear cells: the lymphocytes, monocytes, and dendritic cells of blood). For each sample we sum up to 3,000 cells into one <b>pseudobulk</b> profile.</li>
+    <li id="def-pbmc" data-title="PBMCs" data-short="Peripheral blood mononuclear cells: the lymphocytes, monocytes, and dendritic cells of blood, separated from granulocytes and red cells before profiling."><b>PBMCs:</b> peripheral blood mononuclear cells, the lymphocytes, monocytes, and dendritic cells of blood, separated from granulocytes and red cells by density before profiling.</li>
+    <li id="def-bulk" data-title="Whole-blood bulk RNA-seq" data-short="Measures a whole blood sample at once. Unlike PBMC preparations, whole blood still contains granulocytes such as neutrophils."><b>Bulk RNA-seq</b> measures a whole tissue sample at once. <b>Whole-blood bulk</b> also includes granulocytes, which PBMC preparations remove, so the two assays differ in what they contain as well as in how they measure expression.</li>
+    <li id="def-profile" data-title="Profile" data-short="One sample's expression over the same 5,000 genes, normalized the same way in both assays so the two are comparable."><b>Profile:</b> expression values over the same 5,000 genes, the most variable ones chosen on training donors. Both assays use the same normalization, log(1 + counts per 10,000), so profiles are comparable.</li>
+    <li id="def-cohort" data-title="Cohort" data-short="96 healthy adults from the Allen Institute for Immunology's Sound Life study, each with several blood draws over about two years."><b>Cohort:</b> 96 healthy adults (<a class="cite" href="#ref-gong2025">Gong et al., 2025</a>), 49 young (25–37 years) and 47 older (55–67). Sex and cytomegalovirus status were recorded but not modeled. The data are public from the Allen Institute for Immunology's Sound Life study (doi:10.57785/bn17-3h16, CC BY 4.0), and the repository's scripts rebuild every input from the portal files.</li>
+    <li id="def-draw" data-title="Donor, draw, sample" data-short="Each donor gave several blood draws, or visits, over about two years. Each draw is one sample."><b>Donor, draw, sample:</b> each donor gave several blood <b>draws</b>, or visits, over about two years, around yearly flu vaccination (median 10). Each draw is one <b>sample</b>. Every split keeps all of a donor's draws together and is stratified by age group.</li>
+    <li id="def-pair" data-title="Pair" data-short="The single-cell and bulk profiles measured from the same blood sample."><b>Pair:</b> the single-cell and bulk profiles of the same blood sample. <b>Unpaired</b> training uses two collections with no pairing between them, in this project from different donors.</li>
+    <li id="def-splits" data-title="Splits" data-short="Donors are divided into training, validation (used to choose settings), and test (scored once at the end), with all of a donor's draws in one split."><b>Splits:</b> training, validation (used to choose settings and checkpoints), and test (scored once at the end).</li>
+  </ul></details>
+  <details><summary>The models</summary><ul>
+    <li id="def-crossassay" data-title="Cross-assay prediction" data-short="Predicting a sample's profile in one assay from its profile in the other."><b>Cross-assay prediction:</b> predicting a sample's expression profile in one assay from its profile in the other, in either direction.</li>
+    <li id="def-gan" data-title="GAN and adversarial training" data-short="Adversarial training means training a generator against a discriminator. In a generative adversarial network, the generator produces outputs, and a discriminator learns to tell them from real data; the generator is rewarded when the discriminator is fooled."><b>GAN:</b> a <b>generator</b> produces outputs and a <b>discriminator</b> learns to tell them from real data. The generator is rewarded when the discriminator mistakes its outputs for real (<a class="cite" href="#ref-goodfellow2014">Goodfellow et al., 2014</a>).</li>
+    <li id="def-cyclegan" data-title="CycleGAN" data-short="A generative adversarial network (GAN) with two generators, one per direction, trained on two unpaired collections. Mapping a profile to the other assay and back should return the original."><b>CycleGAN</b> (<a class="cite" href="#ref-zhu2017">Zhu et al., 2017</a>): two generators, one per direction, trained on unpaired collections, with a <b>cycle-consistency loss</b> (mapping a profile to the other assay and back returns the input) and an <b>identity loss</b> (a profile already in the target assay is left unchanged). Our generators build on the per-gene correction and learn a correction to it, with two hidden layers of 512 units. The generators trained for 20,000 steps, and the settings and checkpoints were <b>locked</b> on validation.</li>
+    <li id="def-training" data-title="Training details" data-short="How the CycleGANs were built and trained: the generator, discriminator, losses, optimizer, and the settings searched on validation."><b>Training details:</b>
+      <ul>
+        <li><b>Generator:</b> a residual network with a learnable per-gene scale and two hidden layers of 512 units, initialized exactly at the per-gene correction.</li>
+        <li><b>Discriminator:</b> a network with layers of 256 and 64 units and spectral normalization (<a class="cite" href="#ref-miyato2018">Miyato et al., 2018</a>), with input noise (<a class="cite" href="#ref-sonderby2017">Sønderby et al., 2017</a>) annealed over the first half of training.</li>
+        <li><b>Losses:</b> a least-squares adversarial loss (<a class="cite" href="#ref-mao2017">Mao et al., 2017</a>), an L1 cycle-consistency loss, and an optional identity loss. With composition labels, a composition loss ramped in after 20% of training.</li>
+        <li><b>Optimization:</b> Adam (<a class="cite" href="#ref-kingma2015">Kingma and Ba, 2015</a>; learning rate 2 × 10⁻⁴), batches of 64, 20,000 steps, deterministic on CPU.</li>
+        <li><b>Settings searched on validation:</b> 12 settings × 3 seeds for the unpaired CycleGAN (cycle weight, discriminator learning rate, identity loss) and 9 × 3 with composition labels. The checkpoint with the largest validation margin was locked.</li>
+      </ul></li>
+    <li id="def-complabels" data-title="Composition labels" data-short="Cell-type fractions read by small networks trained on paired samples. A loss asks the CycleGAN's predictions to keep their sample's fractions, while the CycleGAN itself still trains without pairs. In the cross-fitted variant, each sample's label comes from a network that never saw its donor."><b>CycleGAN + composition labels:</b> the same, plus a loss asking each prediction to keep its sample's cell-type fractions, as read by <b>composition networks</b> trained on pairs. In the exploratory <b>cross-fitted</b> variant, each label comes from a network that never saw that sample's donor.</li>
+    <li id="def-ridge" data-title="Paired ridge regression" data-short="A linear regression fit on paired training samples, with its outputs spread out from the average so they look more real. It is the reference that uses the most paired data. Without the spread step, its predictions stay near the average and look much less real."><b>Paired ridge regression:</b> a linear regression fit on all training pairs, whose penalty pulls predictions toward the average profile. The outputs are then spread out from the average by a factor chosen on the training donors, trading a little accuracy for a lot of realism. It is the reference that uses the most paired data. <b>Plain ridge regression (without the spread step)</b> is the same regression without that final spreading, so its predictions stay near the average profile.</li>
+    <li id="def-pergene" data-title="Per-gene correction" data-short="The simple alignment each CycleGAN builds on and learns a correction to. It is mean shift when predicting bulk and ComBat when predicting single-cell."><b>Per-gene correction:</b> the simple alignment each CycleGAN builds on and learns a correction to. It is mean shift for single-cell → bulk and ComBat for bulk → single-cell, the most accurate alignment in each direction.</li>
+    <li id="def-alignments" data-title="Simple alignments" data-short="Corrections that move one assay's profiles toward the other's without pairs. Mean shift, ComBat, and CORAL each match one more property of the two assays' data."><b>Simple unpaired alignments,</b> each matching one more level of the distributions without pairs:
+      <ul>
+        <li id="def-meanshift" data-title="Mean shift" data-short="Adds each gene's average difference between the two assays to the input."><b>Mean shift</b> matches per-gene means. It is the simplest correction, and a strong one for these data, since the gap between the assays lies mostly along one direction.</li>
+        <li id="def-combat" data-title="ComBat" data-short="Matches each gene's average and spread between the two assays. It is a widely used batch correction in genomics."><b>ComBat</b> (<a class="cite" href="#ref-johnson2007">Johnson et al., 2007</a>) also matches per-gene variances and is a widely used batch-effect correction in genomics. The assay difference is only partly a batch effect, though, since whole blood contains cells PBMCs lack.</li>
+        <li id="def-coral" data-title="CORAL" data-short="Matches each gene's average and spread and the correlations between genes. It is a standard unpaired domain-adaptation method."><b>CORAL</b> (<a class="cite" href="#ref-sun2016">Sun et al., 2016</a>) also matches correlations between genes and is a standard unpaired domain-adaptation method in machine learning.</li>
+      </ul>
+      <span id="def-trainingmean" data-title="Training mean" data-short="A baseline that predicts the same profile for every sample, the average profile of the assay being predicted.">The <b>training mean</b> outputs the average profile of the assay being predicted, over the training data, for every input. It is in the frontier because shrinking toward it raises accuracy without adding information.</span> Harmony (<a class="cite" href="#ref-korsunsky2019">Korsunsky et al., 2019</a>), designed to integrate individual cells across batches, made no correction on these sample-level profiles because the two assays do not overlap.</li>
+    <li id="def-checkpoint" data-title="Chosen checkpoint and averaged weights" data-short="Two ways to fix a model's final weights: the saved state chosen on validation, or a running average of the weights over training."><b>Chosen checkpoint, averaged weights:</b> the saved model state picked on validation, or a running average of the weights over training, which needs no choice (<a class="cite" href="#ref-yazici2019">Yazıcı et al., 2019</a>).</li>
+  </ul></details>
+  <details><summary>The measures</summary><ul>
+    <li id="def-accuracy" data-title="Accuracy (centered R²)" data-short="How close a prediction is to its sample's true partner. 1 is perfect, and 0 is no better than predicting the average profile."><b>Accuracy (centered R²):</b> closeness to the sample's true partner over all genes, computed per sample and summarized by the median over samples. 1 is perfect, 0 is no better than predicting the average training profile, and it can be negative. The training-mean method averages only the unpaired training half, so it scores slightly below 0.</li>
+    <li id="def-realism" data-title="Realism" data-short="How hard predictions are to tell apart from real profiles. A classifier tries to separate them, and realism is 1 when it cannot and 0 when it separates them perfectly."><b>Realism:</b> a logistic regression on the top 10 principal components and their squares, cross-validated by donor, is trained to tell predictions from their true partners, a classifier two-sample test (<a class="cite" href="#ref-lopezpaz2017">Lopez-Paz and Oquab, 2017</a>). Its <b>AUROC</b>, the chance that it scores a random prediction as more prediction-like than a random real profile, is 0.5 at chance and 1 when it separates them perfectly. Realism is 1 − 2|AUROC − 0.5|: 1 means indistinguishable. It asks whether the outputs would pass as a real cohort on the main axes of variation, not whether they are biologically plausible.</li>
+    <li id="def-composition" data-title="Composition" data-short="The fractions of six cell types among a sample's PBMCs, counted from its cells."><b>Composition:</b> the fractions of six cell types among a sample's PBMCs, which are T cells, monocytes, B cells, NK cells, dendritic cells, and \"other\" (residual platelets, red cells, progenitors, and innate lymphoid cells). They are counted from each sample's cells, and nothing in the data measures granulocyte abundance. A good prediction keeps its sample's composition.
+      <ul>
+        <li id="def-markers" data-title="Marker genes" data-short="Genes expressed mainly in one cell type, so their levels track how much of that cell type a sample holds."><b>Marker genes</b> are genes expressed mainly in one cell type, for example CD14 and LYZ in monocytes, MS4A1 in B cells, and NKG7 in NK cells, so their levels track how much of that cell type a sample holds.</li>
+        <li id="def-readout" data-title="Composition R²" data-short="How well the cell-type fractions read from a profile, by a fixed readout of 28 marker genes, match the fractions counted from the sample's cells.">The <b>marker-gene readout</b> is a ridge regression, fit on each assay's real training profiles, that estimates the six fractions from 28 such genes. <b>Composition R²</b> is how well the fractions it reads from a predicted profile match the sample's true fractions.</li>
+        <li>The CycleGAN never trains against this readout, so, unlike the composition networks in its loss, the readout is hard for the generator to game.</li>
+      </ul></li>
+    <li id="def-frontier" data-title="Frontier and margin" data-short="The frontier is the most realism that blends of simple methods reach at each accuracy. A model's margin is how far above that edge it lands, so a margin above 0 means more realistic than any blend of equal accuracy."><b>Unpaired accuracy–realism frontier, blends, and margin:</b> blends mix the predictions of two simple methods (the three alignments or the training mean) at a weight from 0 to 1. The frontier is the highest realism that any blend reaches at a given accuracy or better. A model's margin is its realism minus the frontier's at the model's accuracy, or, when the model is more accurate than every blend, its accuracy lead (see <a href="#comparator">How realism is judged</a>).</li>
+    <li id="def-pcs" data-title="Principal components" data-short="The directions along which profiles vary most; the top few summarize the main differences between samples."><b>Principal components:</b> the directions along which profiles vary most. The top few summarize the main differences between samples.</li>
+    <li id="def-top1" data-title="Within-donor top-1" data-short="How often a prediction is closer to its own sample's partner than to the same donor's other draws. Chance is about 1 in 8."><b>Within-donor top-1:</b> the share of samples whose prediction is closer to its own partner than to that donor's other draws. It asks whether a prediction carries information about the sample, not just the person. Chance is about 1 in 8.</li>
+    <li id="def-ci" data-title="95% CI" data-short="A 95% confidence interval from resampling donors. “Clearly” means it excludes the reference value, and “no clear difference” means it includes it."><b>95% CI:</b> from 1,000 resamples of the donors (donors, not draws, since a donor's draws are not independent). "No clear difference" means the interval includes the reference value, and "clearly" means the interval excludes that value.</li>
+    <li id="def-random" data-title="Random real profile" data-short="A real profile drawn at random for each input. It looks real but carries no information about the input."><b>Random real profile:</b> a real training profile drawn at random for each input. It is made of real profiles, though from different donors than the test set, and carries no information about the input.</li>
+    <li id="def-samedonor" data-title="Another draw of the same donor" data-short="The same donor's real profile from a different blood draw, which is the right person but the wrong day."><b>Another draw of the same donor:</b> for each scored sample, the same donor's real profile from a different blood draw, which is real and from the right person but not the right day.</li>
+    <li id="def-mlp" data-title="Paired neural network" data-short="A small neural network fit on paired training samples, a second paired reference."><b>Paired neural network:</b> a small multilayer network fit on all training pairs, a second paired reference.</li>
+    <li id="def-ot" data-title="Optimal-transport retrieval" data-short="An unpaired method that matches each input to training profiles of the other assay and returns one of them."><b>Optimal-transport retrieval:</b> a non-adversarial unpaired method that matches each input to training profiles of the other assay with Sinkhorn optimal transport (<a class="cite" href="#ref-cuturi2013">Cuturi, 2013</a>) and returns one of those profiles.</li>
+  </ul></details>
+  <details><summary>The biological readouts</summary><ul>
+    <li id="def-plasmablast" data-title="Plasmablasts" data-short="Short-lived, antibody-secreting B cells that surge in the blood about a week after vaccination."><b>Plasmablasts:</b> short-lived, antibody-secreting B cells that surge in the blood about a week after vaccination (<a class="cite" href="#ref-wrammert2008">Wrammert et al., 2008</a>; <a class="cite" href="#ref-nakaya2011">Nakaya et al., 2011</a>).</li>
+    <li id="def-granulocyte" data-title="Granulocytes and neutrophils" data-short="White blood cells with granules, mostly neutrophils. They make up over half of blood's white cells and are removed when PBMCs are isolated."><b>Granulocytes and neutrophils:</b> granulocytes are white blood cells with granules, mostly neutrophils, which make up over half of blood's white cells and are removed when PBMCs are isolated.</li>
+    <li id="def-interferon" data-title="Interferon response" data-short="Genes switched on by interferons, signaling proteins released during viral infection and some vaccine responses, peaking within a day or two."><b>Interferon response:</b> genes switched on by interferons, signaling proteins released during viral infection and some vaccine responses, peaking within a day or two.</li>
+    <li id="def-hla" data-title="HLA" data-short="The human leukocyte antigen genes, which present antigens to T cells and differ greatly between people. Their measured expression is a stable trait of the person, partly because reads from different alleles map differently."><b>HLA:</b> the human leukocyte antigen genes, which present antigens to T cells and differ greatly between people, so their expression is a stable signature of the person.</li>
+    <li id="def-cmv" data-title="CMV" data-short="Cytomegalovirus, a common lifelong infection that expands cytotoxic NK and T cells and leaves a lasting expression signature."><b>CMV:</b> cytomegalovirus, a common lifelong herpesvirus infection that expands cytotoxic NK and T cells, leaving a lasting expression signature.</li>
+    <li id="def-deconv" data-title="Deconvolution" data-short="Estimating cell-type fractions in a bulk profile by modeling it as a mix of reference profiles for each cell type."><b>Deconvolution:</b> estimating cell-type fractions in a bulk profile by modeling it as a mix of reference profiles for each cell type (<a class="cite" href="#ref-abbas2009">Abbas et al., 2009</a>; <a class="cite" href="#ref-newman2015">Newman et al., 2015</a>). Newer methods take those reference profiles from single cells (<a class="cite" href="#ref-newman2019">Newman et al., 2019</a>; <a class="cite" href="#ref-chu2022">Chu et al., 2022</a>).</li>
+    <li id="def-program" data-title="Gene program and program score" data-short="A gene program is a set of genes that rise and fall together for one biological reason, such as one cell type's markers. A sample's program score is the average of those genes, each standardized first."><b>Gene program:</b> a fixed set of genes that rise and fall together for a known reason, such as the markers of one cell type, the genes interferon induces, or the immunoglobulin genes of antibody-secreting plasmablasts. A sample's score is the mean of its genes, each standardized with the mean and SD of the training samples of the same assay. The Hallmark gene sets (<a class="cite" href="#ref-liberzon2015">Liberzon et al., 2015</a>) are a supplementary check.</li>
+    <li id="def-personlevel" data-title="Person-level and visit-level" data-short="A program is person-level when most of its variation lies between donors, and visit-level when most lies between one donor's visits."><b>Person-level and visit-level:</b> a program is person-level when half or more of its variance lies between donors in the training data (the intraclass correlation, the share of variance between donors), and visit-level otherwise.</li>
+    <li id="def-basedev" data-title="Baseline and visit deviation" data-short="A donor's baseline is their average score for a program across visits. A visit deviation is how far one draw's score sits from that baseline."><b>Between-donor (baseline) and within-donor (visit-deviation) correlation:</b> tracking split into two parts. The first is computed on donors' baselines, their mean scores: does the prediction rank people correctly? The second is computed on visit deviations, after removing each donor's mean: does it follow one person's visits?</li>
+    <li id="def-tracked" data-title="Tracking and the chance level" data-short="A method tracks a program when its predicted scores correlate with the true scores clearly better than random real profiles do. That random-profile level is the chance level, and Δr is the change in that correlation from the per-gene correction."><b>Tracked:</b> the lower end of the 95% CI of the correlation between predicted and true program scores lies above the 97.5th percentile for 200 random real profiles, the value they exceed only 2.5% of the time. A CycleGAN's tracking is <b>inherited</b> when the per-gene correction tracks the program and the CycleGAN's correlation shows no clear difference from it (the 95% CI of Δr, the change in correlation from the per-gene correction, includes 0). The random-profile level is the <b>chance level</b>.</li>
+    <li id="def-donoryear" data-title="Donor-year" data-short="One donor's Day 0 and Day 7 draws in one flu-vaccine season."><b>Donor-year:</b> the Day 0 and Day 7 draws of one donor's flu-vaccine year. The vaccine readout compares predicted and true Day 7 − Day 0 changes across donor-years. A program is scored only where its Day 7 change is present in both the training and the true validation profiles.</li>
+    <li id="def-partial" data-title="Partial correlation of the change" data-short="How much a method's change from the per-gene correction relates to the true partner, beyond the correction itself. 0 means the change carries nothing about the specific sample."><b>Partial correlation of the change from the per-gene correction:</b> per gene, the correlation of a method's change from the per-gene correction with the true partner, after both are adjusted for the correction. It is zero for any change that is a fixed function of the correction, so it asks whether the change carries information about the specific sample.</li>
+  </ul></details>
+
+  <h2 id="code">Code and report</h2>
+  <p>Source code, notebooks (one per phase), and every result table are in the project repository: <a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/tree/main/dgm">code</a>, <a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/tree/main/notebooks">notebooks</a>, <a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/tree/main/results">results</a>, <a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/tree/main/report">report sources</a>. The repository's <a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/#readme">README</a> explains how the code is organized and how to rerun every phase.</p>
+  <p>Arushi Sahai (the author) conceived the project, chose the Sound Life cohort and the question, and wrote the proposal with AI help on drafting, editing, and a design sketch. The author set each phase's goals, set or approved its decision rules, and chose which analyses to run, with Claude's help on the ablations and exploratory directions. Claude drafted the phase specs from those goals, and the author revised and approved them. The author also interpreted the results, directed and revised the text of the results page, README, and notebooks, and reviewed the analysis code and its tests before Claude ran them. Parts of the preprocessing, including building the slim data files and several data checks, were adapted from code the author wrote for an earlier project.</p>
+  <p>Claude (Anthropic), through Claude Code, wrote all of the new code under the author's direction and ran and monitored the training and evaluation runs. Claude also drafted text for the author to revise, helped interpret the ablation results, and ran code and results audits, one of which changed a decision rule before the main training runs. The <a href="https://github.com/arushi-sahai/unpaired-singlecell-bulk-cyclegan/blob/main/notes/llm_usage.md">AI-use log</a> records what was assisted in each session and how it was checked.</p>
+  <p><b>The author's main contributions:</b></p>
+  <ul class="contrib">
+    <li><b>The question and the setup.</b> Asking whether a generative model trained without pairs can recover sample-level biology. The submitted proposal trained a composition-aware CycleGAN on the matched pairs. In discussion with Claude, the author recast the project around training without pairs, since with pairs available a regression model is the natural competitor. The author designed the unpaired setup: the training donors are split into halves that share no person, and the pairs are used only for scoring.</li>
+    <li><b>The biological framing.</b> Treating a blood transcriptome as three kinds of signal, each with its own readout. The person is read from donor baselines against visit deviations, the draw from the vaccine response, and the assay from granulocyte signal that only whole blood carries.</li>
+    <li><b>The comparison.</b> Choosing the comparison methods, starting from ComBat and CORAL in the proposal and adding the paired models that every result is measured against. Claude suggested adding mean shift and the training mean, and blending the alignments, so each model is judged against mixtures of them rather than each one alone.</li>
+    <li><b>What pairs buy.</b> Measuring how much paired data helps, and in what form:<ul><li><b>as composition labels:</b> networks trained on pairs read each sample's cell-type fractions, and the CycleGAN is trained to keep them;</li><li><b>as labels from networks that never saw the sample's donor,</b> to limit leakage from the pairs into the labels;</li><li><b>as regression targets,</b> through paired ridge regression trained on the pairs.</li></ul></li>
+    <li><b>Rigor.</b> Requiring that the questions and decision rules be fixed before training, and that the test split be locked behind a hash of audited code. Claude ran the code audit, and the author reviewed the code.</li>
+  </ul>
+
+  <h2 id="references">References</h2>
+  <details id="refs-dd"><summary>All 33 references</summary>
+  <ul class="foot">
+    <li id="ref-abbas2009" data-title="Deconvolution of blood microarray data identifies cellular activation patterns in systemic lupus erythematosus" data-authors="Abbas, A. R., Wolslegel, K., Seshasayee, D., Modrusan, Z. &amp; Clark, H. F." data-url="https://doi.org/10.1371/journal.pone.0006098">Abbas, A. R., Wolslegel, K., Seshasayee, D., Modrusan, Z. &amp; Clark, H. F. Deconvolution of blood microarray data identifies cellular activation patterns in systemic lupus erythematosus. <i>PLoS ONE</i> 4, e6098 (2009). <a class="paper" href="https://doi.org/10.1371/journal.pone.0006098">Paper</a></li>
+    <li id="ref-amodio2018" data-title="MAGAN: aligning biological manifolds" data-authors="Amodio, M. &amp; Krishnaswamy, S." data-url="https://proceedings.mlr.press/v80/amodio18a.html">Amodio, M. &amp; Krishnaswamy, S. MAGAN: aligning biological manifolds. <i>ICML</i>, PMLR 80, 215–223 (2018). <a class="paper" href="https://proceedings.mlr.press/v80/amodio18a.html">Paper</a></li>
+    <li id="ref-blau2018" data-title="The perception–distortion tradeoff" data-authors="Blau, Y. &amp; Michaeli, T." data-url="https://arxiv.org/abs/1711.06077">Blau, Y. &amp; Michaeli, T. The perception–distortion tradeoff. <i>CVPR</i>, 6228–6237 (2018). <a class="paper" href="https://arxiv.org/abs/1711.06077">Paper</a></li>
+    <li id="ref-brown1991" data-title="A gene from the region of the human X inactivation centre is expressed exclusively from the inactive X chromosome" data-authors="Brown, C. J. et al." data-url="https://doi.org/10.1038/349038a0">Brown, C. J. et al. A gene from the region of the human X inactivation centre is expressed exclusively from the inactive X chromosome. <i>Nature</i> 349, 38–44 (1991). <a class="paper" href="https://doi.org/10.1038/349038a0">Paper</a></li>
+    <li id="ref-chu2017" data-title="CycleGAN, a master of steganography" data-authors="Chu, C., Zhmoginov, A. &amp; Sandler, M." data-url="https://arxiv.org/abs/1712.02950">Chu, C., Zhmoginov, A. &amp; Sandler, M. CycleGAN, a master of steganography. arXiv:1712.02950 (2017). <a class="paper" href="https://arxiv.org/abs/1712.02950">Paper</a></li>
+    <li id="ref-chu2022" data-title="Cell type and gene expression deconvolution with BayesPrism enables Bayesian integrative analysis across bulk and single-cell RNA sequencing in oncology" data-authors="Chu, T., Wang, Z., Pe'er, D. &amp; Danko, C. G." data-url="https://doi.org/10.1038/s43018-022-00356-3">Chu, T., Wang, Z., Pe'er, D. &amp; Danko, C. G. Cell type and gene expression deconvolution with BayesPrism enables Bayesian integrative analysis across bulk and single-cell RNA sequencing in oncology. <i>Nature Cancer</i> 3, 505–517 (2022). <a class="paper" href="https://doi.org/10.1038/s43018-022-00356-3">Paper</a></li>
+    <li id="ref-cuturi2013" data-title="Sinkhorn distances: lightspeed computation of optimal transport" data-authors="Cuturi, M." data-url="https://proceedings.neurips.cc/paper_files/paper/2013/hash/af21d0c97db2e27e13572cbf59eb343d-Abstract.html">Cuturi, M. Sinkhorn distances: lightspeed computation of optimal transport. <i>NeurIPS</i> 26, 2292–2300 (2013). <a class="paper" href="https://proceedings.neurips.cc/paper_files/paper/2013/hash/af21d0c97db2e27e13572cbf59eb343d-Abstract.html">Paper</a></li>
+    <li id="ref-debortoli2021" data-title="Diffusion Schrödinger bridge with applications to score-based generative modeling" data-authors="De Bortoli, V., Thornton, J., Heng, J. &amp; Doucet, A." data-url="https://proceedings.neurips.cc/paper_files/paper/2021/hash/940392f5f32a7ade1cc201767cf83e31-Abstract.html">De Bortoli, V., Thornton, J., Heng, J. &amp; Doucet, A. Diffusion Schrödinger bridge with applications to score-based generative modeling. <i>NeurIPS</i> 34, 17695–17709 (2021). <a class="paper" href="https://proceedings.neurips.cc/paper_files/paper/2021/hash/940392f5f32a7ade1cc201767cf83e31-Abstract.html">Paper</a></li>
+    <li id="ref-demetci2022" data-title="SCOT: single-cell multi-omics alignment with optimal transport" data-authors="Demetci, P., Santorella, R., Sandstede, B., Noble, W. S. &amp; Singh, R." data-url="https://doi.org/10.1089/cmb.2021.0446">Demetci, P., Santorella, R., Sandstede, B., Noble, W. S. &amp; Singh, R. SCOT: single-cell multi-omics alignment with optimal transport. <i>Journal of Computational Biology</i> 29, 3–18 (2022). <a class="paper" href="https://doi.org/10.1089/cmb.2021.0446">Paper</a></li>
+    <li id="ref-gong2025" data-title="Multi-omic profiling reveals age-related immune dynamics in healthy adults" data-authors="Gong, Q., Sharma, M., Glass, M. C. et al." data-url="https://doi.org/10.1038/s41586-025-09686-5">Gong, Q., Sharma, M., Glass, M. C. et al. Multi-omic profiling reveals age-related immune dynamics in healthy adults. <i>Nature</i> 648, 696–706 (2025). <a class="paper" href="https://doi.org/10.1038/s41586-025-09686-5">Paper</a></li>
+    <li id="ref-goodfellow2014" data-title="Generative adversarial nets" data-authors="Goodfellow, I. et al." data-url="https://proceedings.neurips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html">Goodfellow, I. et al. Generative adversarial nets. <i>NeurIPS</i> 27, 2672–2680 (2014). <a class="paper" href="https://proceedings.neurips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html">Paper</a></li>
+    <li id="ref-guma2004" data-title="Imprint of human cytomegalovirus infection on the NK cell receptor repertoire" data-authors="Gumá, M., Angulo, A., Vilches, C., Gómez-Lozano, N., Malats, N. &amp; López-Botet, M." data-url="https://doi.org/10.1182/blood-2004-05-2058">Gumá, M., Angulo, A., Vilches, C., Gómez-Lozano, N., Malats, N. &amp; López-Botet, M. Imprint of human cytomegalovirus infection on the NK cell receptor repertoire. <i>Blood</i> 104, 3664–3671 (2004). <a class="paper" href="https://doi.org/10.1182/blood-2004-05-2058">Paper</a></li>
+    <li id="ref-ho2020" data-title="Denoising diffusion probabilistic models" data-authors="Ho, J., Jain, A. &amp; Abbeel, P." data-url="https://arxiv.org/abs/2006.11239">Ho, J., Jain, A. &amp; Abbeel, P. Denoising diffusion probabilistic models. <i>NeurIPS</i> 33, 6840–6851 (2020). <a class="paper" href="https://arxiv.org/abs/2006.11239">Paper</a></li>
+    <li id="ref-johnson2007" data-title="Adjusting batch effects in microarray expression data using empirical Bayes methods" data-authors="Johnson, W. E., Li, C. &amp; Rabinovic, A." data-url="https://doi.org/10.1093/biostatistics/kxj037">Johnson, W. E., Li, C. &amp; Rabinovic, A. Adjusting batch effects in microarray expression data using empirical Bayes methods. <i>Biostatistics</i> 8, 118–127 (2007). <a class="paper" href="https://doi.org/10.1093/biostatistics/kxj037">Paper</a></li>
+    <li id="ref-kingma2015" data-title="Adam: a method for stochastic optimization" data-authors="Kingma, D. P. &amp; Ba, J." data-url="https://arxiv.org/abs/1412.6980">Kingma, D. P. &amp; Ba, J. Adam: a method for stochastic optimization. <i>ICLR</i> (2015). <a class="paper" href="https://arxiv.org/abs/1412.6980">Paper</a></li>
+    <li id="ref-korsunsky2019" data-title="Fast, sensitive and accurate integration of single-cell data with Harmony" data-authors="Korsunsky, I. et al." data-url="https://doi.org/10.1038/s41592-019-0619-0">Korsunsky, I. et al. Fast, sensitive and accurate integration of single-cell data with Harmony. <i>Nature Methods</i> 16, 1289–1296 (2019). <a class="paper" href="https://doi.org/10.1038/s41592-019-0619-0">Paper</a></li>
+    <li id="ref-liao2022" data-title="De novo analysis of bulk RNA-seq data at spatially resolved single-cell resolution" data-authors="Liao, J. et al." data-url="https://doi.org/10.1038/s41467-022-34271-z">Liao, J. et al. De novo analysis of bulk RNA-seq data at spatially resolved single-cell resolution. <i>Nature Communications</i> 13, 6498 (2022). <a class="paper" href="https://doi.org/10.1038/s41467-022-34271-z">Paper</a></li>
+    <li id="ref-liberzon2015" data-title="The Molecular Signatures Database (MSigDB) hallmark gene set collection" data-authors="Liberzon, A., Birger, C., Thorvaldsdóttir, H. et al." data-url="https://doi.org/10.1016/j.cels.2015.12.004">Liberzon, A., Birger, C., Thorvaldsdóttir, H. et al. The Molecular Signatures Database (MSigDB) hallmark gene set collection. <i>Cell Systems</i> 1, 417–425 (2015). <a class="paper" href="https://doi.org/10.1016/j.cels.2015.12.004">Paper</a></li>
+    <li id="ref-lipman2023" data-title="Flow matching for generative modeling" data-authors="Lipman, Y., Chen, R. T. Q., Ben-Hamu, H., Nickel, M. &amp; Le, M." data-url="https://arxiv.org/abs/2210.02747">Lipman, Y., Chen, R. T. Q., Ben-Hamu, H., Nickel, M. &amp; Le, M. Flow matching for generative modeling. <i>ICLR</i> (2023). <a class="paper" href="https://arxiv.org/abs/2210.02747">Paper</a></li>
+    <li id="ref-lopezpaz2017" data-title="Revisiting classifier two-sample tests" data-authors="Lopez-Paz, D. &amp; Oquab, M." data-url="https://arxiv.org/abs/1610.06545">Lopez-Paz, D. &amp; Oquab, M. Revisiting classifier two-sample tests. <i>ICLR</i> (2017). <a class="paper" href="https://arxiv.org/abs/1610.06545">Paper</a></li>
+    <li id="ref-luecken2022" data-title="Benchmarking atlas-level data integration in single-cell genomics" data-authors="Luecken, M. D., Büttner, M., Chaichoompu, K. et al." data-url="https://doi.org/10.1038/s41592-021-01336-8">Luecken, M. D., Büttner, M., Chaichoompu, K. et al. Benchmarking atlas-level data integration in single-cell genomics. <i>Nature Methods</i> 19, 41–50 (2022). <a class="paper" href="https://doi.org/10.1038/s41592-021-01336-8">Paper</a></li>
+    <li id="ref-mao2017" data-title="Least squares generative adversarial networks" data-authors="Mao, X. et al." data-url="https://arxiv.org/abs/1611.04076">Mao, X. et al. Least squares generative adversarial networks. <i>ICCV</i>, 2794–2802 (2017). <a class="paper" href="https://arxiv.org/abs/1611.04076">Paper</a></li>
+    <li id="ref-miyato2018" data-title="Spectral normalization for generative adversarial networks" data-authors="Miyato, T., Kataoka, T., Koyama, M. &amp; Yoshida, Y." data-url="https://arxiv.org/abs/1802.05957">Miyato, T., Kataoka, T., Koyama, M. &amp; Yoshida, Y. Spectral normalization for generative adversarial networks. <i>ICLR</i> (2018). <a class="paper" href="https://arxiv.org/abs/1802.05957">Paper</a></li>
+    <li id="ref-nakaya2011" data-title="Systems biology of vaccination for seasonal influenza in humans" data-authors="Nakaya, H. I. et al." data-url="https://doi.org/10.1038/ni.2067">Nakaya, H. I. et al. Systems biology of vaccination for seasonal influenza in humans. <i>Nature Immunology</i> 12, 786–795 (2011). <a class="paper" href="https://doi.org/10.1038/ni.2067">Paper</a></li>
+    <li id="ref-newman2015" data-title="Robust enumeration of cell subsets from tissue expression profiles" data-authors="Newman, A. M. et al." data-url="https://doi.org/10.1038/nmeth.3337">Newman, A. M. et al. Robust enumeration of cell subsets from tissue expression profiles. <i>Nature Methods</i> 12, 453–457 (2015). <a class="paper" href="https://doi.org/10.1038/nmeth.3337">Paper</a></li>
+    <li id="ref-newman2019" data-title="Determining cell type abundance and expression from bulk tissues with digital cytometry" data-authors="Newman, A. M. et al." data-url="https://doi.org/10.1038/s41587-019-0114-2">Newman, A. M. et al. Determining cell type abundance and expression from bulk tissues with digital cytometry. <i>Nature Biotechnology</i> 37, 773–782 (2019). <a class="paper" href="https://doi.org/10.1038/s41587-019-0114-2">Paper</a></li>
+    <li id="ref-obermoser2013" data-title="Systems scale interactive exploration reveals quantitative and qualitative differences in response to influenza and pneumococcal vaccines" data-authors="Obermoser, G. et al." data-url="https://doi.org/10.1016/j.immuni.2012.12.008">Obermoser, G. et al. Systems scale interactive exploration reveals quantitative and qualitative differences in response to influenza and pneumococcal vaccines. <i>Immunity</i> 38, 831–844 (2013). <a class="paper" href="https://doi.org/10.1016/j.immuni.2012.12.008">Paper</a></li>
+    <li id="ref-provost2001" data-title="Robust classification for imprecise environments" data-authors="Provost, F. &amp; Fawcett, T." data-url="https://doi.org/10.1023/A:1007601015854">Provost, F. &amp; Fawcett, T. Robust classification for imprecise environments. <i>Machine Learning</i> 42, 203–231 (2001). <a class="paper" href="https://doi.org/10.1023/A:1007601015854">Paper</a></li>
+    <li id="ref-sonderby2017" data-title="Amortised MAP inference for image super-resolution" data-authors="Sønderby, C. K., Caballero, J., Theis, L., Shi, W. &amp; Huszár, F." data-url="https://arxiv.org/abs/1610.04490">Sønderby, C. K., Caballero, J., Theis, L., Shi, W. &amp; Huszár, F. Amortised MAP inference for image super-resolution. <i>ICLR</i> (2017). <a class="paper" href="https://arxiv.org/abs/1610.04490">Paper</a></li>
+    <li id="ref-sun2016" data-title="Return of frustratingly easy domain adaptation" data-authors="Sun, B., Feng, J. &amp; Saenko, K." data-url="https://doi.org/10.1609/aaai.v30i1.10306">Sun, B., Feng, J. &amp; Saenko, K. Return of frustratingly easy domain adaptation. <i>AAAI</i>, 2058–2065 (2016). <a class="paper" href="https://doi.org/10.1609/aaai.v30i1.10306">Paper</a></li>
+    <li id="ref-wrammert2008" data-title="Rapid cloning of high-affinity human monoclonal antibodies against influenza virus" data-authors="Wrammert, J. et al." data-url="https://doi.org/10.1038/nature06890">Wrammert, J. et al. Rapid cloning of high-affinity human monoclonal antibodies against influenza virus. <i>Nature</i> 453, 667–671 (2008). <a class="paper" href="https://doi.org/10.1038/nature06890">Paper</a></li>
+    <li id="ref-yazici2019" data-title="The unusual effectiveness of averaging in GAN training" data-authors="Yazıcı, Y. et al." data-url="https://openreview.net/forum?id=SJgw_sRqFQ">Yazıcı, Y. et al. The unusual effectiveness of averaging in GAN training. <i>ICLR</i> (2019). <a class="paper" href="https://openreview.net/forum?id=SJgw_sRqFQ">Paper</a></li>
+    <li id="ref-zhu2017" data-title="Unpaired image-to-image translation using cycle-consistent adversarial networks" data-authors="Zhu, J.-Y., Park, T., Isola, P. &amp; Efros, A. A." data-url="https://arxiv.org/abs/1703.10593">Zhu, J.-Y., Park, T., Isola, P. &amp; Efros, A. A. Unpaired image-to-image translation using cycle-consistent adversarial networks. <i>ICCV</i>, 2223–2232 (2017). <a class="paper" href="https://arxiv.org/abs/1703.10593">Paper</a></li>
+  </ul>
+  </details>
+
+</main>
+<script src="assets/data.js"></script>
+<script src="assets/data_bio.js"></script>
+<script>
+(function () {
+  const D = window.DATA || {numbers: {}, readings: {}, table1: [], table2: []};
+  const two = v => String(v).replace(/([+\u2212-]?)(\d+\.\d{3,})/g, (m, sg, x) => {   // the page shows at most two decimals
+    const r = parseFloat(x); const t = r.toFixed(2);
+    return r > 0 && t === "0.00" ? (sg === "\u2212" || sg === "-" ? ">\u22120.01" : "<0.01") : sg + t; });
+  document.querySelectorAll("[data-n]").forEach(el => { const v = D.numbers[el.dataset.n]; if (v !== undefined) el.textContent = two(v); });
+  const B = window.DATA_BIO || {};
+  document.querySelectorAll("[data-b]").forEach(el => { const v = B[el.dataset.b]; if (v !== undefined) el.textContent = two(v); });
+  document.querySelectorAll("[data-r]").forEach(el => { const v = D.readings[el.dataset.r]; if (v !== undefined) el.textContent = two(v); });
+  const fill = (id, rows, keys, numeric) => {
+    const tb = document.querySelector(`#${id} tbody`);
+    tb.innerHTML = "";
+    rows.forEach(r => {
+      const tr = document.createElement("tr");
+      keys.forEach(k => { const td = document.createElement("td"); td.textContent = two(r[k]); if (numeric.includes(k)) td.className = "n"; tr.appendChild(td); });
+      tb.appendChild(tr);
+    });
+  };
+  fill("t1", D.table1, ["direction", "comparison", "estimate", "ci", "reading"], ["estimate", "ci"]);
+  const k2 = ["direction", "model", "r2", "realism", "margin", "kind", "composition", "within", "nn"];
+  let rows2 = D.table2.map((r, i) => Object.assign({}, r, {direction: r.direction || (D.table2.slice(0, i).reverse().find(x => x.direction) || {}).direction}));
+  fill("t2", rows2, k2, ["r2", "realism", "margin", "composition", "within", "nn"]);
+  document.querySelectorAll("#t2 th").forEach((th, j) => {
+    let asc = true;
+    const btn = document.createElement("button");
+    btn.type = "button"; btn.className = "sort"; btn.textContent = th.textContent;
+    th.textContent = ""; th.appendChild(btn);
+    btn.addEventListener("click", () => {
+      const k = k2[j];
+      const val = r => { const x = parseFloat(String(r[k]).replace("−", "-").replace("*", "")); return isNaN(x) ? String(r[k]) : x; };
+      rows2 = rows2.slice().sort((a, b) => (val(a) > val(b) ? 1 : val(a) < val(b) ? -1 : 0) * (asc ? 1 : -1));
+      document.querySelectorAll("#t2 th").forEach(x => x.removeAttribute("aria-sort"));
+      th.setAttribute("aria-sort", asc ? "ascending" : "descending");
+      asc = !asc;
+      fill("t2", rows2, k2, ["r2", "realism", "margin", "composition", "within", "nn"]);
+    });
+  });
+  ["single-cell → bulk", "bulk → single-cell"].forEach((d, i) => {
+    const best = Math.max(...rows2.filter(r => r.direction === d && /CycleGAN/.test(r.model)).map(r => parseFloat(String(r.r2).replace("−", "-"))));
+    document.querySelectorAll(`[data-best="${i ? "BS" : "SB"}"]`).forEach(el => { if (isFinite(best)) el.textContent = best.toFixed(2).replace("-", "−"); });
+  });
+  const openTo = id => { const t = document.getElementById(id); if (!t) return; for (let d = t.closest("details"); d; d = d.parentElement.closest("details")) d.open = true; };
+  // Term previews: hover (or tap) a defined term to see its definition in a small box, as on Wikipedia; the box links to the full entry.
+  const pop = document.createElement("div"); pop.id = "termpop"; pop.setAttribute("role", "tooltip"); pop.hidden = true; document.body.appendChild(pop);
+  let showT, hideT, pinned = false, current = null;
+  const place = a => {
+    const r = a.getBoundingClientRect(), z = parseFloat(getComputedStyle(document.body).zoom) || 1;
+    const w = Math.min(380, document.documentElement.clientWidth / z - 32);
+    pop.style.width = w + "px";
+    let left = (r.left / z) + window.scrollX / z; left = Math.max(16, Math.min(left, document.documentElement.clientWidth / z - w - 16));
+    pop.style.left = left + "px"; pop.style.top = (r.bottom / z + window.scrollY / z + 6) + "px";
+  };
+  const target = a => a.matches(".tag") ? "def-splits" : a.getAttribute("href").slice(1);   // test/validation chips explain the splits
+  const show = a => {
+    const id = target(a), t = document.getElementById(id); if (!t) return;
+    const body = document.createElement("div"); body.className = "tp-body";
+    if (a.matches("a.cite")) {   // a citation shows the paper's title and authors, with a link to the paper
+      const b = document.createElement("b"); b.textContent = t.dataset.title; const p = document.createElement("p"); p.append(b, document.createElement("br"), t.dataset.authors); body.append(p);
+      pop.replaceChildren(body); const go = document.createElement("a"); go.className = "tp-more"; go.href = t.dataset.url; go.target = "_blank"; go.rel = "noopener"; go.textContent = "Open the paper →"; pop.append(go);
+      current = a; place(a); pop.hidden = false; return;
+    }
+    if (t.dataset.short) { const b = document.createElement("b"); b.textContent = t.dataset.title; const p = document.createElement("p"); p.append(b, document.createElement("br"), t.dataset.short); body.append(p); }
+    else { const c = t.cloneNode(true); c.querySelectorAll("a.term").forEach(x => x.replaceWith(...x.childNodes)); body.innerHTML = c.innerHTML; }   // the short definition stands alone; the full entry adds detail
+    pop.replaceChildren(body); pop.insertAdjacentHTML("beforeend", `<a class="tp-more" href="#${id}">Full definition →</a>`);
+    current = a; place(a); pop.hidden = false;
+  };
+  const hide = () => { pop.hidden = true; pinned = false; current = null; };
+  document.addEventListener("mouseover", e => { const a = e.target.closest("a.term, a.cite, .tag"); if (!a || pinned) return; clearTimeout(hideT); clearTimeout(showT); showT = setTimeout(() => show(a), 250); });
+  document.addEventListener("mouseout", e => { const a = e.target.closest("a.term, a.cite, .tag, #termpop"); if (!a || pinned) return; clearTimeout(showT); hideT = setTimeout(hide, 250); });
+  pop.addEventListener("mouseover", () => clearTimeout(hideT));
+  document.addEventListener("click", e => {
+    const a = e.target.closest("a.term, a.cite, .tag");
+    if (a) { e.preventDefault(); if (current === a && pinned) { hide(); return; } show(a); pinned = true; return; }
+    const more = e.target.closest("#termpop .tp-more");
+    if (more) { if (more.getAttribute("href").startsWith("#")) openTo(more.getAttribute("href").slice(1)); hide(); return; }
+    if (!e.target.closest("#termpop")) hide();
+  });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") hide(); });
+  window.addEventListener("resize", () => { if (current && !pop.hidden) place(current); });
+  document.addEventListener("click", e => { const a = e.target.closest('a[href^="#"]:not(.term)'); if (a && a.getAttribute("href").length > 1) openTo(a.getAttribute("href").slice(1)); });   // links into a closed dropdown open it
+  const mq = window.matchMedia("(max-width: 600px)");
+  const setFolds = () => document.querySelectorAll("details.mfold").forEach(d => { d.open = d.id === "cards-fold" ? false : !mq.matches; });
+  setFolds(); mq.addEventListener("change", setFolds);
+  const lb = document.createElement("div"); lb.id = "lightbox"; lb.hidden = true; lb.setAttribute("role", "dialog"); lb.setAttribute("aria-label", "Enlarged figure");
+  lb.innerHTML = '<button type="button">Close ✕</button><div class="lbwrap"><img alt=""><p class="lbcap"></p></div>'; document.body.appendChild(lb);
+  const lbImg = lb.querySelector("img"), closeLb = () => { lb.hidden = true; lb.classList.remove("zoomed"); document.body.style.overflow = ""; };
+  document.addEventListener("click", e => {
+    const a = e.target.closest("figure a"); if (!a || !a.querySelector("img.fig")) return;
+    e.preventDefault(); const img = a.querySelector("img.fig"); lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt; const cap = a.closest("figure").querySelector("figcaption"); lb.querySelector(".lbcap").textContent = cap ? cap.textContent.trim() : "";
+    lb.classList.toggle("zoomed", matchMedia("(pointer: coarse)").matches); lb.hidden = false; document.body.style.overflow = "hidden"; lb.scrollTo(0, 0);
+  });
+  lb.addEventListener("click", e => { if (e.target === lbImg) { lb.classList.toggle("zoomed"); return; } closeLb(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !lb.hidden) closeLb(); });
+  const back = document.createElement("button"); back.id = "backbtn"; back.type = "button"; back.hidden = true; back.textContent = "↩ Back to where you were"; document.body.appendChild(back);
+  let backY = null;
+  let backT;
+  document.addEventListener("click", e => {
+    const a = e.target.closest('a[href^="#def-"], a[href^="#ref-"], a[href^="#terms"], a.tp-more');
+    if (!a) return;
+    const y0 = window.scrollY;
+    setTimeout(() => {                                             // only after the page actually jumped
+      if (Math.abs(window.scrollY - y0) < 300) return;
+      backY = y0; back.hidden = false; clearTimeout(backT); backT = setTimeout(() => { back.hidden = true; }, 20000);
+    }, 400);
+  }, true);
+  window.addEventListener("scroll", () => { if (backY !== null && !back.hidden && Math.abs(window.scrollY - backY) < 200) back.hidden = true; }, { passive: true });
+  back.addEventListener("click", () => { if (backY !== null) window.scrollTo({ top: backY }); back.hidden = true; backY = null; });
+  if (location.hash.length > 1) openTo(location.hash.slice(1));
+  document.querySelectorAll(".tk").forEach(a => a.addEventListener("click", () => { document.getElementById("meaning-detail").open = true; }));   // a takeaway card opens its detail
+  document.getElementById("t1foot").textContent = two(D.foot || "");
+  document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    const dir = b.dataset.dir, img = document.getElementById("linesImg");
+    img.src = `assets/lines_${dir}.png`;
+    document.getElementById("linesLink").href = img.src;
+    img.alt = dir === "sb" ? "Single-cell → bulk partner-line plots for the per-gene correction (mean shift), the unpaired CycleGAN, CycleGAN + composition labels, paired ridge regression, and a random real profile."
+                           : "Bulk → single-cell partner-line plots for the per-gene correction (ComBat), the unpaired CycleGAN, CycleGAN + composition labels, paired ridge regression, and a random real profile.";
+    document.querySelectorAll("[data-dir-cap]").forEach(s => { s.hidden = s.dataset.dirCap !== dir; });
+  }));
+})();
+</script>
+</body>
+</html>

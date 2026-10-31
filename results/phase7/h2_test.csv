@@ -1,0 +1,3 @@
+direction,M2,M1,difference,95% CI,reading,label,note,settings compared
+single-cell → bulk,0.5871729917450378,0.4135056890559794,0.1736673026890584,0.108 to 0.331,supported,"the generator partly fits its training readout (Phase 6; validation point estimate, the locked comparison's CI includes the threshold)",M2's composition networks were trained on pairs that include the training donors' own,M2: 9 settings × 3 seeds on validation
+bulk → single-cell,0.4317667144757276,0.29210116781222606,0.13966554666350156,0.079 to 0.267,supported,,M2's composition networks were trained on pairs that include the training donors' own,M2: 9 settings × 3 seeds on validation

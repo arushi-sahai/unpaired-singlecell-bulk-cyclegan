@@ -1,0 +1,5 @@
+direction,translations,share explained (mean),SD over seeds and steps
+single-cell → bulk,"M1, fresh seeds (raw)",0.25470288728830165,0.04523861496818084
+single-cell → bulk,"M2, fresh seeds (raw)",0.1583209262370001,0.03111347271858658
+bulk → single-cell,"M1, fresh seeds (raw)",0.26408986576449694,0.03057121698059906
+bulk → single-cell,"M2, fresh seeds (raw)",0.2467923982008432,0.05033242308170195

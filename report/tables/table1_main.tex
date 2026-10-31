@@ -1,0 +1,30 @@
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{llrll}
+\toprule
+Direction & Comparison & Estimate & 95\% CI & Reading \\
+\midrule
+single-cell $\to$ bulk & Beyond the frontier? Unpaired CycleGAN's margin & +0.105 & $-$0.259 to 0.290 & not distinguishable from the unpaired frontier \\
+bulk $\to$ single-cell & Beyond the frontier? Unpaired CycleGAN's margin & $-$0.372 & $-$0.705 to $-$0.006 & inside the unpaired frontier \\
+single-cell $\to$ bulk & Do composition labels help? CycleGAN + composition labels $-$ unpaired CycleGAN, composition $R^2$ & +0.174 & 0.108 to 0.331 & supported$^{a}$$^{c}$ \\
+bulk $\to$ single-cell & Do composition labels help? CycleGAN + composition labels $-$ unpaired CycleGAN, composition $R^2$ & +0.140 & 0.079 to 0.267 & supported$^{c}$ \\
+single-cell $\to$ bulk & What pairs buy: paired ridge regression $-$ unpaired CycleGAN, centered $R^2$ & +0.375 & 0.302 to 0.478 & no claim \\
+single-cell $\to$ bulk & What pairs buy: paired ridge regression $-$ unpaired CycleGAN, composition $R^2$ & +0.216 & 0.128 to 0.420 & no claim \\
+single-cell $\to$ bulk & What pairs buy: paired ridge regression $-$ CycleGAN + composition labels, centered $R^2$ & +0.395 & 0.293 to 0.488 & no claim \\
+single-cell $\to$ bulk & What pairs buy: paired ridge regression $-$ CycleGAN + composition labels, composition $R^2$ & +0.043 & 0.001 to 0.115 & no claim \\
+bulk $\to$ single-cell & What pairs buy: paired ridge regression $-$ unpaired CycleGAN, centered $R^2$ & +0.515 & 0.406 to 0.682 & no claim \\
+bulk $\to$ single-cell & What pairs buy: paired ridge regression $-$ unpaired CycleGAN, composition $R^2$ & +0.184 & 0.063 to 0.438 & no claim \\
+bulk $\to$ single-cell & What pairs buy: paired ridge regression $-$ CycleGAN + composition labels, centered $R^2$ & +0.463 & 0.383 to 0.600 & no claim \\
+bulk $\to$ single-cell & What pairs buy: paired ridge regression $-$ CycleGAN + composition labels, composition $R^2$ & +0.045 & $-$0.046 to 0.207 & no claim \\
+single-cell $\to$ bulk & CycleGAN + cross-fitted labels $-$ unpaired CycleGAN (averaged weights), composition $R^2$ & +0.169 & 0.122 to 0.286 & exploratory$^{b}$ \\
+single-cell $\to$ bulk & CycleGAN + cross-fitted labels $-$ unpaired CycleGAN (averaged weights), centered $R^2$ & +0.019 & $-$0.070 to 0.091 & exploratory$^{b}$ \\
+bulk $\to$ single-cell & CycleGAN + cross-fitted labels $-$ unpaired CycleGAN (averaged weights), composition $R^2$ & +0.115 & 0.064 to 0.240 & exploratory$^{b}$ \\
+bulk $\to$ single-cell & CycleGAN + cross-fitted labels $-$ unpaired CycleGAN (averaged weights), centered $R^2$ & +0.026 & $-$0.028 to 0.093 & exploratory$^{b}$ \\
+single-cell $\to$ bulk & Random real profile's margin & +0.059 & -- & reference \\
+bulk $\to$ single-cell & Random real profile's margin & +0.201 & -- & reference \\
+\bottomrule
+\end{tabular}
+\caption{Main results on the test split (119 pairs, 14 donors). Estimates with paired donor-bootstrap 95\% CIs (1,000 resamples of the test donors), not corrected for multiple comparisons. Composition $R^2$ is read by a marker-gene readout independent of the composition networks; accuracy is centered $R^2$ against the true partner. Margin: realism minus the unpaired frontier's realism at the same accuracy. Robustness: on a second split of the training donors, the unpaired CycleGAN's margins were +0.257 (single-cell $\to$ bulk) and $-$0.476 (bulk $\to$ single-cell) (point estimates). The original hypothesis (beat the most accurate simple method on accuracy and the most realistic one on realism, separately) would not have been supported (realism not distinguishable; accuracy worse) in both directions. Settings compared on validation: unpaired CycleGAN: 12 settings × 3 seeds on validation; CycleGAN + composition labels: 9 settings × 3 seeds on validation. $^{a}$ The generator partly fits the network it trained against: on validation, less than half of its composition gain under that network was confirmed by the marker-gene readout (a point estimate; its interval includes one half). $^{b}$ Exploratory: designed after 56 settings and 160 runs on validation, with no check on a second split of the training donors, and it also partly fits the network it trained against, in both directions. $^{c}$ The composition networks were trained on pairs that include the training donors' own.}
+\label{tab:main}
+\end{table*}

@@ -1,0 +1,1447 @@
+{
+ "C_bulk_cf68_f0": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "crossfit": "C_bulk_cf68",
+  "donors": [
+   "BR1003",
+   "BR1004",
+   "BR1005",
+   "BR1009",
+   "BR1010",
+   "BR1011",
+   "BR1012",
+   "BR1013",
+   "BR1014",
+   "BR1015",
+   "BR1016",
+   "BR1017",
+   "BR1019",
+   "BR1021",
+   "BR1024",
+   "BR1029",
+   "BR1031",
+   "BR1033",
+   "BR1040",
+   "BR1041",
+   "BR1042",
+   "BR1045",
+   "BR1050",
+   "BR1052",
+   "BR1054",
+   "BR1056",
+   "BR1057",
+   "BR1059",
+   "BR2002",
+   "BR2003",
+   "BR2008",
+   "BR2012",
+   "BR2014",
+   "BR2015",
+   "BR2018",
+   "BR2019",
+   "BR2020",
+   "BR2023",
+   "BR2027",
+   "BR2028",
+   "BR2030",
+   "BR2034",
+   "BR2035",
+   "BR2037",
+   "BR2039",
+   "BR2040",
+   "BR2042",
+   "BR2044",
+   "BR2045",
+   "BR2046",
+   "BR2047",
+   "BR2048",
+   "BR2050",
+   "BR2053"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "left_out_fold": 0,
+  "members": [
+   {
+    "canonical_hash": "300e83ff4d44054f064da2d4dc3b58be0d1724b1bde5cc3aecfafff5afcd399a",
+    "file": "C_bulk_cf68_f0_seed0.pt"
+   },
+   {
+    "canonical_hash": "0ac93e04dad1a73e4414afcafd3e256d31601d1967f2eba7a12372d06c2034e7",
+    "file": "C_bulk_cf68_f0_seed1.pt"
+   },
+   {
+    "canonical_hash": "49d5f3a9f7d4c2a3d8d682ee485d2a2d2c93caab58396abbef15b4dc42a67310",
+    "file": "C_bulk_cf68_f0_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 463,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "48c26a92e5e80efc857dc7b23ab8061f724852d2b6f1803dfe110c50cda4612f"
+ },
+ "C_bulk_cf68_f1": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "crossfit": "C_bulk_cf68",
+  "donors": [
+   "BR1002",
+   "BR1003",
+   "BR1004",
+   "BR1005",
+   "BR1006",
+   "BR1007",
+   "BR1008",
+   "BR1009",
+   "BR1010",
+   "BR1011",
+   "BR1012",
+   "BR1013",
+   "BR1015",
+   "BR1016",
+   "BR1017",
+   "BR1019",
+   "BR1029",
+   "BR1031",
+   "BR1032",
+   "BR1035",
+   "BR1040",
+   "BR1041",
+   "BR1044",
+   "BR1045",
+   "BR1050",
+   "BR1052",
+   "BR1054",
+   "BR1056",
+   "BR2009",
+   "BR2012",
+   "BR2015",
+   "BR2018",
+   "BR2019",
+   "BR2020",
+   "BR2022",
+   "BR2027",
+   "BR2028",
+   "BR2030",
+   "BR2032",
+   "BR2033",
+   "BR2034",
+   "BR2035",
+   "BR2037",
+   "BR2039",
+   "BR2040",
+   "BR2041",
+   "BR2042",
+   "BR2044",
+   "BR2045",
+   "BR2046",
+   "BR2047",
+   "BR2048",
+   "BR2051",
+   "BR2052"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "left_out_fold": 1,
+  "members": [
+   {
+    "canonical_hash": "e5272018ee7ddd70007421464e1c8846fa4132a2bfcc07e0c6a9d7ab93676d71",
+    "file": "C_bulk_cf68_f1_seed0.pt"
+   },
+   {
+    "canonical_hash": "aef67a7309974b0b126f9df0e5dd3c972661ca7e0360b4457a82700267e03e12",
+    "file": "C_bulk_cf68_f1_seed1.pt"
+   },
+   {
+    "canonical_hash": "8586523d078066e808d99f749d69627155e9369d728f407a87fe30f85efa9b79",
+    "file": "C_bulk_cf68_f1_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 463,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "1615df8ac46f497abdab22c05be602d70346f2a0a8916c44867e2c52a3be918b"
+ },
+ "C_bulk_cf68_f2": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "crossfit": "C_bulk_cf68",
+  "donors": [
+   "BR1002",
+   "BR1003",
+   "BR1004",
+   "BR1005",
+   "BR1006",
+   "BR1007",
+   "BR1008",
+   "BR1009",
+   "BR1010",
+   "BR1011",
+   "BR1012",
+   "BR1013",
+   "BR1014",
+   "BR1015",
+   "BR1016",
+   "BR1017",
+   "BR1019",
+   "BR1021",
+   "BR1024",
+   "BR1032",
+   "BR1033",
+   "BR1035",
+   "BR1040",
+   "BR1042",
+   "BR1044",
+   "BR1054",
+   "BR1057",
+   "BR1059",
+   "BR2002",
+   "BR2003",
+   "BR2008",
+   "BR2009",
+   "BR2014",
+   "BR2018",
+   "BR2019",
+   "BR2022",
+   "BR2023",
+   "BR2028",
+   "BR2030",
+   "BR2032",
+   "BR2033",
+   "BR2034",
+   "BR2035",
+   "BR2037",
+   "BR2039",
+   "BR2040",
+   "BR2041",
+   "BR2042",
+   "BR2045",
+   "BR2047",
+   "BR2050",
+   "BR2051",
+   "BR2052",
+   "BR2053"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "left_out_fold": 2,
+  "members": [
+   {
+    "canonical_hash": "1c9b51ae728a1d0f7aa8d9ea8907963c8037f60aa5d798335f572d94d9f6e455",
+    "file": "C_bulk_cf68_f2_seed0.pt"
+   },
+   {
+    "canonical_hash": "4a45a94d6b54108cadf5148cf063b8019af0c1e053359950e6d0ad4a49217cbd",
+    "file": "C_bulk_cf68_f2_seed1.pt"
+   },
+   {
+    "canonical_hash": "8e4169307a4ad43374821ddbc6bd87b485a37c73ed12aba8392dc3d09271da67",
+    "file": "C_bulk_cf68_f2_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 480,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "bbf442a64f98ba443d46b423c8a76b6dea419a231d5b36e1306a7880d0dc7c9e"
+ },
+ "C_bulk_cf68_f3": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "crossfit": "C_bulk_cf68",
+  "donors": [
+   "BR1002",
+   "BR1003",
+   "BR1005",
+   "BR1006",
+   "BR1007",
+   "BR1008",
+   "BR1009",
+   "BR1011",
+   "BR1014",
+   "BR1019",
+   "BR1021",
+   "BR1024",
+   "BR1029",
+   "BR1031",
+   "BR1032",
+   "BR1033",
+   "BR1035",
+   "BR1040",
+   "BR1041",
+   "BR1042",
+   "BR1044",
+   "BR1045",
+   "BR1050",
+   "BR1052",
+   "BR1054",
+   "BR1056",
+   "BR1057",
+   "BR1059",
+   "BR2002",
+   "BR2003",
+   "BR2008",
+   "BR2009",
+   "BR2012",
+   "BR2014",
+   "BR2015",
+   "BR2018",
+   "BR2020",
+   "BR2022",
+   "BR2023",
+   "BR2027",
+   "BR2028",
+   "BR2032",
+   "BR2033",
+   "BR2040",
+   "BR2041",
+   "BR2042",
+   "BR2044",
+   "BR2045",
+   "BR2046",
+   "BR2047",
+   "BR2048",
+   "BR2050",
+   "BR2051",
+   "BR2052",
+   "BR2053"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "left_out_fold": 3,
+  "members": [
+   {
+    "canonical_hash": "bc47deb895800469ecdf3282e68ac31075b84432bca5654cf8101ac8edf37e80",
+    "file": "C_bulk_cf68_f3_seed0.pt"
+   },
+   {
+    "canonical_hash": "1da3d8be00a658b51c29ce5812cab4f013daf56f1c48ac1e97b6f4cc71561c61",
+    "file": "C_bulk_cf68_f3_seed1.pt"
+   },
+   {
+    "canonical_hash": "adedc513a2257fa9d43d23d95d25f4a05048d5165ebfbe7f7eaf36a603f8e6c6",
+    "file": "C_bulk_cf68_f3_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 466,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "e5951b4f5d832553ecbfa437de3f21412be64ad19e3dd88da31834fdbab160e0"
+ },
+ "C_bulk_cf68_f4": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "crossfit": "C_bulk_cf68",
+  "donors": [
+   "BR1002",
+   "BR1004",
+   "BR1006",
+   "BR1007",
+   "BR1008",
+   "BR1010",
+   "BR1012",
+   "BR1013",
+   "BR1014",
+   "BR1015",
+   "BR1016",
+   "BR1017",
+   "BR1021",
+   "BR1024",
+   "BR1029",
+   "BR1031",
+   "BR1032",
+   "BR1033",
+   "BR1035",
+   "BR1041",
+   "BR1042",
+   "BR1044",
+   "BR1045",
+   "BR1050",
+   "BR1052",
+   "BR1056",
+   "BR1057",
+   "BR1059",
+   "BR2002",
+   "BR2003",
+   "BR2008",
+   "BR2009",
+   "BR2012",
+   "BR2014",
+   "BR2015",
+   "BR2019",
+   "BR2020",
+   "BR2022",
+   "BR2023",
+   "BR2027",
+   "BR2030",
+   "BR2032",
+   "BR2033",
+   "BR2034",
+   "BR2035",
+   "BR2037",
+   "BR2039",
+   "BR2041",
+   "BR2044",
+   "BR2046",
+   "BR2048",
+   "BR2050",
+   "BR2051",
+   "BR2052",
+   "BR2053"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "left_out_fold": 4,
+  "members": [
+   {
+    "canonical_hash": "6de4d0b81bbb6c10b444c7159e72c63b78f97b32a741969c57d6189ce9a48cf5",
+    "file": "C_bulk_cf68_f4_seed0.pt"
+   },
+   {
+    "canonical_hash": "0f70d87dfd0be27078de16845cf60d0adfc35f99cac8569d6825d75498e3b63b",
+    "file": "C_bulk_cf68_f4_seed1.pt"
+   },
+   {
+    "canonical_hash": "e55df80d0ea6f931d9972033b04703c523826fd6b13fc418364c2e24683ffcf4",
+    "file": "C_bulk_cf68_f4_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 456,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "b92b32f32d6f18ec5a66f2abd3ef1bf1a4fa92191049b25bfba88407bffa35d6"
+ },
+ "C_bulk_cf68_folds": {
+  "BR1002": 0,
+  "BR1003": 4,
+  "BR1004": 3,
+  "BR1005": 4,
+  "BR1006": 0,
+  "BR1007": 0,
+  "BR1008": 0,
+  "BR1009": 4,
+  "BR1010": 3,
+  "BR1011": 4,
+  "BR1012": 3,
+  "BR1013": 3,
+  "BR1014": 1,
+  "BR1015": 3,
+  "BR1016": 3,
+  "BR1017": 3,
+  "BR1019": 4,
+  "BR1021": 1,
+  "BR1024": 1,
+  "BR1029": 2,
+  "BR1031": 2,
+  "BR1032": 0,
+  "BR1033": 1,
+  "BR1035": 0,
+  "BR1040": 4,
+  "BR1041": 2,
+  "BR1042": 1,
+  "BR1044": 0,
+  "BR1045": 2,
+  "BR1050": 2,
+  "BR1052": 2,
+  "BR1054": 4,
+  "BR1056": 2,
+  "BR1057": 1,
+  "BR1059": 1,
+  "BR2002": 1,
+  "BR2003": 1,
+  "BR2008": 1,
+  "BR2009": 0,
+  "BR2012": 2,
+  "BR2014": 1,
+  "BR2015": 2,
+  "BR2018": 4,
+  "BR2019": 3,
+  "BR2020": 2,
+  "BR2022": 0,
+  "BR2023": 1,
+  "BR2027": 2,
+  "BR2028": 4,
+  "BR2030": 3,
+  "BR2032": 0,
+  "BR2033": 0,
+  "BR2034": 3,
+  "BR2035": 3,
+  "BR2037": 3,
+  "BR2039": 3,
+  "BR2040": 4,
+  "BR2041": 0,
+  "BR2042": 4,
+  "BR2044": 2,
+  "BR2045": 4,
+  "BR2046": 2,
+  "BR2047": 4,
+  "BR2048": 2,
+  "BR2050": 1,
+  "BR2051": 0,
+  "BR2052": 0,
+  "BR2053": 1
+ },
+ "C_bulk_cfA_f0": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "crossfit": "C_bulk_cfA",
+  "donors": [
+   "BR1003",
+   "BR1009",
+   "BR1016",
+   "BR1017",
+   "BR1019",
+   "BR1021",
+   "BR1024",
+   "BR1031",
+   "BR1033",
+   "BR1040",
+   "BR1052",
+   "BR1056",
+   "BR1059",
+   "BR2003",
+   "BR2008",
+   "BR2014",
+   "BR2015",
+   "BR2018",
+   "BR2023",
+   "BR2028",
+   "BR2033",
+   "BR2034",
+   "BR2042",
+   "BR2047",
+   "BR2048",
+   "BR2050"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "left_out_fold": 0,
+  "members": [
+   {
+    "canonical_hash": "2ecf959e7b96a6f057485ebcc7b39869958222e88047e186c478614c245710f1",
+    "file": "C_bulk_cfA_f0_seed0.pt"
+   },
+   {
+    "canonical_hash": "14e5e379b6a54b054748c4d33edcc2b9fc9ded6871cc5802812b6e84b347c60e",
+    "file": "C_bulk_cfA_f0_seed1.pt"
+   },
+   {
+    "canonical_hash": "e969d446eba88bbbdcb529749738634c3efe5e0f002ddea22c73c4c35a5a718b",
+    "file": "C_bulk_cfA_f0_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 229,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "1034147e97c3cc1cb30b03b41151c6c6e5f88315c191d863d0276657c6d2c552"
+ },
+ "C_bulk_cfA_f1": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "crossfit": "C_bulk_cfA",
+  "donors": [
+   "BR1003",
+   "BR1005",
+   "BR1006",
+   "BR1009",
+   "BR1011",
+   "BR1016",
+   "BR1021",
+   "BR1024",
+   "BR1033",
+   "BR1040",
+   "BR1042",
+   "BR1052",
+   "BR1059",
+   "BR2003",
+   "BR2008",
+   "BR2014",
+   "BR2018",
+   "BR2022",
+   "BR2023",
+   "BR2028",
+   "BR2030",
+   "BR2032",
+   "BR2034",
+   "BR2047",
+   "BR2048",
+   "BR2050"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "left_out_fold": 1,
+  "members": [
+   {
+    "canonical_hash": "c0ad30f96275fab1af8e4f568811182419265cf79237237eea70d3c9a77c386b",
+    "file": "C_bulk_cfA_f1_seed0.pt"
+   },
+   {
+    "canonical_hash": "a2728dca82b4a4088a5884abc19dc4bd28b5a6a8e55d7e3bb7212f807fac4ae1",
+    "file": "C_bulk_cfA_f1_seed1.pt"
+   },
+   {
+    "canonical_hash": "6acceb4e8e02150149828b2f82236f659b63dd1f92194b234afb1c47213c4aa9",
+    "file": "C_bulk_cfA_f1_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 222,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "1dffa57a6fb8b13b19139f95eb992896d13150160374c15d6e1efcab7708bd3b"
+ },
+ "C_bulk_cfA_f2": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "crossfit": "C_bulk_cfA",
+  "donors": [
+   "BR1003",
+   "BR1005",
+   "BR1006",
+   "BR1011",
+   "BR1017",
+   "BR1019",
+   "BR1021",
+   "BR1031",
+   "BR1033",
+   "BR1040",
+   "BR1042",
+   "BR1052",
+   "BR1056",
+   "BR1059",
+   "BR2003",
+   "BR2008",
+   "BR2015",
+   "BR2022",
+   "BR2023",
+   "BR2028",
+   "BR2030",
+   "BR2032",
+   "BR2033",
+   "BR2034",
+   "BR2042",
+   "BR2048"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "left_out_fold": 2,
+  "members": [
+   {
+    "canonical_hash": "0c6ae9d9d85479fb6c8d087df2bff34025a696dcff113166276ceb6801e5ae5b",
+    "file": "C_bulk_cfA_f2_seed0.pt"
+   },
+   {
+    "canonical_hash": "be2e242e8ee04ea3c591203e5da7713831c67ef996ed2e5acc7a37fdc8669707",
+    "file": "C_bulk_cfA_f2_seed1.pt"
+   },
+   {
+    "canonical_hash": "99f6633cf33b21fdfd2baf40841d250e38703cd671574ae37885cbab862a47b4",
+    "file": "C_bulk_cfA_f2_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 226,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "812c56abc4270dc68b4058ef3e791fea2e22bdf7a7a6dbf7cc6655294ac24c8c"
+ },
+ "C_bulk_cfA_f3": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "crossfit": "C_bulk_cfA",
+  "donors": [
+   "BR1003",
+   "BR1005",
+   "BR1006",
+   "BR1009",
+   "BR1011",
+   "BR1016",
+   "BR1017",
+   "BR1019",
+   "BR1021",
+   "BR1024",
+   "BR1031",
+   "BR1040",
+   "BR1042",
+   "BR1056",
+   "BR2003",
+   "BR2014",
+   "BR2015",
+   "BR2018",
+   "BR2022",
+   "BR2028",
+   "BR2030",
+   "BR2032",
+   "BR2033",
+   "BR2042",
+   "BR2047",
+   "BR2048",
+   "BR2050"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "left_out_fold": 3,
+  "members": [
+   {
+    "canonical_hash": "c058e117bda3962201be9595360430c036372134f3d44e8ec61361f900b92b7e",
+    "file": "C_bulk_cfA_f3_seed0.pt"
+   },
+   {
+    "canonical_hash": "b216eaa7e01e371e8f09923caef8f615e84ebbca0ffc96c6828cdf058f5e6464",
+    "file": "C_bulk_cfA_f3_seed1.pt"
+   },
+   {
+    "canonical_hash": "2c2fbc8444c4023343249134941c9998c52ab2ae83268683f520b3345f38e396",
+    "file": "C_bulk_cfA_f3_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 242,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "1eb8d42c6106b538acd5a98911670145731daea4952d7c4de55a080d249f455b"
+ },
+ "C_bulk_cfA_f4": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "crossfit": "C_bulk_cfA",
+  "donors": [
+   "BR1005",
+   "BR1006",
+   "BR1009",
+   "BR1011",
+   "BR1016",
+   "BR1017",
+   "BR1019",
+   "BR1024",
+   "BR1031",
+   "BR1033",
+   "BR1042",
+   "BR1052",
+   "BR1056",
+   "BR1059",
+   "BR2008",
+   "BR2014",
+   "BR2015",
+   "BR2018",
+   "BR2022",
+   "BR2023",
+   "BR2030",
+   "BR2032",
+   "BR2033",
+   "BR2034",
+   "BR2042",
+   "BR2047",
+   "BR2050"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "left_out_fold": 4,
+  "members": [
+   {
+    "canonical_hash": "52c1b77b293e6a2e8e550cb23952b718550eb82672c13bc8f62f68e55a164689",
+    "file": "C_bulk_cfA_f4_seed0.pt"
+   },
+   {
+    "canonical_hash": "f6432aa0946c301884a82b8927a271552768e72525d817f90c4fd7e15fe9e8a3",
+    "file": "C_bulk_cfA_f4_seed1.pt"
+   },
+   {
+    "canonical_hash": "249db5913187313404a7a02c9a22c4cb200e9b0f3e289dc02ae09130cfd33f0f",
+    "file": "C_bulk_cfA_f4_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 233,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "2e53763a5b7f6a93f11499ccb1ff1a31dfda4b2008ce699528ff8eb381d5db14"
+ },
+ "C_bulk_cfA_folds": {
+  "BR1003": 4,
+  "BR1005": 0,
+  "BR1006": 0,
+  "BR1009": 2,
+  "BR1011": 0,
+  "BR1016": 2,
+  "BR1017": 1,
+  "BR1019": 1,
+  "BR1021": 4,
+  "BR1024": 2,
+  "BR1031": 1,
+  "BR1033": 3,
+  "BR1040": 4,
+  "BR1042": 0,
+  "BR1052": 3,
+  "BR1056": 1,
+  "BR1059": 3,
+  "BR2003": 4,
+  "BR2008": 3,
+  "BR2014": 2,
+  "BR2015": 1,
+  "BR2018": 2,
+  "BR2022": 0,
+  "BR2023": 3,
+  "BR2028": 4,
+  "BR2030": 0,
+  "BR2032": 0,
+  "BR2033": 1,
+  "BR2034": 3,
+  "BR2042": 1,
+  "BR2047": 2,
+  "BR2048": 4,
+  "BR2050": 2
+ },
+ "C_bulk_k16_s6": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "donors": [
+   "BR1005",
+   "BR1017",
+   "BR1019",
+   "BR1021",
+   "BR1033",
+   "BR1040",
+   "BR1042",
+   "BR1052",
+   "BR2014",
+   "BR2015",
+   "BR2028",
+   "BR2030",
+   "BR2033",
+   "BR2042",
+   "BR2048",
+   "BR2050"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "k": 16,
+  "members": [
+   {
+    "canonical_hash": "1fbbf7486f2cb411cfd2ff4f13a10bbcee7bd0fd537a20352b55bb96d7368dfc",
+    "file": "C_bulk_k16_s6_seed0.pt"
+   },
+   {
+    "canonical_hash": "7fd04454043251082f7659569142a970e6d26be20e1e051984376d6935d914f8",
+    "file": "C_bulk_k16_s6_seed1.pt"
+   },
+   {
+    "canonical_hash": "7dd9a1ec56310d90c03d68730aa0284d77daced0950f3f4a50d20323dac58506",
+    "file": "C_bulk_k16_s6_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 131,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "372d84b217b591c4dadd657005697e5979132f7288e8e6cdb5eff389871b56d0",
+  "seed": 6
+ },
+ "C_bulk_k16_s7": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "donors": [
+   "BR1003",
+   "BR1005",
+   "BR1016",
+   "BR1019",
+   "BR1021",
+   "BR1031",
+   "BR1040",
+   "BR1056",
+   "BR2008",
+   "BR2028",
+   "BR2033",
+   "BR2034",
+   "BR2042",
+   "BR2047",
+   "BR2048",
+   "BR2050"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "k": 16,
+  "members": [
+   {
+    "canonical_hash": "a7275b29ff3aff08148673e835285b3c7bc7a8ad761a29ba6c8e48fb6869f651",
+    "file": "C_bulk_k16_s7_seed0.pt"
+   },
+   {
+    "canonical_hash": "f960f9795627796b02aaf46545713da28bc481255f1edd07746c13e29d1b1ea8",
+    "file": "C_bulk_k16_s7_seed1.pt"
+   },
+   {
+    "canonical_hash": "3bc80bd669b204760a44ea2d48af5064b2d0140ea9b63abf0a2120a23373c5c6",
+    "file": "C_bulk_k16_s7_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 143,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "7822449d0a24707232f744b441100367eb176c680828f8deb51639dc1aa6e581",
+  "seed": 7
+ },
+ "C_bulk_k16_s8": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "donors": [
+   "BR1003",
+   "BR1005",
+   "BR1006",
+   "BR1011",
+   "BR1017",
+   "BR1024",
+   "BR1040",
+   "BR1056",
+   "BR2008",
+   "BR2015",
+   "BR2018",
+   "BR2023",
+   "BR2030",
+   "BR2042",
+   "BR2047",
+   "BR2048"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "k": 16,
+  "members": [
+   {
+    "canonical_hash": "f7e66ac33bbb2a60a2fad7aafb24ac748c99976556ca91d02f72fdfea9eb77bd",
+    "file": "C_bulk_k16_s8_seed0.pt"
+   },
+   {
+    "canonical_hash": "91c7d7a142d0725bf499994238a61f730a095069bf179055fd10a976eb9359ce",
+    "file": "C_bulk_k16_s8_seed1.pt"
+   },
+   {
+    "canonical_hash": "1b9cd5eb1044aa2c55d5db6e1016dbd3ff1677192f01f0de602b9c53f3517ddd",
+    "file": "C_bulk_k16_s8_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 158,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "ef480f92a551482767a7ad42024052eded3af02cebdcfc7df41da7611f8b88ce",
+  "seed": 8
+ },
+ "C_bulk_k4_s6": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "donors": [
+   "BR1005",
+   "BR1017",
+   "BR2033",
+   "BR2048"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "k": 4,
+  "members": [
+   {
+    "canonical_hash": "ee754172edebc361f78d785ab44e6c1454aede609e4ee080db009026ae4552e9",
+    "file": "C_bulk_k4_s6_seed0.pt"
+   },
+   {
+    "canonical_hash": "f8f9a040a8fcff2aba24daeaf38418111454bbcc75c320de01010720523e0b11",
+    "file": "C_bulk_k4_s6_seed1.pt"
+   },
+   {
+    "canonical_hash": "967ce024797339735f8c45955bff7d7953f9d96140c67ac6aeb46418e90d4307",
+    "file": "C_bulk_k4_s6_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 40,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "881e62a2c07a48968a96d55c751f3665524443d17e0bc1778c8264f524059cb8",
+  "seed": 6
+ },
+ "C_bulk_k4_s7": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "donors": [
+   "BR1031",
+   "BR1040",
+   "BR2028",
+   "BR2050"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "k": 4,
+  "members": [
+   {
+    "canonical_hash": "c72a89d1bc94bafa2d105485bb136738bd53306ab3a2f843f1b9e2b9a16e35a1",
+    "file": "C_bulk_k4_s7_seed0.pt"
+   },
+   {
+    "canonical_hash": "42c7275beeb16dba18097e0e0f6b01a4440816c90ad98b026dd174aabdeeaf69",
+    "file": "C_bulk_k4_s7_seed1.pt"
+   },
+   {
+    "canonical_hash": "c4b032454913ca8222b505816bddd2348d42f3190660f8a8ca506f3c86265240",
+    "file": "C_bulk_k4_s7_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 40,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "abe58d6f1dfe0c66054d6d3afa54840694512a484d4096472bdceb43580c0b23",
+  "seed": 7
+ },
+ "C_bulk_k4_s8": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "donors": [
+   "BR1006",
+   "BR1011",
+   "BR2008",
+   "BR2030"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "k": 4,
+  "members": [
+   {
+    "canonical_hash": "42f0498474bc30602e47b7dd9a4c5d73c47a3e73c54355c2ba4777c38db4011b",
+    "file": "C_bulk_k4_s8_seed0.pt"
+   },
+   {
+    "canonical_hash": "7bfed6500dad0f44e5bb5ca0973e3cd903f9e02463d5c386181b1a1a54a0038f",
+    "file": "C_bulk_k4_s8_seed1.pt"
+   },
+   {
+    "canonical_hash": "7dfd62beff4f858ed136a04e371de43164a7f35478d504aad4ebd2bc40aae96d",
+    "file": "C_bulk_k4_s8_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 39,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "84785b5e9ff1587147c0c96f1c4ba1a8154d1f472ea6a7445aea13eba7e79c11",
+  "seed": 8
+ },
+ "C_bulk_k8_s6": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "donors": [
+   "BR1005",
+   "BR1017",
+   "BR1021",
+   "BR1042",
+   "BR2015",
+   "BR2030",
+   "BR2033",
+   "BR2048"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "k": 8,
+  "members": [
+   {
+    "canonical_hash": "3dcd0cd2e217f1b908efeef9154aaf55b3f8bb1ecef7ec59c4b956add0fe701b",
+    "file": "C_bulk_k8_s6_seed0.pt"
+   },
+   {
+    "canonical_hash": "ed44d2b3dab30ca9d73ad19e43bdfd98fea089f2875f53e0a8277f65c80d387f",
+    "file": "C_bulk_k8_s6_seed1.pt"
+   },
+   {
+    "canonical_hash": "78a31e2cd50b42872456820047d1ce08861f72767a512ec0165b3f95038221ce",
+    "file": "C_bulk_k8_s6_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 68,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "8f45332d3a27205ae90199a7d38c7be2c7dec72513698f61c0bb14014e7ff205",
+  "seed": 6
+ },
+ "C_bulk_k8_s7": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "donors": [
+   "BR1019",
+   "BR1031",
+   "BR1040",
+   "BR1056",
+   "BR2028",
+   "BR2034",
+   "BR2048",
+   "BR2050"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "k": 8,
+  "members": [
+   {
+    "canonical_hash": "1161268ffb763dc1c0f9336134d510ea394beb520f7f714606c263d00398a630",
+    "file": "C_bulk_k8_s7_seed0.pt"
+   },
+   {
+    "canonical_hash": "46ad16274511fc9ec8a3656a05a51dbf686af572d98e012338ac836ef5922404",
+    "file": "C_bulk_k8_s7_seed1.pt"
+   },
+   {
+    "canonical_hash": "d8e2922b551b4478a253d651ed39b823f94b3cee61dfb3557dc552cb57b1d2a9",
+    "file": "C_bulk_k8_s7_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 76,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "555c0b81f0a34a77dec030113bfdb2eee2691c74d5e4ff64f856aedbb218fb88",
+  "seed": 7
+ },
+ "C_bulk_k8_s8": {
+  "classes": [
+   "T cell",
+   "Monocyte",
+   "B cell",
+   "NK cell",
+   "DC",
+   "Other"
+  ],
+  "config": {
+   "dropout": 0.0,
+   "hidden": 0,
+   "loss": "kl",
+   "noise": 0.0,
+   "scaling": "center",
+   "weight_decay": 0.0001
+  },
+  "donors": [
+   "BR1003",
+   "BR1006",
+   "BR1011",
+   "BR1024",
+   "BR2008",
+   "BR2030",
+   "BR2042",
+   "BR2048"
+  ],
+  "epochs": 184,
+  "genes_hash": "4a2d0643152f42473c3f81b08cee0f8ee17f2c85c43481f1c9026f6aca0120bf",
+  "k": 8,
+  "members": [
+   {
+    "canonical_hash": "248c11d4bca2580172f2a833d6c9b34531aaed98fb4a8a1cb4af7a375bf89776",
+    "file": "C_bulk_k8_s8_seed0.pt"
+   },
+   {
+    "canonical_hash": "b610e2322cc7bc4297ec99bde821893ffe4e2589a250a153182e4b3e84627f42",
+    "file": "C_bulk_k8_s8_seed1.pt"
+   },
+   {
+    "canonical_hash": "53e71dd90f7933d4108a9b39cc3c079fcf360eb3e480b4d8c81fe281aa001872",
+    "file": "C_bulk_k8_s8_seed2.pt"
+   }
+  ],
+  "n_members": 3,
+  "n_rows": 79,
+  "pairs_hash": "8495de1378b830ddc8547314526798c14adc1909c856b076430d298f9b233102",
+  "rows_hash": "6ba674489a2c067cfb46403e12d59bd2bd401747bb357daddaf6cd19deaf63b1",
+  "seed": 8
+ },
+ "pool_s6": [
+  "BR1017",
+  "BR2033",
+  "BR1005",
+  "BR2048",
+  "BR1021",
+  "BR2015",
+  "BR1042",
+  "BR2030",
+  "BR1052",
+  "BR2014",
+  "BR1040",
+  "BR2042",
+  "BR1033",
+  "BR2050",
+  "BR1019",
+  "BR2028"
+ ],
+ "pool_s7": [
+  "BR1040",
+  "BR2050",
+  "BR1031",
+  "BR2028",
+  "BR1056",
+  "BR2034",
+  "BR1019",
+  "BR2048",
+  "BR1021",
+  "BR2047",
+  "BR1016",
+  "BR2042",
+  "BR1005",
+  "BR2008",
+  "BR1003",
+  "BR2033"
+ ],
+ "pool_s8": [
+  "BR1006",
+  "BR2030",
+  "BR1011",
+  "BR2008",
+  "BR1024",
+  "BR2042",
+  "BR1003",
+  "BR2048",
+  "BR1040",
+  "BR2015",
+  "BR1056",
+  "BR2047",
+  "BR1017",
+  "BR2018",
+  "BR1005",
+  "BR2023"
+ ]
+}

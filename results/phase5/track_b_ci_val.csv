@@ -1,0 +1,13 @@
+condition,direction,Δ centered R²,Δ centered R² CI,Δ marker composition R²,Δ marker composition R² CI
+M2,single-cell → bulk,0.042408615,-0.020 to 0.101,0.13659198192253896,0.097 to 0.218
+M2,bulk → single-cell,0.06277667,0.004 to 0.124,0.21632524109776188,0.104 to 0.415
+B-cf cross-fitted labels,single-cell → bulk,0.04114969,-0.038 to 0.083,0.1410336542094237,0.099 to 0.222
+B-cf cross-fitted labels,bulk → single-cell,0.04909946,-0.008 to 0.107,0.20032357466679718,0.099 to 0.383
+B-k4 labels from 4 donors,single-cell → bulk,-0.12971072,-0.213 to -0.046,-0.1677373873919508,-0.305 to -0.100
+B-k4 labels from 4 donors,bulk → single-cell,0.023619354,-0.048 to 0.090,0.0016109251330048114,-0.135 to 0.149
+B-k8 labels from 8 donors,single-cell → bulk,-0.040318027,-0.098 to 0.024,-0.07366572768949653,-0.144 to -0.026
+B-k8 labels from 8 donors,bulk → single-cell,0.01524581,-0.041 to 0.075,0.11693098641940144,0.029 to 0.251
+B-k16 labels from 16 donors,single-cell → bulk,0.039003745,-0.013 to 0.113,0.009392284653281235,-0.034 to 0.047
+B-k16 labels from 16 donors,bulk → single-cell,0.04667023,-0.011 to 0.093,0.15627162017725502,0.068 to 0.325
+B-k33 labels from 33 donors,single-cell → bulk,0.06134972,-0.011 to 0.120,0.0631260425623889,0.015 to 0.127
+B-k33 labels from 33 donors,bulk → single-cell,0.062234893,0.000 to 0.129,0.20300826821769727,0.115 to 0.377

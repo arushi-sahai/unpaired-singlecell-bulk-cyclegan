@@ -1,0 +1,10 @@
+direction,translations,minus,difference,"difference, 95% CI"
+single-cell → bulk,M1 (EMA),mean shift (start),-0.05632668374096794,-0.161 to 0.018
+single-cell → bulk,M1 (EMA),ComBat,-0.15743144055869596,-0.278 to -0.078
+single-cell → bulk,M2 (EMA),mean shift (start),0.08026529818157102,0.020 to 0.153
+single-cell → bulk,M2 (EMA),ComBat,-0.020839458636156993,-0.115 to 0.070
+single-cell → bulk,B-cf (EMA),mean shift (start),0.08470697046845577,0.007 to 0.168
+single-cell → bulk,B-cf (EMA),ComBat,-0.016397786349272248,-0.112 to 0.076
+bulk → single-cell,M1 (EMA),ComBat (start),-0.33473931397123596,-0.570 to -0.244
+bulk → single-cell,M2 (EMA),ComBat (start),-0.11841407287347411,-0.285 to -0.042
+bulk → single-cell,B-cf (EMA),ComBat (start),-0.1344157393044388,-0.286 to -0.067
