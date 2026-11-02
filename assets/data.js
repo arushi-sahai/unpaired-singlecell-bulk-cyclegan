@@ -141,56 +141,56 @@ window.DATA = {
   },
   {
    "direction": "single-cell → bulk",
-   "comparison": "What pairs buy: paired ridge regression − unpaired CycleGAN, centered R²",
+   "comparison": "What pairs add: paired ridge regression − unpaired CycleGAN, centered R²",
    "estimate": "+0.38",
    "ci": "0.302 to 0.478",
    "reading": "no claim"
   },
   {
    "direction": "single-cell → bulk",
-   "comparison": "What pairs buy: paired ridge regression − unpaired CycleGAN, composition R²",
+   "comparison": "What pairs add: paired ridge regression − unpaired CycleGAN, composition R²",
    "estimate": "+0.216",
    "ci": "0.128 to 0.420",
    "reading": "no claim"
   },
   {
    "direction": "single-cell → bulk",
-   "comparison": "What pairs buy: paired ridge regression − CycleGAN + composition labels, centered R²",
+   "comparison": "What pairs add: paired ridge regression − CycleGAN + composition labels, centered R²",
    "estimate": "+0.39",
    "ci": "0.293 to 0.488",
    "reading": "no claim"
   },
   {
    "direction": "single-cell → bulk",
-   "comparison": "What pairs buy: paired ridge regression − CycleGAN + composition labels, composition R²",
+   "comparison": "What pairs add: paired ridge regression − CycleGAN + composition labels, composition R²",
    "estimate": "+0.043",
    "ci": "0.001 to 0.115",
    "reading": "no claim"
   },
   {
    "direction": "bulk → single-cell",
-   "comparison": "What pairs buy: paired ridge regression − unpaired CycleGAN, centered R²",
+   "comparison": "What pairs add: paired ridge regression − unpaired CycleGAN, centered R²",
    "estimate": "+0.51",
    "ci": "0.406 to 0.682",
    "reading": "no claim"
   },
   {
    "direction": "bulk → single-cell",
-   "comparison": "What pairs buy: paired ridge regression − unpaired CycleGAN, composition R²",
+   "comparison": "What pairs add: paired ridge regression − unpaired CycleGAN, composition R²",
    "estimate": "+0.184",
    "ci": "0.063 to 0.438",
    "reading": "no claim"
   },
   {
    "direction": "bulk → single-cell",
-   "comparison": "What pairs buy: paired ridge regression − CycleGAN + composition labels, centered R²",
+   "comparison": "What pairs add: paired ridge regression − CycleGAN + composition labels, centered R²",
    "estimate": "+0.463",
    "ci": "0.383 to 0.600",
    "reading": "no claim"
   },
   {
    "direction": "bulk → single-cell",
-   "comparison": "What pairs buy: paired ridge regression − CycleGAN + composition labels, composition R²",
+   "comparison": "What pairs add: paired ridge regression − CycleGAN + composition labels, composition R²",
    "estimate": "+0.04",
    "ci": "−0.046 to 0.207",
    "reading": "no claim"

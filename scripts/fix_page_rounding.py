@@ -88,7 +88,8 @@ def main():
     for c in changes: print(f"{c[0]}: {c[1]} -> {c[2]}")
     print(f"{len(changes)} values rounded from full precision. Left as is (no full-precision source): {left}")
     if a.apply:
-        JS.write_text("window.DATA = " + json.dumps(D, ensure_ascii=False, indent=1) + ";\n")
+        out = json.dumps(D, ensure_ascii=False, indent=1).replace("What pairs buy:", "What pairs add:")   # page wording
+        JS.write_text("window.DATA = " + out + ";\n")
 
 
 if __name__ == "__main__":
