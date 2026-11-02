@@ -18,14 +18,14 @@ The Allen Institute for Immunology's Sound Life cohort followed 96 healthy adult
 
 ## Results
 
-Without paired samples, the CycleGAN's predictions mostly reflected who the donor is, which a simple per-gene correction between the assays already captures, and the CycleGAN was no more realistic than blends of simple alignments at equal accuracy. Paired donors are what added accuracy. With 8 paired donors, plain ridge regression (without the spread step) roughly matched the average profile, and with all 68 it scored above the average profile (centered R² 0.16 and 0.24, point estimates), which no unpaired method did.
+Without paired samples, the CycleGAN learned little beyond a simple per-gene correction between the assays. Its predictions mostly reflected each person's usual immune profile, and only some of what changed from one blood draw to the next. The CycleGAN was also no more realistic than blends of simple alignments at equal accuracy. Training on paired samples did better: with 8 paired donors, plain ridge regression (without the spread step) roughly matched the average profile, and with all 68 it scored above the average profile (centered R² 0.16 when predicting bulk and 0.24 when predicting single-cell profiles, point estimates), which no unpaired method did. Accuracy stayed low for every method. For a bulk-only cohort, adding single-cell data from the same blood draws for some donors helped more than any unpaired model tested.
 
 **Stack:** Python, PyTorch, scanpy and AnnData, scikit-learn, and baselines from ComBat, CORAL, Harmony, and entropic optimal transport.
 
 ## Workflow
 
 - **Data (Phase 0).** Raw Sound Life counts become 836 matched pairs of PBMC single-cell pseudobulk and whole-blood bulk profiles from 96 donors, on a 5,000-gene panel chosen on training donors only.
-- **The bar to beat (Phase 1).** Every model is scored for accuracy against its sample's true partner and for realism. Blends of simple alignments, such as mean shift and ComBat, set an accuracy–realism frontier that a model has to beat.
+- **The comparison (Phase 1).** Every model is scored for accuracy against its sample's true partner and for realism. Blends of simple alignments, such as mean shift and ComBat, set an accuracy–realism frontier that a model has to beat.
 - **The models (Phases 2–3).** CycleGANs are trained on two halves of the training donors that never share a person, one half giving only single-cell profiles and the other only bulk profiles. Optional composition labels come from networks trained on pairs. Settings and checkpoints are locked on validation data.
 - **Analysis on validation (Phases 4–6).** Ablations, exploratory changes, and analyses of what the CycleGAN changes.
 - **One test run (Phase 7).** The locked models and every baseline are scored on the test split once.
@@ -71,7 +71,7 @@ The notebooks are the working record and use short names.
 - **ridge + spread**: paired ridge regression
 - **OT-s**: optimal-transport retrieval
 - **no-information reference**: the random real profile
-- **H1, H2, and H3**: the three machine-learning questions. H1 asks whether the unpaired CycleGAN is beyond the frontier, H2 whether composition labels help, and H3 what pairs buy.
+- **H1, H2, and H3**: the three machine-learning questions. H1 asks whether the unpaired CycleGAN is beyond the frontier, H2 whether composition labels help, and H3 what pairs add.
 - **probe**: a readout, such as the marker-gene readout
 - **halving 0 and 1**: the two divisions of the training donors into unpaired halves
 - **suspect** (in `h2_suspect_test.csv`): a composition gain under the network the CycleGAN trained against that the independent marker-gene readout does not confirm
@@ -167,9 +167,9 @@ The page is static HTML. Its numbers are filled at load time from `assets/data.j
 |---|---|
 | `scripts/make_public_figures.py` | Reruns the Phase 8 and 9 figure cells in a temporary copy with plain wording and the page's colors (`scripts/public_figure_style.py`), and checks that every result CSV is unchanged |
 | `scripts/make_public_dev_figures.py`, `make_public_gap_figure.py`, `make_frontier_figure.py`, `make_overview_figure.py` | The page's other figures, drawn from saved result files |
-| `scripts/link_terms.py` | Links defined terms, citations, and figure references, and fills the hover texts. It is idempotent. |
+| `scripts/link_terms.py` | Links defined terms, citations, and figure references, and fills the hover texts. |
 | `scripts/make_og_image.py` | The link-preview image |
-| `scripts/fix_page_rounding.py` | Rounds the page's numbers once from full precision and rewords the Table 1 footnote. Run it after Phase 8 writes `assets/data.js`. |
+| `scripts/fix_page_rounding.py` | Rounds the page's numbers once from full precision and rewords the footnote of the comparisons table. Run it after Phase 8 writes `assets/data.js`. |
 
 ## Use of AI tools
 

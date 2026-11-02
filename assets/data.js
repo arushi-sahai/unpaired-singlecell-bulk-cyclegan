@@ -39,7 +39,7 @@ window.DATA = {
   "WithinSBCoralLo": "−0.021",
   "WithinSBCoralHi": "0.110",
   "HOneBSMargin": "−0.372",
-  "HOneBSLo": "−0.705",
+  "HOneBSLo": "−0.71",
   "HOneBSHi": "−0.006",
   "HOneBSHalvingOne": "−0.476",
   "MOneBSRealism": "0.25",
@@ -122,7 +122,7 @@ window.DATA = {
    "direction": "bulk → single-cell",
    "comparison": "Beyond the frontier? Unpaired CycleGAN's margin",
    "estimate": "−0.372",
-   "ci": "−0.705 to −0.006",
+   "ci": "−0.71 to −0.006",
    "reading": "inside the unpaired frontier"
   },
   {
