@@ -111,7 +111,7 @@ Register the environment as a Jupyter kernel with `python -m ipykernel install -
 
 ## Data
 
-The inputs are from the AIFI Sound Life study (Gong et al., 2025), data doi:10.57785/bn17-3h16, licensed CC BY 4.0:
+The inputs are from the AIFI Sound Life study (Gong et al., 2025), downloaded from the Allen Institute for Immunology's Human Immune System Explorer (doi:10.57785/bn17-3h16):
 - **Single-cell:** the 8 portal files (age group × sex × CMV status), reduced to "slim" files of a uniform random 3,000 cells per sample.
 - **Bulk:** the whole-blood counts file `sound-life_whole-blood_no-stim.h5ad`.
 
@@ -178,7 +178,7 @@ The full statement, with the author's main contributions, is in [`notes/ai_use.m
 
 ## License
 
-The code is released under the MIT License (`LICENSE`). The Sound Life data are not included and keep their own license (CC BY 4.0).
+The code is released under the MIT License (`LICENSE`). The Sound Life data are not included, and the portal states no license for them. Anyone using them should cite Gong et al. (2025) and Gustafson et al., "Longitudinal Dynamics of Health and Age" (doi:10.57785/bn17-3h16), as the portal asks.
 
 ## References
 

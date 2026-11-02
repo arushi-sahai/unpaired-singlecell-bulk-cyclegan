@@ -35,6 +35,12 @@ The panel titles baked into `proposal_fig1.png` say "SoundLife"; the caption say
 
 **Correct:** the first author is Qiuyu Gong; Claire E. Gustafson is the last and corresponding author (PubMed 41162704; Nature 648:696–706, 2025; doi:10.1038/s41586-025-09686-5). Cite as Gong et al. 2025. The report uses the key `gong2025soundlife` (`report/references.bib`).
 
+## 5. Data license
+
+**Submitted:** the data are described as "public, CC BY".
+
+**Correct:** the Human Immune System Explorer portal and the DataCite record for doi:10.57785/bn17-3h16 state no license for the Sound Life data (checked 2026-11-02). The portal asks users to cite Gong et al. (2025) and Gustafson et al., "Longitudinal Dynamics of Health and Age" (doi:10.57785/bn17-3h16). The data are not redistributed in this repository.
+
 ## Not an error, but worth stating precisely in the report
 
 - **What $c^*$ is.** $c^*$ is the AIFI_L1 composition of the PBMC single-cell sample (computed from all post-QC slim cells, ~3,000 per sample: 9 measured classes, merged to 6 targets, with Platelet, Erythrocyte, Progenitor and ILC as "Other"). For the bulk side, it is the composition of the *mononuclear fraction* of that draw, not of whole blood, which also holds granulocytes. So $C_{\text{bulk}}$ learns to read PBMC-relative proportions out of a whole-blood profile. That is learnable, but the proposal's "one invariant ground-truth composition vector supervises both directions" should say this.
