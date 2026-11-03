@@ -118,8 +118,7 @@ TERMS = [
     (r"CycleGANs?", "def-cyclegan"),
 ]
 ONCE = {"def-cyclegan"}                                   # linked at first use on the page only
-EXCLUDE = {'<h2 id="comparator"': {"def-frontier", "def-realism"},   # don't link a term inside the section that defines it
-           '<dl class="terms"': {"def-program", "def-basedev", "def-tracked", "def-personlevel"}}
+EXCLUDE = {}                                              # region -> anchors not linked there (none: every section links its terms)
 PATTERN = re.compile("|".join(f"(?P<t{i}>\\b(?:{p})(?![\\w-]))" for i, (p, _) in enumerate(TERMS)), re.I)
 SKIP = {"a", "h1", "h2", "h3", "summary", "script", "style", "title", "button", "th", "svg", "code", "caption", "nolink"}
 OWN = re.compile(r'<a class="term" href="#def-[\w-]+">(.*?)</a>', re.S)
