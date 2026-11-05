@@ -215,7 +215,8 @@
   .result1 { margin: 10px 0 12px; font-size: 1.02rem; color: var(--ink); }
   .card .v .vsub { font-size: 0.85rem; font-weight: 500; color: var(--ink-2); }
   .card .v2 { display: grid; gap: 2px; margin: 4px 0 6px; font-size: 1.15rem; font-weight: 650; color: var(--ink); font-variant-numeric: tabular-nums; }
-  .card .v2 .dl { display: inline-block; min-width: 11.5em; margin-right: 6px; font-size: 0.78rem; font-weight: 500; color: var(--ink-2); }
+  .card .v2 > div { display: flex; align-items: baseline; white-space: nowrap; }   /* the value never wraps; the label can */
+  .card .v2 .dl { flex: 0 1 11.5em; min-width: 0; margin-right: 6px; white-space: normal; font-size: 0.78rem; font-weight: 500; color: var(--ink-2); }
   .card .vsub { font-size: 0.85rem; color: var(--ink-2); }
   details { margin: 10px 0; }
   ol.steps { list-style: none; counter-reset: step; padding: 0; margin: 14px 0 6px; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
@@ -606,7 +607,7 @@
       <span class="nx-k">Resolution</span>
       <p class="nx-q">Can a prediction carry cells, not just their sum?</p>
       <p class="nx-t">Predicting cells, not <a class="term" href="#def-singlecell">pseudobulk</a></p>
-      <p class="nx-b">Generate a set of cells for each sample, so a prediction from bulk carries cell states and composition directly.</p>
+      <p class="nx-b">Generate a set of cells for each sample instead of one summed profile. A prediction from bulk could then show whether a change in bulk signal comes from a shift in cell-type proportions or a change in expression within cells, which a summed profile cannot separate on its own. It could also carry rare cell states.</p>
     </div>
     <div class="nx">
       <span class="nx-k">Model</span>
@@ -624,11 +625,11 @@
       <span class="nx-k">Mixtures</span>
       <p class="nx-q">Is the missing signal a mixing problem?</p>
       <p class="nx-t">Model whole blood as a mixture</p>
-      <p class="nx-b">Model whole blood as its <a class="term" href="#def-pbmc">PBMC</a> profile plus a sample-specific <a class="term" href="#def-granulocyte">granulocyte</a> fraction, which may explain why every per-gene method scores below the average profile and gives a <a class="term" href="#def-deconv">deconvolution</a> comparator next to BayesPrism (<a class="cite" href="#ref-chu2022">Chu et al., 2022</a>) and CIBERSORTx (<a class="cite" href="#ref-newman2019">Newman et al., 2019</a>).</p>
+      <p class="nx-b">Model whole blood as its <a class="term" href="#def-pbmc">PBMC</a> profile plus a sample-specific <a class="term" href="#def-granulocyte">granulocyte</a> fraction. PBMC isolation physically removes the granulocytes, most of the white cells in whole blood. A <a class="term" href="#def-pergene">per-gene correction</a> cannot add or remove that sample-specific background, which may help explain why <a class="term" href="#def-meanshift">mean shift</a> and <a class="term" href="#def-combat">ComBat</a> both scored below the average profile. BayesPrism (<a class="cite" href="#ref-chu2022">Chu et al., 2022</a>) or CIBERSORTx (<a class="cite" href="#ref-newman2019">Newman et al., 2019</a>) <a class="term" href="#def-deconv">deconvolution</a> would be the comparator.</p>
     </div>
   </div>
   <details><summary>Further analyses</summary><ul>
-    <li><b>A synthetic mixing benchmark.</b> Bulk profiles simulated by mixing single-cell profiles of known cell types in set proportions, so the right prediction for every sample is known. If unpaired models fail on these data, two unpaired collections alone do not determine the mapping. The CycleGAN already recovered simpler simulated mappings (<a href="#dev-checks">Checks on the pipeline</a>).</li>
+    <li><b>A synthetic mixing benchmark to test learnability.</b> Bulk profiles simulated by mixing single-cell profiles of known cell types in set proportions, so the right prediction for every sample is known. If unpaired models fail even on these clean mixtures, that would suggest two unpaired collections alone do not determine the mapping. Better results would then more likely come from biological structure, such as a mixing model, than from more model capacity. The CycleGAN already recovered simpler simulated mappings (<a href="#dev-checks">Checks on the pipeline</a>).</li>
     <li><b>Interval checks for few donors.</b> Bias-corrected bootstrap or leave-one-donor-out intervals for the validation verdicts near the edge of their intervals. The test verdicts cannot be rechecked without scoring the test split again.</li>
     <li><b>A second, planned test scoring.</b> Score the biological readouts on the test split under a fixed plan, and add an interval for the <a class="term" href="#def-random">random real profile</a>'s <a class="term" href="#def-frontier">margin</a>, which was reported as a point estimate.</li>
     <li><b>Trait intervals.</b> <a class="term" href="#def-ci">Confidence intervals</a> and per-split counts of female and male donors for the XIST ratios.</li>
